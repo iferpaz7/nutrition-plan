@@ -6,13 +6,13 @@ Implementation of a complete CRUD system for managing weekly nutritional plans u
 
 ## Tasks
 
-- [-] 1. Project Setup and Configuration
+- [x] 1. Project Setup and Configuration
   - Configure Tailwind CSS with nutritional color palette
   - Set up shadcn/ui component library
   - Install and configure Prisma with SQLite
   - _Requirements: 5.1, 5.2, 6.1_
 
-- [ ] 2. Database Schema and Models
+- [-] 2. Database Schema and Models
   - [ ] 2.1 Create Prisma schema for nutritional plans and meal entries
     - Define NutritionalPlan and MealEntry models
     - Set up enums for DayOfWeek and MealType
