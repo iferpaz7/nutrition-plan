@@ -16,26 +16,25 @@ function PalettePreview({
   onSelect: () => void
 }) {
   return (
-    <Card
-      className={`cursor-pointer transition-all hover:shadow-lg ${
-        isSelected ? 'ring-2 ring-primary ring-offset-2' : ''
+    <div
+      className={`cursor-pointer rounded-xl bg-card p-5 shadow-md transition-all hover:shadow-xl hover:-translate-y-1 ${        isSelected ? 'ring-2 ring-primary ring-offset-2 shadow-lg' : ''
       }`}
       onClick={onSelect}
     >
-      <CardHeader className="pb-3">
+      <div className="mb-3">
         <div className="flex items-center justify-between">
-          <CardTitle className="text-lg flex items-center gap-2">
+          <h3 className="text-lg font-semibold flex items-center gap-2">
             {palette.name}
             {isSelected && (
               <span className="flex h-5 w-5 items-center justify-center rounded-full bg-primary text-primary-foreground">
                 <Check className="h-3 w-3" />
               </span>
             )}
-          </CardTitle>
+          </h3>
         </div>
-        <CardDescription>{palette.description}</CardDescription>
-      </CardHeader>
-      <CardContent>
+        <p className="text-sm text-muted-foreground mt-1">{palette.description}</p>
+      </div>
+      <div>
         {/* Vista previa de colores */}
         <div className="grid grid-cols-4 gap-2 mb-3">
           <div
@@ -61,59 +60,29 @@ function PalettePreview({
         </div>
         <div className="grid grid-cols-4 gap-2">
           <div
-            className="h-6 rounded-md border"
+            className="h-6 rounded-md shadow-sm"
             style={{ backgroundColor: `hsl(${palette.colors.background})` }}
             title="Fondo"
           />
           <div
-            className="h-6 rounded-md border"
+            className="h-6 rounded-md shadow-sm"
             style={{ backgroundColor: `hsl(${palette.colors.card})` }}
             title="Tarjeta"
           />
           <div
-            className="h-6 rounded-md border"
+            className="h-6 rounded-md shadow-sm"
             style={{ backgroundColor: `hsl(${palette.colors.muted})` }}
             title="Atenuado"
           />
           <div
-            className="h-6 rounded-md border"
+            className="h-6 rounded-md shadow-sm"
             style={{ backgroundColor: `hsl(${palette.colors.border})` }}
             title="Borde"
           />
         </div>
 
-        {/* Etiquetas */}
-        <div className="mt-3 flex flex-wrap gap-1">
-          <span
-            className="text-[10px] px-2 py-0.5 rounded-full"
-            style={{
-              backgroundColor: `hsl(${palette.colors.primary})`,
-              color: 'white',
-            }}
-          >
-            Principal
-          </span>
-          <span
-            className="text-[10px] px-2 py-0.5 rounded-full"
-            style={{
-              backgroundColor: `hsl(${palette.colors.secondary})`,
-              color: 'white',
-            }}
-          >
-            Secundario
-          </span>
-          <span
-            className="text-[10px] px-2 py-0.5 rounded-full"
-            style={{
-              backgroundColor: `hsl(${palette.colors.accent})`,
-              color: 'white',
-            }}
-          >
-            Acento
-          </span>
-        </div>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   )
 }
 
@@ -154,7 +123,7 @@ export default function ConfigPage() {
         </CardHeader>
         <CardContent>
           {/* Paleta actual */}
-          <div className="mb-6 p-4 rounded-lg bg-primary/10 border border-primary/20">
+          <div className="mb-6 p-4 rounded-xl bg-gradient-to-r from-primary/10 to-primary/5 shadow-inner">
             <p className="text-sm font-medium mb-2">Tema actual:</p>
             <div className="flex items-center gap-3">
               <div className="flex gap-1">
