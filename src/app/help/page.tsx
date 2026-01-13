@@ -1,3 +1,5 @@
+'use client'
+
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import {
   Users,
@@ -17,6 +19,7 @@ import {
   Lightbulb,
   Phone,
 } from 'lucide-react'
+import { AppTour } from '@/components/AppTour'
 
 export default function HelpPage() {
   return (
@@ -29,10 +32,15 @@ export default function HelpPage() {
           </div>
         </div>
         <h1 className="text-4xl font-bold text-primary mb-4">Centro de Ayuda</h1>
-        <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+        <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-6">
           Guía completa para utilizar NutriPlan, tu sistema de gestión de planes nutricionales
           semanales.
         </p>
+
+        {/* Tour Button */}
+        <div className="flex justify-center">
+          <AppTour />
+        </div>
       </div>
 
       {/* Quick Start */}

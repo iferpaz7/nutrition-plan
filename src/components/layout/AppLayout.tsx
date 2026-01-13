@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { Header } from './Header'
 import { Sidebar } from './Sidebar'
 import { Footer } from './Footer'
+import { FirstTimeTour } from '@/components/FirstTimeTour'
 
 interface AppLayoutProps {
   children: React.ReactNode
@@ -14,6 +15,9 @@ export function AppLayout({ children }: AppLayoutProps) {
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
+      {/* First-time user tour */}
+      <FirstTimeTour />
+
       {/* Header - visible on mobile, hidden on desktop with sidebar */}
       <div className="md:hidden">
         <Header onMenuToggle={() => setSidebarOpen(true)} />

@@ -24,16 +24,21 @@ const menuItems = [
   {
     title: 'Principal',
     items: [
-      { href: '/', label: 'Inicio', icon: Home },
-      { href: '/plans', label: 'Planes', icon: ClipboardList },
-      { href: '/customers', label: 'Clientes', icon: Users },
+      { href: '/', label: 'Inicio', icon: Home, tourId: 'sidebar-home' },
+      { href: '/plans', label: 'Planes', icon: ClipboardList, tourId: 'sidebar-plans' },
+      { href: '/customers', label: 'Clientes', icon: Users, tourId: 'sidebar-customers' },
     ],
   },
   {
     title: 'Acciones Rápidas',
     items: [
-      { href: '/plans/new', label: 'Nuevo Plan', icon: PlusCircle },
-      { href: '/customers/new', label: 'Nuevo Cliente', icon: PlusCircle },
+      { href: '/plans/new', label: 'Nuevo Plan', icon: PlusCircle, tourId: 'sidebar-new-plan' },
+      {
+        href: '/customers/new',
+        label: 'Nuevo Cliente',
+        icon: PlusCircle,
+        tourId: 'sidebar-new-customer',
+      },
     ],
   },
 ]
@@ -91,6 +96,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
                       <Link
                         href={item.href}
                         onClick={onClose}
+                        data-tour={item.tourId}
                         className={cn(
                           'flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-all hover:bg-primary/10 hover:text-primary',
                           isActive ? 'bg-primary/10 text-primary' : 'text-muted-foreground'
@@ -112,6 +118,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
           <div className="flex flex-col gap-1">
             <Link
               href="/config"
+              data-tour="sidebar-config"
               className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
             >
               <Settings className="h-4 w-4" />
@@ -119,6 +126,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
             </Link>
             <Link
               href="/help"
+              data-tour="sidebar-help"
               className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
             >
               <HelpCircle className="h-4 w-4" />
