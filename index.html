@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Planner de Comida</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #ffd6e8 0%, #ffb3d9 100%);
+        min-height: 100vh;
+        padding: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .container {
+        background: white;
+        border-radius: 20px;
+        padding: 40px;
+        box-shadow: 0 10px 40px rgba(255, 105, 180, 0.3);
+        max-width: 900px;
+        width: 100%;
+      }
+
+      h1 {
+        color: #ff4d94;
+        text-align: center;
+        margin-bottom: 30px;
+        font-size: 2.5em;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+      }
+
+      .preview {
+        background: linear-gradient(135deg, #ffb3d9 0%, #ff8ac6 100%);
+        border-radius: 15px;
+        padding: 30px;
+        margin-bottom: 30px;
+        overflow-x: auto;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        background: white;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      th {
+        background: #ff4d94;
+        color: white;
+        padding: 15px;
+        text-align: center;
+        font-weight: 600;
+        font-size: 0.9em;
+        text-transform: uppercase;
+      }
+
+      td {
+        padding: 12px;
+        text-align: center;
+        border: 1px solid #ffe0f0;
+        font-size: 0.85em;
+        color: #ff4d94;
+      }
+
+      tr:nth-child(even) {
+        background: #fff5fa;
+      }
+
+      .day-cell {
+        background: #ffb3d9;
+        color: white;
+        font-weight: 600;
+        text-transform: uppercase;
+      }
+
+      .download-btn {
+        background: linear-gradient(135deg, #ff4d94 0%, #ff1a75 100%);
+        color: white;
+        border: none;
+        padding: 18px 50px;
+        font-size: 1.2em;
+        border-radius: 50px;
+        cursor: pointer;
+        display: block;
+        margin: 0 auto;
+        text-transform: uppercase;
+        font-weight: 600;
+        letter-spacing: 1px;
+        box-shadow: 0 5px 20px rgba(255, 77, 148, 0.4);
+        transition: all 0.3s ease;
+      }
+
+      .download-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(255, 77, 148, 0.6);
+      }
+
+      .download-btn:active {
+        transform: translateY(-1px);
+      }
+
+      .info {
+        text-align: center;
+        color: #ff4d94;
+        margin-top: 20px;
+        font-size: 0.9em;
+      }
+
+      @media (max-width: 768px) {
+        .container {
+          padding: 20px;
+        }
+
+        h1 {
+          font-size: 1.8em;
+        }
+
+        th,
+        td {
+          padding: 8px;
+          font-size: 0.75em;
+        }
+
+        .download-btn {
+          padding: 15px 40px;
+          font-size: 1em;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>🍽️ Planner de Comida</h1>
+
+      <div class="preview">
+        <table id="previewTable">
+          <thead>
+            <tr>
+              <th>DÍA</th>
+              <th>DESAYUNO</th>
+              <th>COLACIÓN</th>
+              <th>ALMUERZO</th>
+              <th>COLACIÓN</th>
+              <th>MERIENDA</th>
+              <th>CENA</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="day-cell">LUNES</td>
+              <td>Menú para el Desayuno</td>
+              <td>Menú para la Colación</td>
+              <td>Menú para el Almuerzo</td>
+              <td>Menú para la Colación</td>
+              <td>Menú para la Merienda</td>
+              <td>Menú para la Cena</td>
+            </tr>
+            <tr>
+              <td class="day-cell">MARTES</td>
+              <td>Menú para el Desayuno</td>
+              <td>Menú para la Colación</td>
+              <td>Menú para el Almuerzo</td>
+              <td>Menú para la Colación</td>
+              <td>Menú para la Merienda</td>
+              <td>Menú para la Cena</td>
+            </tr>
+            <tr>
+              <td class="day-cell">MIÉRCOLES</td>
+              <td>Menú para el Desayuno</td>
+              <td>Menú para la Colación</td>
+              <td>Menú para el Almuerzo</td>
+              <td>Menú para la Colación</td>
+              <td>Menú para la Merienda</td>
+              <td>Menú para la Cena</td>
+            </tr>
+            <tr>
+              <td class="day-cell">JUEVES</td>
+              <td>Menú para el Desayuno</td>
+              <td>Menú para la Colación</td>
+              <td>Menú para el Almuerzo</td>
+              <td>Menú para la Colación</td>
+              <td>Menú para la Merienda</td>
+              <td>Menú para la Cena</td>
+            </tr>
+            <tr>
+              <td class="day-cell">VIERNES</td>
+              <td>Menú para el Desayuno</td>
+              <td>Menú para la Colación</td>
+              <td>Menú para el Almuerzo</td>
+              <td>Menú para la Colación</td>
+              <td>Menú para la Merienda</td>
+              <td>Menú para la Cena</td>
+            </tr>
+            <tr>
+              <td class="day-cell">SÁBADO</td>
+              <td>Menú para el Desayuno</td>
+              <td>Menú para la Colación</td>
+              <td>Menú para el Almuerzo</td>
+              <td>Menú para la Colación</td>
+              <td>Menú para la Merienda</td>
+              <td>Menú para la Cena</td>
+            </tr>
+            <tr>
+              <td class="day-cell">DOMINGO</td>
+              <td>Menú para el Desayuno</td>
+              <td>Menú para la Colación</td>
+              <td>Menú para el Almuerzo</td>
+              <td>Menú para la Colación</td>
+              <td>Menú para la Merienda</td>
+              <td>Menú para la Cena</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <button class="download-btn" onclick="downloadExcel()">
+        📥 Descargar Excel
+      </button>
+
+      <p class="info">
+        ✨ El archivo incluye formato y está listo para editar en Excel
+      </p>
+    </div>
+
+    <script>
+      function downloadExcel() {
+        const data = [
+          ["PLANNER DE COMIDA SEMANAL"],
+          [],
+          [
+            "DÍA",
+            "DESAYUNO",
+            "COLACIÓN",
+            "ALMUERZO",
+            "COLACIÓN",
+            "MERIENDA",
+            "CENA",
+          ],
+          [
+            "LUNES",
+            "Menú para el Desayuno",
+            "Menú para la Colación",
+            "Menú para el Almuerzo",
+            "Menú para la Colación",
+            "Menú para la Merienda",
+            "Menú para la Cena",
+          ],
+          [
+            "MARTES",
+            "Menú para el Desayuno",
+            "Menú para la Colación",
+            "Menú para el Almuerzo",
+            "Menú para la Colación",
+            "Menú para la Merienda",
+            "Menú para la Cena",
+          ],
+          [
+            "MIÉRCOLES",
+            "Menú para el Desayuno",
+            "Menú para la Colación",
+            "Menú para el Almuerzo",
+            "Menú para la Colación",
+            "Menú para la Merienda",
+            "Menú para la Cena",
+          ],
+          [
+            "JUEVES",
+            "Menú para el Desayuno",
+            "Menú para la Colación",
+            "Menú para el Almuerzo",
+            "Menú para la Colación",
+            "Menú para la Merienda",
+            "Menú para la Cena",
+          ],
+          [
+            "VIERNES",
+            "Menú para el Desayuno",
+            "Menú para la Colación",
+            "Menú para el Almuerzo",
+            "Menú para la Colación",
+            "Menú para la Merienda",
+            "Menú para la Cena",
+          ],
+          [
+            "SÁBADO",
+            "Menú para el Desayuno",
+            "Menú para la Colación",
+            "Menú para el Almuerzo",
+            "Menú para la Colación",
+            "Menú para la Merienda",
+            "Menú para la Cena",
+          ],
+          [
+            "DOMINGO",
+            "Menú para el Desayuno",
+            "Menú para la Colación",
+            "Menú para el Almuerzo",
+            "Menú para la Colación",
+            "Menú para la Merienda",
+            "Menú para la Cena",
+          ],
+        ];
+
+        const ws = XLSX.utils.aoa_to_sheet(data);
+
+        // Ajustar anchos de columna
+        ws["!cols"] = [
+          { wch: 12 },
+          { wch: 25 },
+          { wch: 25 },
+          { wch: 25 },
+          { wch: 25 },
+          { wch: 25 },
+          { wch: 25 },
+        ];
+
+        // Ajustar altura de filas
+        ws["!rows"] = [{ hpt: 30 }, { hpt: 15 }];
+
+        // Aplicar estilos al título
+        if (!ws["A1"].s) ws["A1"].s = {};
+        ws["A1"].s = {
+          font: { bold: true, sz: 16, color: { rgb: "FF4D94" } },
+          alignment: { horizontal: "center", vertical: "center" },
+        };
+
+        // Merge del título
+        ws["!merges"] = [{ s: { r: 0, c: 0 }, e: { r: 0, c: 6 } }];
+
+        // Aplicar estilos a los encabezados
+        const headerCells = ["A3", "B3", "C3", "D3", "E3", "F3", "G3"];
+        headerCells.forEach((cell) => {
+          if (!ws[cell].s) ws[cell].s = {};
+          ws[cell].s = {
+            font: { bold: true, color: { rgb: "FFFFFF" } },
+            fill: { fgColor: { rgb: "FF4D94" } },
+            alignment: { horizontal: "center", vertical: "center" },
+          };
+        });
+
+        // Aplicar estilos a las celdas de días
+        const dayCells = ["A4", "A5", "A6", "A7", "A8", "A9", "A10"];
+        dayCells.forEach((cell) => {
+          if (!ws[cell].s) ws[cell].s = {};
+          ws[cell].s = {
+            font: { bold: true, color: { rgb: "FFFFFF" } },
+            fill: { fgColor: { rgb: "FFB3D9" } },
+            alignment: { horizontal: "center", vertical: "center" },
+          };
+        });
+
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, "Planner Semanal");
+
+        XLSX.writeFile(wb, "Planner_de_Comida_Semanal.xlsx");
+      }
+    </script>
+  </body>
+</html>
