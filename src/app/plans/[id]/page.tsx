@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
-import { prisma } from '@/lib/prisma'
+import { createClient } from '@/utils/supabase/server'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { PlanGrid } from '@/components/PlanGrid'
@@ -14,10 +14,17 @@ interface PageProps {
 }
 
 async function getPlan(id: string): Promise<NutritionalPlan | null> {
-  const plan = await prisma.nutritionalPlan.findUnique({
-    where: { id },
-    include: { mealEntries: true }
-  })
+  const supabase = await createClient()
+  const { data: plan, error } = await supabase
+    .from('nutritional_plan')
+    .select(`
+      *,
+      meal_entries:meal_entry (*)
+    `)
+    .eq('id', id)
+    .single()
+  
+  if (error) return null
   return plan
 }
 
@@ -29,7 +36,7 @@ export default async function PlanViewPage({ params }: PageProps) {
     notFound()
   }
 
-  const formatDate = (date: Date) => {
+  const formatDate = (date: string) => {
     return new Date(date).toLocaleDateString('es-ES', {
       year: 'numeric',
       month: 'long',
@@ -60,11 +67,11 @@ export default async function PlanViewPage({ params }: PageProps) {
               )}
               <div className="flex items-center gap-2 mt-3 text-sm text-muted-foreground">
                 <Calendar className="h-4 w-4" />
-                <span>Creado: {formatDate(plan.createdAt)}</span>
-                {plan.updatedAt !== plan.createdAt && (
+                <span>Creado: {formatDate(plan.created_at)}</span>
+                {plan.updated_at !== plan.created_at && (
                   <>
                     <span className="mx-2">•</span>
-                    <span>Actualizado: {formatDate(plan.updatedAt)}</span>
+                    <span>Actualizado: {formatDate(plan.updated_at)}</span>
                   </>
                 )}
               </div>
@@ -82,7 +89,7 @@ export default async function PlanViewPage({ params }: PageProps) {
           </div>
         </CardHeader>
         <CardContent>
-          <PlanGrid meals={plan.mealEntries || []} />
+          <PlanGrid meals={plan.meal_entries || []} />
         </CardContent>
       </Card>
     </div>

@@ -12,11 +12,11 @@ interface PlanCardProps {
 }
 
 export function PlanCard({ plan, onDelete }: PlanCardProps) {
-  const mealCount = plan.mealEntries?.length || 0
+  const mealCount = plan.meal_entries?.length || 0
   const totalPossibleMeals = 7 * 5 // 7 days * 5 meal types
   const completionPercentage = Math.round((mealCount / totalPossibleMeals) * 100)
 
-  const formatDate = (date: Date) => {
+  const formatDate = (date: string) => {
     return new Date(date).toLocaleDateString('es-ES', {
       year: 'numeric',
       month: 'short',
@@ -41,7 +41,7 @@ export function PlanCard({ plan, onDelete }: PlanCardProps) {
         <div className="space-y-3">
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
             <Calendar className="h-4 w-4" />
-            <span>Creado: {formatDate(plan.createdAt)}</span>
+            <span>Creado: {formatDate(plan.created_at)}</span>
           </div>
           <div className="space-y-1">
             <div className="flex justify-between text-sm">

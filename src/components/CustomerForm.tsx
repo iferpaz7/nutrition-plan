@@ -17,10 +17,10 @@ interface CustomerFormProps {
 export function CustomerForm({ initialData, mode }: CustomerFormProps) {
   const router = useRouter()
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [idCard, setIdCard] = useState(initialData?.idCard || '')
-  const [firstName, setFirstName] = useState(initialData?.firstName || '')
-  const [lastName, setLastName] = useState(initialData?.lastName || '')
-  const [cellPhone, setCellPhone] = useState(initialData?.cellPhone || '')
+  const [idCard, setIdCard] = useState(initialData?.id_card || '')
+  const [firstName, setFirstName] = useState(initialData?.first_name || '')
+  const [lastName, setLastName] = useState(initialData?.last_name || '')
+  const [cellPhone, setCellPhone] = useState(initialData?.cell_phone || '')
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -44,10 +44,10 @@ export function CustomerForm({ initialData, mode }: CustomerFormProps) {
 
     try {
       const body = {
-        idCard: idCard.trim(),
-        firstName: firstName.trim(),
-        lastName: lastName.trim(),
-        cellPhone: cellPhone.trim() || undefined
+        id_card: idCard.trim(),
+        first_name: firstName.trim(),
+        last_name: lastName.trim(),
+        cell_phone: cellPhone.trim() || undefined
       }
 
       const url = mode === 'create' 

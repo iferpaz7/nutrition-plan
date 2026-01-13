@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { prisma } from '@/lib/prisma'
+import { createClient } from '@/utils/supabase/server'
 import type { ApiResponse, Customer, ApiError } from '@/lib/types'
 
 interface RouteParams {
@@ -9,23 +9,22 @@ interface RouteParams {
 // GET /api/customers/[id] - Get a single customer
 export async function GET(request: NextRequest, { params }: RouteParams) {
   try {
+    const supabase = await createClient()
     const { id } = await params
 
-    const customer = await prisma.customer.findUnique({
-      where: { id },
-      include: {
-        nutritionalPlans: {
-          include: {
-            mealEntries: true,
-          },
-          orderBy: {
-            createdAt: 'desc',
-          },
-        },
-      },
-    })
+    const { data: customer, error } = await supabase
+      .from('customer')
+      .select(`
+        *,
+        nutritional_plans:nutritional_plan (
+          *,
+          meal_entries:meal_entry (*)
+        )
+      `)
+      .eq('id', id)
+      .single()
 
-    if (!customer) {
+    if (error || !customer) {
       return NextResponse.json<ApiError>(
         {
           success: false,
@@ -56,15 +55,18 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
 // PUT /api/customers/[id] - Update a customer
 export async function PUT(request: NextRequest, { params }: RouteParams) {
   try {
+    const supabase = await createClient()
     const { id } = await params
     const body = await request.json()
 
     // Check if customer exists
-    const existingCustomer = await prisma.customer.findUnique({
-      where: { id },
-    })
+    const { data: existingCustomer, error: findError } = await supabase
+      .from('customer')
+      .select('*')
+      .eq('id', id)
+      .single()
 
-    if (!existingCustomer) {
+    if (findError || !existingCustomer) {
       return NextResponse.json<ApiError>(
         {
           success: false,
@@ -75,9 +77,9 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
       )
     }
 
-    // Validate idCard if provided
-    if (body.idCard !== undefined) {
-      if (typeof body.idCard !== 'string' || body.idCard.trim() === '') {
+    // Validate fields if provided
+    if (body.id_card !== undefined) {
+      if (typeof body.id_card !== 'string' || body.id_card.trim() === '') {
         return NextResponse.json<ApiError>(
           {
             success: false,
@@ -88,13 +90,13 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
         )
       }
 
-      // Check if another customer has the same idCard
-      const duplicateCustomer = await prisma.customer.findFirst({
-        where: {
-          idCard: body.idCard.trim(),
-          NOT: { id },
-        },
-      })
+      // Check if idCard already exists for another customer
+      const { data: duplicateCustomer } = await supabase
+        .from('customer')
+        .select('id')
+        .eq('id_card', body.id_card.trim())
+        .neq('id', id)
+        .single()
 
       if (duplicateCustomer) {
         return NextResponse.json<ApiError>(
@@ -108,25 +110,44 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
       }
     }
 
-    // Update the customer
-    const updatedCustomer = await prisma.customer.update({
-      where: { id },
-      data: {
-        idCard: body.idCard?.trim() ?? existingCustomer.idCard,
-        firstName: body.firstName?.trim() ?? existingCustomer.firstName,
-        lastName: body.lastName?.trim() ?? existingCustomer.lastName,
-        cellPhone: body.cellPhone !== undefined 
-          ? (body.cellPhone?.trim() || null) 
-          : existingCustomer.cellPhone,
-      },
-      include: {
-        nutritionalPlans: {
-          include: {
-            mealEntries: true,
-          },
+    if (body.first_name !== undefined && (typeof body.first_name !== 'string' || body.first_name.trim() === '')) {
+      return NextResponse.json<ApiError>(
+        {
+          success: false,
+          error: 'El nombre no puede estar vacío',
+          code: 'VALIDATION_ERROR',
         },
-      },
-    })
+        { status: 400 }
+      )
+    }
+
+    if (body.last_name !== undefined && (typeof body.last_name !== 'string' || body.last_name.trim() === '')) {
+      return NextResponse.json<ApiError>(
+        {
+          success: false,
+          error: 'El apellido no puede estar vacío',
+          code: 'VALIDATION_ERROR',
+        },
+        { status: 400 }
+      )
+    }
+
+    // Update customer
+    const { data: updatedCustomer, error: updateError } = await supabase
+      .from('customer')
+      .update({
+        id_card: body.id_card?.trim() ?? existingCustomer.id_card,
+        first_name: body.first_name?.trim() ?? existingCustomer.first_name,
+        last_name: body.last_name?.trim() ?? existingCustomer.last_name,
+        cell_phone: body.cell_phone !== undefined 
+          ? (body.cell_phone?.trim() || null) 
+          : existingCustomer.cell_phone,
+      })
+      .eq('id', id)
+      .select()
+      .single()
+
+    if (updateError) throw updateError
 
     return NextResponse.json<ApiResponse<Customer>>({
       success: true,
@@ -148,14 +169,17 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
 // DELETE /api/customers/[id] - Delete a customer
 export async function DELETE(request: NextRequest, { params }: RouteParams) {
   try {
+    const supabase = await createClient()
     const { id } = await params
 
     // Check if customer exists
-    const existingCustomer = await prisma.customer.findUnique({
-      where: { id },
-    })
+    const { data: existingCustomer, error: findError } = await supabase
+      .from('customer')
+      .select('id')
+      .eq('id', id)
+      .single()
 
-    if (!existingCustomer) {
+    if (findError || !existingCustomer) {
       return NextResponse.json<ApiError>(
         {
           success: false,
@@ -166,14 +190,16 @@ export async function DELETE(request: NextRequest, { params }: RouteParams) {
       )
     }
 
-    // Delete the customer (cascade will delete plans and meals)
-    await prisma.customer.delete({
-      where: { id },
-    })
+    // Delete the customer (cascade will delete nutritional plans and meal entries)
+    const { error: deleteError } = await supabase
+      .from('customer')
+      .delete()
+      .eq('id', id)
 
-    return NextResponse.json<ApiResponse<{ deleted: boolean }>>({
+    if (deleteError) throw deleteError
+
+    return NextResponse.json<ApiResponse<null>>({
       success: true,
-      data: { deleted: true },
     })
   } catch (error) {
     console.error('Error deleting customer:', error)

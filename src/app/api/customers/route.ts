@@ -1,26 +1,29 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { prisma } from '@/lib/prisma'
+import { createClient } from '@/utils/supabase/server'
 import type { ApiResponse, Customer, ApiError } from '@/lib/types'
 
 // GET /api/customers - List all customers
 export async function GET() {
   try {
-    const customers = await prisma.customer.findMany({
-      include: {
-        nutritionalPlans: {
-          include: {
-            mealEntries: true,
-          },
-        },
-      },
-      orderBy: {
-        lastName: 'asc',
-      },
-    })
+    const supabase = await createClient()
+
+    const { data: customers, error } = await supabase
+      .from('customer')
+      .select(`
+        *,
+        nutritional_plans:nutritional_plan (
+          id,
+          name,
+          created_at
+        )
+      `)
+      .order('created_at', { ascending: false })
+
+    if (error) throw error
 
     return NextResponse.json<ApiResponse<Customer[]>>({
       success: true,
-      data: customers,
+      data: customers || [],
     })
   } catch (error) {
     console.error('Error fetching customers:', error)
@@ -38,10 +41,11 @@ export async function GET() {
 // POST /api/customers - Create a new customer
 export async function POST(request: NextRequest) {
   try {
+    const supabase = await createClient()
     const body = await request.json()
 
     // Validate required fields
-    if (!body.idCard || typeof body.idCard !== 'string' || body.idCard.trim() === '') {
+    if (!body.id_card || typeof body.id_card !== 'string' || body.id_card.trim() === '') {
       return NextResponse.json<ApiError>(
         {
           success: false,
@@ -52,7 +56,7 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    if (!body.firstName || typeof body.firstName !== 'string' || body.firstName.trim() === '') {
+    if (!body.first_name || typeof body.first_name !== 'string' || body.first_name.trim() === '') {
       return NextResponse.json<ApiError>(
         {
           success: false,
@@ -63,7 +67,7 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    if (!body.lastName || typeof body.lastName !== 'string' || body.lastName.trim() === '') {
+    if (!body.last_name || typeof body.last_name !== 'string' || body.last_name.trim() === '') {
       return NextResponse.json<ApiError>(
         {
           success: false,
@@ -74,10 +78,12 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Check if customer with same idCard already exists
-    const existingCustomer = await prisma.customer.findUnique({
-      where: { idCard: body.idCard.trim() },
-    })
+    // Check if idCard already exists
+    const { data: existingCustomer } = await supabase
+      .from('customer')
+      .select('id')
+      .eq('id_card', body.id_card.trim())
+      .single()
 
     if (existingCustomer) {
       return NextResponse.json<ApiError>(
@@ -90,18 +96,22 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Create the customer
-    const customer = await prisma.customer.create({
-      data: {
-        idCard: body.idCard.trim(),
-        firstName: body.firstName.trim(),
-        lastName: body.lastName.trim(),
-        cellPhone: body.cellPhone?.trim() || null,
-      },
-      include: {
-        nutritionalPlans: true,
-      },
-    })
+    // Create customer
+    const { data: customer, error } = await supabase
+      .from('customer')
+      .insert({
+        id_card: body.id_card.trim(),
+        first_name: body.first_name.trim(),
+        last_name: body.last_name.trim(),
+        cell_phone: body.cell_phone?.trim() || null,
+      })
+      .select(`
+        *,
+        nutritional_plans:nutritional_plan (*)
+      `)
+      .single()
+
+    if (error) throw error
 
     return NextResponse.json<ApiResponse<Customer>>(
       {

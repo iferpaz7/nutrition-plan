@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
-import { prisma } from '@/lib/prisma'
+import { createClient } from '@/utils/supabase/server'
 import { CustomerForm } from '@/components/CustomerForm'
 import { Button } from '@/components/ui/button'
 import { ArrowLeft } from 'lucide-react'
@@ -11,9 +11,14 @@ interface PageProps {
 }
 
 async function getCustomer(id: string): Promise<Customer | null> {
-  const customer = await prisma.customer.findUnique({
-    where: { id },
-  })
+  const supabase = await createClient()
+  const { data: customer, error } = await supabase
+    .from('customer')
+    .select('*')
+    .eq('id', id)
+    .single()
+  
+  if (error) return null
   return customer
 }
 

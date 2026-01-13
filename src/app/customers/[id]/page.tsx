@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
-import { prisma } from '@/lib/prisma'
+import { createClient } from '@/utils/supabase/server'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { PlanCard } from '@/components/PlanCard'
@@ -13,19 +13,20 @@ interface PageProps {
 }
 
 async function getCustomer(id: string): Promise<Customer | null> {
-  const customer = await prisma.customer.findUnique({
-    where: { id },
-    include: {
-      nutritionalPlans: {
-        include: {
-          mealEntries: true,
-        },
-        orderBy: {
-          createdAt: 'desc',
-        },
-      },
-    },
-  })
+  const supabase = await createClient()
+  const { data: customer, error } = await supabase
+    .from('customer')
+    .select(`
+      *,
+      nutritional_plans:nutritional_plan (
+        *,
+        meal_entries:meal_entry (*)
+      )
+    `)
+    .eq('id', id)
+    .single()
+  
+  if (error) return null
   return customer
 }
 
@@ -37,7 +38,7 @@ export default async function CustomerViewPage({ params }: PageProps) {
     notFound()
   }
 
-  const formatDate = (date: Date) => {
+  const formatDate = (date: string) => {
     return new Date(date).toLocaleDateString('es-ES', {
       year: 'numeric',
       month: 'long',
@@ -61,22 +62,22 @@ export default async function CustomerViewPage({ params }: PageProps) {
           <div className="flex items-start justify-between">
             <div>
               <CardTitle className="text-2xl text-primary">
-                {customer.firstName} {customer.lastName}
+                {customer.first_name} {customer.last_name}
               </CardTitle>
               <CardDescription className="mt-2 space-y-1">
                 <div className="flex items-center gap-2">
                   <IdCard className="h-4 w-4" />
-                  <span>{customer.idCard}</span>
+                  <span>{customer.id_card}</span>
                 </div>
-                {customer.cellPhone && (
+                {customer.cell_phone && (
                   <div className="flex items-center gap-2">
                     <Phone className="h-4 w-4" />
-                    <span>{customer.cellPhone}</span>
+                    <span>{customer.cell_phone}</span>
                   </div>
                 )}
                 <div className="flex items-center gap-2">
                   <Calendar className="h-4 w-4" />
-                  <span>Cliente desde: {formatDate(customer.createdAt)}</span>
+                  <span>Cliente desde: {formatDate(customer.created_at)}</span>
                 </div>
               </CardDescription>
             </div>
@@ -87,7 +88,7 @@ export default async function CustomerViewPage({ params }: PageProps) {
                   Editar
                 </Link>
               </Button>
-              <DeleteCustomerButton customerId={customer.id} customerName={`${customer.firstName} ${customer.lastName}`} />
+              <DeleteCustomerButton customerId={customer.id} customerName={`${customer.first_name} ${customer.last_name}`} />
             </div>
           </div>
         </CardHeader>
@@ -103,9 +104,9 @@ export default async function CustomerViewPage({ params }: PageProps) {
         </Button>
       </div>
 
-      {customer.nutritionalPlans && customer.nutritionalPlans.length > 0 ? (
+      {customer.nutritional_plans && customer.nutritional_plans.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {customer.nutritionalPlans.map(plan => (
+          {customer.nutritional_plans.map(plan => (
             <PlanCard key={plan.id} plan={plan} />
           ))}
         </div>

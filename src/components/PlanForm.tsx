@@ -9,8 +9,7 @@ import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { PlanGrid, DAYS, MEAL_TYPES } from '@/components/PlanGrid'
 import { toast } from 'sonner'
-import { DayOfWeek, MealType } from '@/lib/types'
-import type { NutritionalPlan } from '@/lib/types'
+import type { DayOfWeek, MealType, NutritionalPlan } from '@/lib/types'
 
 interface PlanFormProps {
   initialData?: NutritionalPlan
@@ -32,10 +31,10 @@ export function PlanForm({ initialData, mode, customerId }: PlanFormProps) {
     DAYS.forEach(day => {
       meals[day.key] = {}
       MEAL_TYPES.forEach(mealType => {
-        const existingMeal = (initialData?.mealEntries || []).find(
-          m => m.dayOfWeek === day.key && m.mealType === mealType.key
+        const existingMeal = (initialData?.meal_entries || []).find(
+          m => m.day_of_week === day.key && m.meal_type === mealType.key
         )
-        meals[day.key][mealType.key] = existingMeal?.mealDescription || ''
+        meals[day.key][mealType.key] = existingMeal?.meal_description || ''
       })
     })
     return meals
@@ -83,7 +82,7 @@ export function PlanForm({ initialData, mode, customerId }: PlanFormProps) {
         name: name.trim(),
         description: description.trim() || undefined,
         meals: filteredMeals,
-        customerId: customerId || initialData?.customerId
+        customer_id: customerId || initialData?.customer_id
       }
 
       const url = mode === 'create' 

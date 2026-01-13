@@ -128,7 +128,7 @@ export default function CustomersPage() {
       <DeleteConfirmDialog
         open={deleteDialogOpen}
         onOpenChange={setDeleteDialogOpen}
-        planName={customerToDelete ? `${customerToDelete.firstName} ${customerToDelete.lastName}` : ''}
+        planName={customerToDelete ? `${customerToDelete.first_name} ${customerToDelete.last_name}` : ''}
         onConfirm={handleDeleteConfirm}
       />
     </div>

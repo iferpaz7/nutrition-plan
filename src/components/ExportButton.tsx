@@ -28,10 +28,10 @@ export function ExportButton({ plan }: ExportButtonProps) {
       DAYS.forEach(day => {
         const row: (string | undefined)[] = [day.label.toUpperCase()]
         MEAL_TYPES.forEach(mealType => {
-          const meal = (plan.mealEntries || []).find(
-            m => m.dayOfWeek === day.key && m.mealType === mealType.key
+          const meal = (plan.meal_entries || []).find(
+            m => m.day_of_week === day.key && m.meal_type === mealType.key
           )
-          row.push(meal?.mealDescription || '')
+          row.push(meal?.meal_description || '')
         })
         data.push(row)
       })

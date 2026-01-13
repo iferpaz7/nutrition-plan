@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
-import { prisma } from '@/lib/prisma'
+import { createClient } from '@/utils/supabase/server'
 import { PlanForm } from '@/components/PlanForm'
 import { Button } from '@/components/ui/button'
 import { ArrowLeft } from 'lucide-react'
@@ -11,10 +11,17 @@ interface PageProps {
 }
 
 async function getPlan(id: string): Promise<NutritionalPlan | null> {
-  const plan = await prisma.nutritionalPlan.findUnique({
-    where: { id },
-    include: { mealEntries: true }
-  })
+  const supabase = await createClient()
+  const { data: plan, error } = await supabase
+    .from('nutritional_plan')
+    .select(`
+      *,
+      meal_entries:meal_entry (*)
+    `)
+    .eq('id', id)
+    .single()
+  
+  if (error) return null
   return plan
 }
 

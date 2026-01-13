@@ -12,23 +12,23 @@ interface CustomerCardProps {
 }
 
 export function CustomerCard({ customer, onDelete }: CustomerCardProps) {
-  const planCount = customer.nutritionalPlans?.length || 0
+  const planCount = customer.nutritional_plans?.length || 0
 
   return (
     <Card className="hover:shadow-lg transition-shadow">
       <CardHeader>
         <CardTitle className="text-primary flex items-center gap-2">
-          {customer.firstName} {customer.lastName}
+          {customer.first_name} {customer.last_name}
         </CardTitle>
         <CardDescription className="space-y-1">
           <div className="flex items-center gap-2">
             <IdCard className="h-4 w-4" />
-            <span>{customer.idCard}</span>
+            <span>{customer.id_card}</span>
           </div>
-          {customer.cellPhone && (
+          {customer.cell_phone && (
             <div className="flex items-center gap-2">
               <Phone className="h-4 w-4" />
-              <span>{customer.cellPhone}</span>
+              <span>{customer.cell_phone}</span>
             </div>
           )}
         </CardDescription>

@@ -9,8 +9,7 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { Textarea } from '@/components/ui/textarea'
-import { DayOfWeek, MealType } from '@/lib/types'
-import type { MealEntry } from '@/lib/types'
+import type { DayOfWeek, MealType, MealEntry } from '@/lib/types'
 import { cn } from '@/lib/utils'
 
 interface PlanGridProps {
@@ -21,21 +20,21 @@ interface PlanGridProps {
 }
 
 const DAYS: { key: DayOfWeek; label: string }[] = [
-  { key: DayOfWeek.LUNES, label: 'Lunes' },
-  { key: DayOfWeek.MARTES, label: 'Martes' },
-  { key: DayOfWeek.MIERCOLES, label: 'Miércoles' },
-  { key: DayOfWeek.JUEVES, label: 'Jueves' },
-  { key: DayOfWeek.VIERNES, label: 'Viernes' },
-  { key: DayOfWeek.SABADO, label: 'Sábado' },
-  { key: DayOfWeek.DOMINGO, label: 'Domingo' },
+  { key: 'LUNES', label: 'Lunes' },
+  { key: 'MARTES', label: 'Martes' },
+  { key: 'MIERCOLES', label: 'Miércoles' },
+  { key: 'JUEVES', label: 'Jueves' },
+  { key: 'VIERNES', label: 'Viernes' },
+  { key: 'SABADO', label: 'Sábado' },
+  { key: 'DOMINGO', label: 'Domingo' },
 ]
 
 const MEAL_TYPES: { key: MealType; label: string; color: string }[] = [
-  { key: MealType.DESAYUNO, label: 'Desayuno', color: 'bg-amber-100' },
-  { key: MealType.COLACION_1, label: 'Colación', color: 'bg-green-100' },
-  { key: MealType.ALMUERZO, label: 'Almuerzo', color: 'bg-orange-100' },
-  { key: MealType.COLACION_2, label: 'Colación', color: 'bg-green-100' },
-  { key: MealType.CENA, label: 'Cena', color: 'bg-blue-100' },
+  { key: 'DESAYUNO', label: 'Desayuno', color: 'bg-amber-100' },
+  { key: 'COLACION_1', label: 'Colación', color: 'bg-green-100' },
+  { key: 'ALMUERZO', label: 'Almuerzo', color: 'bg-orange-100' },
+  { key: 'COLACION_2', label: 'Colación', color: 'bg-green-100' },
+  { key: 'CENA', label: 'Cena', color: 'bg-blue-100' },
 ]
 
 export function PlanGrid({ meals, editMode = false, onMealChange, getMealValue }: PlanGridProps) {
@@ -43,8 +42,8 @@ export function PlanGrid({ meals, editMode = false, onMealChange, getMealValue }
     if (getMealValue) {
       return getMealValue(day, mealType)
     }
-    const meal = meals.find(m => m.dayOfWeek === day && m.mealType === mealType)
-    return meal?.mealDescription || ''
+    const meal = meals.find(m => m.day_of_week === day && m.meal_type === mealType)
+    return meal?.meal_description || ''
   }
 
   return (
