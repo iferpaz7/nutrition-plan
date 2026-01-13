@@ -38,6 +38,13 @@ jest.mock('html2canvas', () => jest.fn(() => Promise.resolve({
   toBlob: jest.fn((callback) => callback(new Blob(['test'], { type: 'image/png' }))),
 })))
 
+// Mock dom-to-image-more
+jest.mock('dom-to-image-more', () => ({
+  toBlob: jest.fn(() => Promise.resolve(new Blob(['test'], { type: 'image/png' }))),
+  toPng: jest.fn(() => Promise.resolve('data:image/png;base64,test')),
+  toJpeg: jest.fn(() => Promise.resolve('data:image/jpeg;base64,test')),
+}))
+
 // Mock jspdf
 jest.mock('jspdf', () => {
   return jest.fn().mockImplementation(() => ({

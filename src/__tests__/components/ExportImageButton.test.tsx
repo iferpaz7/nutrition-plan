@@ -2,9 +2,9 @@ import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { ExportImageButton } from '@/components/ExportImageButton'
 import type { NutritionalPlan } from '@/lib/types'
-import html2canvas from 'html2canvas'
+import domtoimage from 'dom-to-image-more'
 
-jest.mock('html2canvas')
+jest.mock('dom-to-image-more')
 
 const mockPlan: NutritionalPlan = {
   id: '123e4567-e89b-12d3-a456-426614174001',
@@ -31,6 +31,8 @@ describe('ExportImageButton', () => {
     jest.clearAllMocks()
     // Mock getElementById
     document.getElementById = jest.fn().mockReturnValue(document.createElement('div'))
+    // Mock dom-to-image-more toBlob
+    ;(domtoimage.toBlob as jest.Mock).mockResolvedValue(new Blob(['test'], { type: 'image/png' }))
   })
 
   it('renders export image button correctly', () => {
@@ -45,14 +47,14 @@ describe('ExportImageButton', () => {
     expect(screen.getByText(/exportar imagen/i)).toBeInTheDocument()
   })
 
-  it('calls html2canvas when clicked', async () => {
+  it('calls dom-to-image when clicked', async () => {
     const user = userEvent.setup()
     render(<ExportImageButton plan={mockPlan} />)
     
     const button = screen.getByRole('button', { name: /exportar imagen/i })
     await user.click(button)
     
-    expect(html2canvas).toHaveBeenCalled()
+    expect(domtoimage.toBlob).toHaveBeenCalled()
   })
 
   it('uses default targetId if not provided', async () => {
