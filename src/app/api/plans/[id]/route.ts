@@ -16,6 +16,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
       where: { id },
       include: {
         mealEntries: true,
+        customer: true,
       },
     })
 
@@ -23,7 +24,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
       return NextResponse.json<ApiError>(
         {
           success: false,
-          error: 'Nutritional plan not found',
+          error: 'Plan nutricional no encontrado',
           code: 'NOT_FOUND',
         },
         { status: 404 }
@@ -160,6 +161,7 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
         },
         include: {
           mealEntries: true,
+          customer: true,
         },
       })
     })

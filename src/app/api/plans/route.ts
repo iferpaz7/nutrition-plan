@@ -4,11 +4,16 @@ import { DayOfWeek, MealType } from '@prisma/client'
 import type { ApiResponse, NutritionalPlan, ApiError } from '@/lib/types'
 
 // GET /api/plans - List all nutritional plans
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
+    const { searchParams } = new URL(request.url)
+    const customerId = searchParams.get('customerId')
+
     const plans = await prisma.nutritionalPlan.findMany({
+      where: customerId ? { customerId } : undefined,
       include: {
         mealEntries: true,
+        customer: true,
       },
       orderBy: {
         createdAt: 'desc',
@@ -37,12 +42,40 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
 
+    // Validate customerId
+    if (!body.customerId || typeof body.customerId !== 'string') {
+      return NextResponse.json<ApiError>(
+        {
+          success: false,
+          error: 'El cliente es requerido',
+          code: 'VALIDATION_ERROR',
+        },
+        { status: 400 }
+      )
+    }
+
+    // Check if customer exists
+    const customer = await prisma.customer.findUnique({
+      where: { id: body.customerId },
+    })
+
+    if (!customer) {
+      return NextResponse.json<ApiError>(
+        {
+          success: false,
+          error: 'Cliente no encontrado',
+          code: 'NOT_FOUND',
+        },
+        { status: 404 }
+      )
+    }
+
     // Validate required fields
     if (!body.name || typeof body.name !== 'string' || body.name.trim() === '') {
       return NextResponse.json<ApiError>(
         {
           success: false,
-          error: 'Plan name is required',
+          error: 'El nombre del plan es requerido',
           code: 'VALIDATION_ERROR',
         },
         { status: 400 }
@@ -107,12 +140,14 @@ export async function POST(request: NextRequest) {
       data: {
         name: body.name.trim(),
         description: body.description?.trim() || null,
+        customerId: body.customerId,
         mealEntries: {
           create: meals,
         },
       },
       include: {
         mealEntries: true,
+        customer: true,
       },
     })
 

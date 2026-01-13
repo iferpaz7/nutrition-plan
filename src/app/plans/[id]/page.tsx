@@ -82,7 +82,7 @@ export default async function PlanViewPage({ params }: PageProps) {
           </div>
         </CardHeader>
         <CardContent>
-          <PlanGrid meals={plan.mealEntries} />
+          <PlanGrid meals={plan.mealEntries || []} />
         </CardContent>
       </Card>
     </div>

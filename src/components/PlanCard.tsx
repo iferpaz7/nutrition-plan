@@ -12,7 +12,7 @@ interface PlanCardProps {
 }
 
 export function PlanCard({ plan, onDelete }: PlanCardProps) {
-  const mealCount = plan.mealEntries.length
+  const mealCount = plan.mealEntries?.length || 0
   const totalPossibleMeals = 7 * 5 // 7 days * 5 meal types
   const completionPercentage = Math.round((mealCount / totalPossibleMeals) * 100)
 

@@ -15,11 +15,12 @@ import type { NutritionalPlan } from '@/lib/types'
 interface PlanFormProps {
   initialData?: NutritionalPlan
   mode: 'create' | 'edit'
+  customerId?: string
 }
 
 type MealsState = Record<string, Record<string, string>>
 
-export function PlanForm({ initialData, mode }: PlanFormProps) {
+export function PlanForm({ initialData, mode, customerId }: PlanFormProps) {
   const router = useRouter()
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [name, setName] = useState(initialData?.name || '')
@@ -31,7 +32,7 @@ export function PlanForm({ initialData, mode }: PlanFormProps) {
     DAYS.forEach(day => {
       meals[day.key] = {}
       MEAL_TYPES.forEach(mealType => {
-        const existingMeal = initialData?.mealEntries.find(
+        const existingMeal = (initialData?.mealEntries || []).find(
           m => m.dayOfWeek === day.key && m.mealType === mealType.key
         )
         meals[day.key][mealType.key] = existingMeal?.mealDescription || ''
@@ -81,7 +82,8 @@ export function PlanForm({ initialData, mode }: PlanFormProps) {
       const body = {
         name: name.trim(),
         description: description.trim() || undefined,
-        meals: filteredMeals
+        meals: filteredMeals,
+        customerId: customerId || initialData?.customerId
       }
 
       const url = mode === 'create' 
@@ -103,7 +105,13 @@ export function PlanForm({ initialData, mode }: PlanFormProps) {
       }
 
       toast.success(mode === 'create' ? 'Plan creado exitosamente' : 'Plan actualizado exitosamente')
-      router.push(`/plans/${result.data.id}`)
+      
+      // Redirect to customer page if customerId exists, otherwise to plan page
+      if (customerId) {
+        router.push(`/customers/${customerId}`)
+      } else {
+        router.push(`/plans/${result.data.id}`)
+      }
       router.refresh()
     } catch (error) {
       toast.error(error instanceof Error ? error.message : 'Error al guardar el plan')

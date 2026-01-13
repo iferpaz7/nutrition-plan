@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { PlanCard } from '@/components/PlanCard'
 import { DeleteConfirmDialog } from '@/components/DeleteConfirmDialog'
-import { Plus, Salad } from 'lucide-react'
+import { Plus, Salad, Users } from 'lucide-react'
 import { toast } from 'sonner'
 import type { NutritionalPlan, ApiResponse } from '@/lib/types'
 
@@ -90,12 +90,20 @@ export default function HomePage() {
               <p className="text-muted-foreground">Gestiona tus planes de alimentación semanales</p>
             </div>
           </div>
-          <Button asChild>
-            <Link href="/plans/new">
-              <Plus className="h-4 w-4 mr-2" />
-              Nuevo Plan
-            </Link>
-          </Button>
+          <div className="flex gap-2">
+            <Button asChild variant="outline">
+              <Link href="/customers">
+                <Users className="h-4 w-4 mr-2" />
+                Clientes
+              </Link>
+            </Button>
+            <Button asChild>
+              <Link href="/plans/new">
+                <Plus className="h-4 w-4 mr-2" />
+                Nuevo Plan
+              </Link>
+            </Button>
+          </div>
         </div>
       </header>
 
