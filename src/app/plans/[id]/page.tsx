@@ -38,8 +38,8 @@ export default async function PlanViewPage({ params }: PageProps) {
   }
 
   return (
-    <div className="container mx-auto py-10 px-4 max-w-7xl">
-      <div className="mb-6">
+    <div className="container mx-auto py-6 sm:py-10 px-2 sm:px-4 max-w-7xl">
+      <div className="mb-4 sm:mb-6 px-2 sm:px-0">
         <Button asChild variant="ghost" size="sm">
           <Link href="/">
             <ArrowLeft className="h-4 w-4 mr-2" />

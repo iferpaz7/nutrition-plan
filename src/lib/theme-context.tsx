@@ -152,8 +152,11 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined)
 
 const STORAGE_KEY = 'nutriplan-theme-palette'
 
+// Get the default palette (Menta)
+const DEFAULT_PALETTE = THEME_PALETTES.find((p) => p.id === 'mint') || THEME_PALETTES[0]
+
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [currentPalette, setCurrentPalette] = useState<ThemePalette>(THEME_PALETTES[0])
+  const [currentPalette, setCurrentPalette] = useState<ThemePalette>(DEFAULT_PALETTE)
   const [isLoaded, setIsLoaded] = useState(false)
 
   const applyPalette = useCallback((palette: ThemePalette) => {
@@ -196,7 +199,13 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
       if (palette) {
         setCurrentPalette(palette)
         applyPalette(palette)
+      } else {
+        // Saved palette not found, apply default
+        applyPalette(DEFAULT_PALETTE)
       }
+    } else {
+      // No saved palette, apply default (Menta)
+      applyPalette(DEFAULT_PALETTE)
     }
     setIsLoaded(true)
   }, [applyPalette])

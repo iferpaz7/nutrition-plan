@@ -54,12 +54,12 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
       {/* Sidebar */}
       <aside
         className={cn(
-          'fixed left-0 top-0 z-50 h-full w-64 bg-white border-r shadow-lg transition-transform duration-300 ease-in-out md:translate-x-0 md:static md:shadow-none md:z-0',
+          'fixed left-0 top-0 z-50 h-full w-64 bg-white shadow-lg transition-transform duration-300 ease-in-out md:translate-x-0 md:static md:shadow-sm md:z-0',
           isOpen ? 'translate-x-0' : '-translate-x-full'
         )}
       >
         {/* Mobile Header */}
-        <div className="flex items-center justify-between p-4 border-b md:hidden">
+        <div className="flex items-center justify-between p-4 md:hidden">
           <Link href="/" className="flex items-center gap-2 font-semibold" onClick={onClose}>
             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-white">
               <Apple className="h-5 w-5" />
@@ -72,7 +72,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
         </div>
 
         {/* Desktop Header */}
-        <div className="hidden md:flex items-center gap-2 p-4 border-b">
+        <div className="hidden md:flex items-center gap-2 p-4">
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-white">
             <Apple className="h-5 w-5" />
           </div>
@@ -114,7 +114,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
         </nav>
 
         {/* Footer */}
-        <div className="border-t p-4">
+        <div className="p-4 mt-auto">
           <div className="flex flex-col gap-1">
             <Link
               href="/config"

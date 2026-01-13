@@ -30,7 +30,7 @@ export function AppLayout({ children }: AppLayoutProps) {
         {/* Main content area */}
         <div className="flex-1 flex flex-col min-h-screen md:min-h-0">
           {/* Desktop Header */}
-          <header className="hidden md:flex sticky top-0 z-40 h-14 items-center gap-4 border-b bg-white px-6">
+          <header className="hidden md:flex sticky top-0 z-40 h-14 items-center gap-4 bg-white px-6 shadow-sm">
             <div className="flex-1">
               <h1 className="text-lg font-semibold text-muted-foreground">
                 Sistema de Planes Nutricionales

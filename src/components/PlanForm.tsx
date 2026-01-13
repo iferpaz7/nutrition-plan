@@ -385,10 +385,10 @@ export function PlanForm({ initialData, mode, customerId: initialCustomerId }: P
         </Card>
 
         <Card>
-          <CardHeader>
+          <CardHeader className="px-4 sm:px-6">
             <CardTitle className="text-primary">Planificación Semanal</CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="px-0 sm:px-6">
             <PlanGrid
               meals={[]}
               editMode={true}
@@ -398,7 +398,7 @@ export function PlanForm({ initialData, mode, customerId: initialCustomerId }: P
           </CardContent>
         </Card>
 
-        <div className="flex gap-4 justify-end">
+        <div className="flex gap-4 justify-end px-2 sm:px-0">
           <Button
             type="button"
             variant="outline"

@@ -30,12 +30,12 @@ export function PlanViewClient({ plan, children }: PlanViewClientProps) {
   return (
     <Card className="mb-6">
       <div id="plan-grid-container" className="bg-white">
-        <CardHeader className="pb-4">
-          <CardTitle className="text-2xl text-primary">{plan.name}</CardTitle>
+        <CardHeader className="pb-4 px-4 sm:px-6">
+          <CardTitle className="text-xl sm:text-2xl text-primary">{plan.name}</CardTitle>
           {plan.description && (
-            <CardDescription className="mt-2">{plan.description}</CardDescription>
+            <CardDescription className="mt-2 text-sm">{plan.description}</CardDescription>
           )}
-          <div className="flex flex-wrap items-center gap-x-4 gap-y-2 mt-3 text-sm text-muted-foreground">
+          <div className="flex flex-col sm:flex-row sm:flex-wrap sm:items-center gap-2 sm:gap-x-4 sm:gap-y-2 mt-3 text-xs sm:text-sm text-muted-foreground">
             {customer && (
               <Link
                 href={`/customers/${customer.id}`}
@@ -52,17 +52,17 @@ export function PlanViewClient({ plan, children }: PlanViewClientProps) {
               <span>Creado: {formatDate(plan.created_at)}</span>
             </div>
             {plan.updated_at !== plan.created_at && (
-              <span>Actualizado: {formatDate(plan.updated_at)}</span>
+              <span className="ml-6 sm:ml-0">Actualizado: {formatDate(plan.updated_at)}</span>
             )}
           </div>
         </CardHeader>
-        <CardContent>
+        <CardContent className="px-0 sm:px-6">
           <PlanGrid meals={plan.meal_entries || []} />
         </CardContent>
       </div>
 
       {/* Action buttons - outside the export area */}
-      <div className="px-6 pb-6 pt-2 flex flex-wrap gap-2 justify-end border-t">
+      <div className="px-4 sm:px-6 pb-6 pt-2 flex flex-wrap gap-2 justify-center sm:justify-end border-t">
         <ExportPdfButton plan={plan} customer={customer} />
         <ExportImageButton plan={plan} />
         <ExportButton plan={plan} />

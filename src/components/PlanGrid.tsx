@@ -47,47 +47,58 @@ export function PlanGrid({ meals, editMode = false, onMealChange, getMealValue }
   }
 
   return (
-    <div className="overflow-x-auto rounded-lg border border-border">
-      <Table>
-        <TableHeader>
-          <TableRow className="bg-primary/10">
-            <TableHead className="w-28 font-semibold text-primary">Día</TableHead>
-            {MEAL_TYPES.map((mealType) => (
-              <TableHead
-                key={mealType.key}
-                className={cn('text-center font-semibold min-w-[140px]', mealType.color)}
-              >
-                {mealType.label}
-              </TableHead>
-            ))}
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {DAYS.map((day) => (
-            <TableRow key={day.key} className="hover:bg-muted/30">
-              <TableCell className="font-medium bg-primary/20 text-primary">{day.label}</TableCell>
-              {MEAL_TYPES.map((mealType) => (
-                <TableCell key={`${day.key}-${mealType.key}`} className="p-2">
-                  {editMode ? (
-                    <Textarea
-                      className="min-h-20 text-sm resize-none"
-                      placeholder={`${mealType.label}...`}
-                      value={getMealDescription(day.key, mealType.key)}
-                      onChange={(e) => onMealChange?.(day.key, mealType.key, e.target.value)}
-                    />
-                  ) : (
-                    <div className="min-h-15 text-sm whitespace-pre-wrap">
-                      {getMealDescription(day.key, mealType.key) || (
-                        <span className="text-muted-foreground italic">-</span>
+    <div className="-mx-4 sm:mx-0">
+      <div className="overflow-x-auto px-4 sm:px-0">
+        <div className="min-w-[700px] rounded-lg border border-border">
+          <Table>
+            <TableHeader>
+              <TableRow className="bg-primary/10">
+                <TableHead className="w-24 sm:w-28 font-semibold text-primary sticky left-0 bg-primary/10 z-10">
+                  Día
+                </TableHead>
+                {MEAL_TYPES.map((mealType) => (
+                  <TableHead
+                    key={mealType.key}
+                    className={cn(
+                      'text-center font-semibold min-w-[120px] sm:min-w-[140px]',
+                      mealType.color
+                    )}
+                  >
+                    {mealType.label}
+                  </TableHead>
+                ))}
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {DAYS.map((day) => (
+                <TableRow key={day.key} className="hover:bg-muted/30">
+                  <TableCell className="font-medium bg-primary/20 text-primary sticky left-0 z-10 text-xs sm:text-sm">
+                    {day.label}
+                  </TableCell>
+                  {MEAL_TYPES.map((mealType) => (
+                    <TableCell key={`${day.key}-${mealType.key}`} className="p-1 sm:p-2">
+                      {editMode ? (
+                        <Textarea
+                          className="min-h-16 sm:min-h-20 text-xs sm:text-sm resize-none"
+                          placeholder={`${mealType.label}...`}
+                          value={getMealDescription(day.key, mealType.key)}
+                          onChange={(e) => onMealChange?.(day.key, mealType.key, e.target.value)}
+                        />
+                      ) : (
+                        <div className="min-h-12 sm:min-h-15 text-xs sm:text-sm whitespace-pre-wrap">
+                          {getMealDescription(day.key, mealType.key) || (
+                            <span className="text-muted-foreground italic">-</span>
+                          )}
+                        </div>
                       )}
-                    </div>
-                  )}
-                </TableCell>
+                    </TableCell>
+                  ))}
+                </TableRow>
               ))}
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+            </TableBody>
+          </Table>
+        </div>
+      </div>
     </div>
   )
 }
