@@ -1,9 +1,8 @@
 import Link from 'next/link'
 import { createClient } from '@/utils/supabase/server'
 import { Button } from '@/components/ui/button'
-import { PlanCard } from '@/components/PlanCard'
 import { Plus, ClipboardList } from 'lucide-react'
-import { DeletePlanButton } from './DeletePlanButton'
+import { PlanCardWithExport } from './PlanCardWithExport'
 import type { NutritionalPlan } from '@/lib/types'
 
 async function getPlans(): Promise<NutritionalPlan[]> {
@@ -68,20 +67,7 @@ export default async function PlansPage() {
       ) : (
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {plans.map((plan) => (
-            <div key={plan.id} className="relative">
-              <PlanCard plan={plan} />
-              {plan.customer && (
-                <div className="absolute top-2 right-2">
-                  <Link 
-                    href={`/customers/${plan.customer.id}`}
-                    className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full hover:bg-primary/20 transition-colors"
-                  >
-                    {plan.customer.first_name} {plan.customer.last_name}
-                  </Link>
-                </div>
-              )}
-              <DeletePlanButton planId={plan.id} planName={plan.name} />
-            </div>
+            <PlanCardWithExport key={plan.id} plan={plan} />
           ))}
         </div>
       )}
