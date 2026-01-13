@@ -1,0 +1,49 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model NutritionalPlan {
+  id          String      @id @default(cuid())
+  name        String
+  description String?
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  mealEntries MealEntry[]
+}
+
+model MealEntry {
+  id               String          @id @default(cuid())
+  dayOfWeek        DayOfWeek
+  mealType         MealType
+  mealDescription  String
+  nutritionalPlan  NutritionalPlan @relation(fields: [nutritionalPlanId], references: [id], onDelete: Cascade)
+  nutritionalPlanId String
+  
+  @@unique([nutritionalPlanId, dayOfWeek, mealType])
+}
+
+enum DayOfWeek {
+  LUNES
+  MARTES
+  MIERCOLES
+  JUEVES
+  VIERNES
+  SABADO
+  DOMINGO
+}
+
+enum MealType {
+  DESAYUNO
+  COLACION_1
+  ALMUERZO
+  COLACION_2
+  MERIENDA
+  CENA
+}
