@@ -14,7 +14,8 @@ async function getPlans(): Promise<NutritionalPlan[]> {
       customer:customer (
         id,
         first_name,
-        last_name
+        last_name,
+        cell_phone
       ),
       meal_entries:meal_entry (*)
     `)

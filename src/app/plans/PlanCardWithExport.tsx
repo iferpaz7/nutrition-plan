@@ -4,8 +4,8 @@ import Link from 'next/link'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { 
-  Eye, Pencil, Calendar, FileText, Download, ImageIcon, FileDown,
-  MoreHorizontal
+  Eye, Pencil, Calendar, FileText, Download, FileDown,
+  Copy, Phone
 } from 'lucide-react'
 import {
   DropdownMenu,
@@ -21,9 +21,18 @@ import autoTable from 'jspdf-autotable'
 import type { NutritionalPlan, Customer } from '@/lib/types'
 import { DAYS, MEAL_TYPES } from '@/components/PlanGrid'
 import { DeletePlanButton } from './DeletePlanButton'
+import { CopyPlanButton } from '@/components/CopyPlanButton'
+import { ShareWhatsAppButton } from '@/components/ShareWhatsAppButton'
 
 interface PlanCardWithExportProps {
-  plan: NutritionalPlan & { customer?: { id: string; first_name: string; last_name: string } | null }
+  plan: NutritionalPlan & { 
+    customer?: { 
+      id: string
+      first_name: string
+      last_name: string
+      cell_phone?: string | null 
+    } | null 
+  }
 }
 
 export function PlanCardWithExport({ plan }: PlanCardWithExportProps) {
@@ -222,6 +231,21 @@ export function PlanCardWithExport({ plan }: PlanCardWithExportProps) {
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
+        
+        <CopyPlanButton plan={plan} />
+        
+        {plan.customer && (
+          <ShareWhatsAppButton 
+            plan={plan} 
+            customer={{
+              ...plan.customer,
+              email: '',
+              cell_phone: plan.customer.cell_phone || null,
+              created_at: '',
+              updated_at: ''
+            }} 
+          />
+        )}
         
         <DeletePlanButton planId={plan.id} planName={plan.name} />
       </CardFooter>
