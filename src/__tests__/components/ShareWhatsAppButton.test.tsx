@@ -1,5 +1,5 @@
 import React from 'react'
-import { render, screen, fireEvent, waitFor } from '@testing-library/react'
+import { render, screen, fireEvent } from '@testing-library/react'
 import { ShareWhatsAppButton } from '@/components/ShareWhatsAppButton'
 import type { NutritionalPlan, Customer } from '@/lib/types'
 
@@ -7,15 +7,15 @@ import type { NutritionalPlan, Customer } from '@/lib/types'
 jest.mock('sonner', () => ({
   toast: {
     success: jest.fn(),
-    error: jest.fn()
-  }
+    error: jest.fn(),
+  },
 }))
 
 // Mock window.open
 const mockWindowOpen = jest.fn()
 Object.defineProperty(window, 'open', {
   value: mockWindowOpen,
-  writable: true
+  writable: true,
 })
 
 describe('ShareWhatsAppButton', () => {
@@ -38,9 +38,9 @@ describe('ShareWhatsAppButton', () => {
         meal_type: 'breakfast',
         meal_description: 'Huevos con tostadas',
         created_at: '2025-01-15T00:00:00Z',
-        updated_at: '2025-01-15T00:00:00Z'
-      }
-    ]
+        updated_at: '2025-01-15T00:00:00Z',
+      },
+    ],
   }
 
   const mockCustomer: Customer = {
@@ -50,7 +50,7 @@ describe('ShareWhatsAppButton', () => {
     email: 'juan@test.com',
     cell_phone: '0991234567',
     created_at: '2025-01-15T00:00:00Z',
-    updated_at: '2025-01-15T00:00:00Z'
+    updated_at: '2025-01-15T00:00:00Z',
   }
 
   beforeEach(() => {
@@ -59,24 +59,24 @@ describe('ShareWhatsAppButton', () => {
 
   it('renders the WhatsApp button', () => {
     render(<ShareWhatsAppButton plan={mockPlan} customer={mockCustomer} />)
-    
+
     expect(screen.getByRole('button', { name: /whatsapp/i })).toBeInTheDocument()
   })
 
   it('shows button disabled when customer has no phone', () => {
     const customerNoPhone = { ...mockCustomer, cell_phone: null }
     render(<ShareWhatsAppButton plan={mockPlan} customer={customerNoPhone} />)
-    
+
     const button = screen.getByRole('button', { name: /whatsapp/i })
     expect(button).toBeDisabled()
   })
 
   it('opens WhatsApp link when clicked with valid phone', () => {
     render(<ShareWhatsAppButton plan={mockPlan} customer={mockCustomer} />)
-    
+
     const button = screen.getByRole('button', { name: /whatsapp/i })
     fireEvent.click(button)
-    
+
     expect(mockWindowOpen).toHaveBeenCalledTimes(1)
     const callArg = mockWindowOpen.mock.calls[0][0]
     expect(callArg).toContain('https://wa.me/593991234567')
@@ -85,9 +85,9 @@ describe('ShareWhatsAppButton', () => {
 
   it('formats phone number correctly removing leading 0', () => {
     render(<ShareWhatsAppButton plan={mockPlan} customer={mockCustomer} />)
-    
+
     fireEvent.click(screen.getByRole('button', { name: /whatsapp/i }))
-    
+
     const callArg = mockWindowOpen.mock.calls[0][0]
     // Should convert 0991234567 to 593991234567
     expect(callArg).toContain('wa.me/593991234567')
@@ -96,18 +96,18 @@ describe('ShareWhatsAppButton', () => {
   it('handles phone number already with country code', () => {
     const customerWithCode = { ...mockCustomer, cell_phone: '593991234567' }
     render(<ShareWhatsAppButton plan={mockPlan} customer={customerWithCode} />)
-    
+
     fireEvent.click(screen.getByRole('button', { name: /whatsapp/i }))
-    
+
     const callArg = mockWindowOpen.mock.calls[0][0]
     expect(callArg).toContain('wa.me/593991234567')
   })
 
   it('includes plan name in WhatsApp message', () => {
     render(<ShareWhatsAppButton plan={mockPlan} customer={mockCustomer} />)
-    
+
     fireEvent.click(screen.getByRole('button', { name: /whatsapp/i }))
-    
+
     const callArg = mockWindowOpen.mock.calls[0][0]
     const decodedMessage = decodeURIComponent(callArg.split('text=')[1])
     expect(decodedMessage).toContain('Plan de Prueba')
@@ -115,9 +115,9 @@ describe('ShareWhatsAppButton', () => {
 
   it('includes customer name in WhatsApp message', () => {
     render(<ShareWhatsAppButton plan={mockPlan} customer={mockCustomer} />)
-    
+
     fireEvent.click(screen.getByRole('button', { name: /whatsapp/i }))
-    
+
     const callArg = mockWindowOpen.mock.calls[0][0]
     const decodedMessage = decodeURIComponent(callArg.split('text=')[1])
     expect(decodedMessage).toContain('Juan Pérez')
@@ -125,9 +125,9 @@ describe('ShareWhatsAppButton', () => {
 
   it('includes nutritional targets in message', () => {
     render(<ShareWhatsAppButton plan={mockPlan} customer={mockCustomer} />)
-    
+
     fireEvent.click(screen.getByRole('button', { name: /whatsapp/i }))
-    
+
     const callArg = mockWindowOpen.mock.calls[0][0]
     const decodedMessage = decodeURIComponent(callArg.split('text=')[1])
     expect(decodedMessage).toContain('2000')
@@ -136,7 +136,7 @@ describe('ShareWhatsAppButton', () => {
 
   it('button is disabled when customer is null', async () => {
     render(<ShareWhatsAppButton plan={mockPlan} customer={null} />)
-    
+
     const button = screen.getByRole('button', { name: /whatsapp/i })
     expect(button).toBeDisabled()
   })

@@ -11,11 +11,14 @@ interface ExportImageButtonProps {
   targetId?: string
 }
 
-export function ExportImageButton({ plan, targetId = 'plan-grid-container' }: ExportImageButtonProps) {
+export function ExportImageButton({
+  plan,
+  targetId = 'plan-grid-container',
+}: ExportImageButtonProps) {
   const handleExportImage = async () => {
     try {
       const element = document.getElementById(targetId)
-      
+
       if (!element) {
         toast.error('No se encontró el elemento para exportar')
         return
@@ -42,7 +45,7 @@ export function ExportImageButton({ plan, targetId = 'plan-grid-container' }: Ex
             }
           }
           return true
-        }
+        },
       })
 
       if (!blob) {
@@ -53,12 +56,14 @@ export function ExportImageButton({ plan, targetId = 'plan-grid-container' }: Ex
       // Download the image
       const url = URL.createObjectURL(blob)
       const link = document.createElement('a')
-      
+
       // Generate filename with plan name and date
-      const sanitizedName = plan.name.replace(/[^a-zA-Z0-9áéíóúñÁÉÍÓÚÑ\s]/g, '').replace(/\s+/g, '_')
+      const sanitizedName = plan.name
+        .replace(/[^a-zA-Z0-9áéíóúñÁÉÍÓÚÑ\s]/g, '')
+        .replace(/\s+/g, '_')
       const date = new Date().toISOString().split('T')[0]
       link.download = `${sanitizedName}_${date}.png`
-      
+
       link.href = url
       document.body.appendChild(link)
       link.click()

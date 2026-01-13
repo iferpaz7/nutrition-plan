@@ -23,7 +23,7 @@ export function PlanViewClient({ plan, children }: PlanViewClientProps) {
       month: 'long',
       day: 'numeric',
       hour: '2-digit',
-      minute: '2-digit'
+      minute: '2-digit',
     })
   }
 
@@ -37,12 +37,14 @@ export function PlanViewClient({ plan, children }: PlanViewClientProps) {
           )}
           <div className="flex flex-wrap items-center gap-x-4 gap-y-2 mt-3 text-sm text-muted-foreground">
             {customer && (
-              <Link 
+              <Link
                 href={`/customers/${customer.id}`}
                 className="flex items-center gap-2 hover:text-primary transition-colors"
               >
                 <User className="h-4 w-4" />
-                <span>{customer.first_name} {customer.last_name}</span>
+                <span>
+                  {customer.first_name} {customer.last_name}
+                </span>
               </Link>
             )}
             <div className="flex items-center gap-2">
@@ -58,7 +60,7 @@ export function PlanViewClient({ plan, children }: PlanViewClientProps) {
           <PlanGrid meals={plan.meal_entries || []} />
         </CardContent>
       </div>
-      
+
       {/* Action buttons - outside the export area */}
       <div className="px-6 pb-6 pt-2 flex flex-wrap gap-2 justify-end border-t">
         <ExportPdfButton plan={plan} customer={customer} />

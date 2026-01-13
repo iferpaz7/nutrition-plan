@@ -16,7 +16,7 @@ async function getCustomer(id: string) {
     .select('*')
     .eq('id', id)
     .single()
-  
+
   if (error) return null
   return customer
 }

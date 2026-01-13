@@ -17,8 +17,8 @@ export function Footer() {
               <span className="text-lg text-primary">NutriPlan</span>
             </Link>
             <p className="text-sm text-muted-foreground max-w-md">
-              Sistema de gestión de planes nutricionales semanales. 
-              Diseñado para nutricionistas y profesionales de la salud.
+              Sistema de gestión de planes nutricionales semanales. Diseñado para nutricionistas y
+              profesionales de la salud.
             </p>
           </div>
 
@@ -65,13 +65,13 @@ export function Footer() {
         {/* Bottom */}
         <div className="border-t mt-8 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-sm text-muted-foreground flex items-center gap-1">
-            © {currentYear} NutriPlan. Hecho con 
+            © {currentYear} NutriPlan. Hecho con
             <Heart className="h-4 w-4 text-red-500 fill-red-500" />
             para nutricionistas.
           </p>
           <div className="flex items-center gap-4">
-            <Link 
-              href="https://github.com/iferpaz7/nutrition-plan" 
+            <Link
+              href="https://github.com/iferpaz7/nutrition-plan"
               target="_blank"
               rel="noopener noreferrer"
               className="text-muted-foreground hover:text-primary transition-colors"

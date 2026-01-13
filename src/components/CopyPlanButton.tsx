@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import {
@@ -39,14 +39,7 @@ export function CopyPlanButton({ plan, currentCustomerId }: CopyPlanButtonProps)
   const [isLoading, setIsLoading] = useState(false)
   const [isFetchingCustomers, setIsFetchingCustomers] = useState(false)
 
-  // Fetch customers when dialog opens
-  useEffect(() => {
-    if (open) {
-      fetchCustomers()
-    }
-  }, [open])
-
-  const fetchCustomers = async () => {
+  const fetchCustomers = useCallback(async () => {
     setIsFetchingCustomers(true)
     try {
       const response = await fetch('/api/customers')
@@ -68,7 +61,14 @@ export function CopyPlanButton({ plan, currentCustomerId }: CopyPlanButtonProps)
     } finally {
       setIsFetchingCustomers(false)
     }
-  }
+  }, [currentCustomerId])
+
+  // Fetch customers when dialog opens
+  useEffect(() => {
+    if (open) {
+      fetchCustomers()
+    }
+  }, [open, fetchCustomers])
 
   const handleCopyPlan = async () => {
     if (!selectedCustomerId) {
@@ -111,23 +111,25 @@ export function CopyPlanButton({ plan, currentCustomerId }: CopyPlanButtonProps)
 
       // Copy meal entries if they exist
       if (plan.meal_entries && plan.meal_entries.length > 0) {
-        const mealPromises = plan.meal_entries.map(meal => 
+        const mealPromises = plan.meal_entries.map((meal) =>
           fetch(`/api/plans/${newPlanId}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-              meals: [{
-                day_of_week: meal.day_of_week,
-                meal_type: meal.meal_type,
-                meal_description: meal.meal_description,
-                calories: meal.calories,
-                protein_grams: meal.protein_grams,
-                carbs_grams: meal.carbs_grams,
-                fat_grams: meal.fat_grams,
-                fiber_grams: meal.fiber_grams,
-                portion_size: meal.portion_size,
-                preparation_notes: meal.preparation_notes,
-              }],
+              meals: [
+                {
+                  day_of_week: meal.day_of_week,
+                  meal_type: meal.meal_type,
+                  meal_description: meal.meal_description,
+                  calories: meal.calories,
+                  protein_grams: meal.protein_grams,
+                  carbs_grams: meal.carbs_grams,
+                  fat_grams: meal.fat_grams,
+                  fiber_grams: meal.fiber_grams,
+                  portion_size: meal.portion_size,
+                  preparation_notes: meal.preparation_notes,
+                },
+              ],
             }),
           })
         )

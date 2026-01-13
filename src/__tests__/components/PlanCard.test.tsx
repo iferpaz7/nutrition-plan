@@ -32,19 +32,19 @@ describe('PlanCard', () => {
 
   it('renders plan name correctly', () => {
     render(<PlanCard plan={mockPlan} onDelete={mockOnDelete} />)
-    
+
     expect(screen.getByText('Plan de Pérdida de Peso - Semana 1')).toBeInTheDocument()
   })
 
   it('renders plan description', () => {
     render(<PlanCard plan={mockPlan} onDelete={mockOnDelete} />)
-    
+
     expect(screen.getByText('Plan diseñado para pérdida de peso gradual')).toBeInTheDocument()
   })
 
   it('renders meal count progress', () => {
     render(<PlanCard plan={mockPlan} onDelete={mockOnDelete} />)
-    
+
     // Component shows meals planned / 35 total
     expect(screen.getByText('Comidas planificadas')).toBeInTheDocument()
     expect(screen.getByText(/completado/i)).toBeInTheDocument()
@@ -53,26 +53,26 @@ describe('PlanCard', () => {
   it('calls onDelete when delete button is clicked', async () => {
     const user = userEvent.setup()
     render(<PlanCard plan={mockPlan} onDelete={mockOnDelete} />)
-    
+
     // Delete button only has an icon, find by button role and class
     const buttons = screen.getAllByRole('button')
-    const deleteButton = buttons.find(btn => btn.classList.contains('bg-destructive'))
+    const deleteButton = buttons.find((btn) => btn.classList.contains('bg-destructive'))
     expect(deleteButton).toBeTruthy()
     await user.click(deleteButton!)
-    
+
     expect(mockOnDelete).toHaveBeenCalledWith(mockPlan.id)
   })
 
   it('renders view link with correct href', () => {
     render(<PlanCard plan={mockPlan} onDelete={mockOnDelete} />)
-    
+
     const viewLink = screen.getByRole('link', { name: /ver/i })
     expect(viewLink).toHaveAttribute('href', `/plans/${mockPlan.id}`)
   })
 
   it('renders edit link with correct href', () => {
     render(<PlanCard plan={mockPlan} onDelete={mockOnDelete} />)
-    
+
     const editLink = screen.getByRole('link', { name: /editar/i })
     expect(editLink).toHaveAttribute('href', `/plans/${mockPlan.id}/edit`)
   })
@@ -80,13 +80,13 @@ describe('PlanCard', () => {
   it('handles plan without description gracefully', () => {
     const planWithoutDescription = { ...mockPlan, description: null }
     render(<PlanCard plan={planWithoutDescription} onDelete={mockOnDelete} />)
-    
+
     expect(screen.getByText('Plan de Pérdida de Peso - Semana 1')).toBeInTheDocument()
   })
 
   it('shows creation date', () => {
     render(<PlanCard plan={mockPlan} onDelete={mockOnDelete} />)
-    
+
     expect(screen.getByText(/Creado:/)).toBeInTheDocument()
   })
 })

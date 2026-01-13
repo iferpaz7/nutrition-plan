@@ -19,7 +19,7 @@ export function DeletePlanButton({ planId, planName }: DeletePlanButtonProps) {
   const handleDelete = async () => {
     try {
       const response = await fetch(`/api/plans/${planId}`, {
-        method: 'DELETE'
+        method: 'DELETE',
       })
       const result = await response.json()
 

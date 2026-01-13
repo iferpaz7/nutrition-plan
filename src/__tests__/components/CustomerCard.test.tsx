@@ -38,7 +38,7 @@ describe('CustomerCard', () => {
 
   it('renders customer name correctly', () => {
     render(<CustomerCard customer={mockCustomer} onDelete={mockOnDelete} />)
-    
+
     // Component renders first_name and last_name separately
     expect(screen.getByText(/Ivan/)).toBeInTheDocument()
     expect(screen.getByText(/Paz/)).toBeInTheDocument()
@@ -46,19 +46,19 @@ describe('CustomerCard', () => {
 
   it('renders customer phone', () => {
     render(<CustomerCard customer={mockCustomer} onDelete={mockOnDelete} />)
-    
+
     expect(screen.getByText('0999123456')).toBeInTheDocument()
   })
 
   it('renders ID card', () => {
     render(<CustomerCard customer={mockCustomer} onDelete={mockOnDelete} />)
-    
+
     expect(screen.getByText('1234567890')).toBeInTheDocument()
   })
 
   it('renders plan count', () => {
     render(<CustomerCard customer={mockCustomer} onDelete={mockOnDelete} />)
-    
+
     // Component shows plan count (0 planes for mockCustomer with no plans)
     expect(screen.getByText(/planes/)).toBeInTheDocument()
   })
@@ -66,26 +66,26 @@ describe('CustomerCard', () => {
   it('calls onDelete when delete button is clicked', async () => {
     const user = userEvent.setup()
     render(<CustomerCard customer={mockCustomer} onDelete={mockOnDelete} />)
-    
+
     // Delete button only has an icon, find by button role
     const buttons = screen.getAllByRole('button')
-    const deleteButton = buttons.find(btn => btn.classList.contains('bg-destructive'))
+    const deleteButton = buttons.find((btn) => btn.classList.contains('bg-destructive'))
     expect(deleteButton).toBeTruthy()
     await user.click(deleteButton!)
-    
+
     expect(mockOnDelete).toHaveBeenCalledWith(mockCustomer.id)
   })
 
   it('renders view link with correct href', () => {
     render(<CustomerCard customer={mockCustomer} onDelete={mockOnDelete} />)
-    
+
     const viewLink = screen.getByRole('link', { name: /ver/i })
     expect(viewLink).toHaveAttribute('href', `/customers/${mockCustomer.id}`)
   })
 
   it('renders edit link with correct href', () => {
     render(<CustomerCard customer={mockCustomer} onDelete={mockOnDelete} />)
-    
+
     const editLink = screen.getByRole('link', { name: /editar/i })
     expect(editLink).toHaveAttribute('href', `/customers/${mockCustomer.id}/edit`)
   })
@@ -93,7 +93,7 @@ describe('CustomerCard', () => {
   it('handles customer without phone gracefully', () => {
     const customerWithoutPhone = { ...mockCustomer, cell_phone: null }
     render(<CustomerCard customer={customerWithoutPhone} onDelete={mockOnDelete} />)
-    
+
     expect(screen.getByText(/Ivan/)).toBeInTheDocument()
   })
 })

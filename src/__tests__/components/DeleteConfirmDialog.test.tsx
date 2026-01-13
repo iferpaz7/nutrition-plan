@@ -19,7 +19,7 @@ describe('DeleteConfirmDialog', () => {
         onConfirm={mockOnConfirm}
       />
     )
-    
+
     expect(screen.getByText(/¿Estás seguro/i)).toBeInTheDocument()
   })
 
@@ -32,7 +32,7 @@ describe('DeleteConfirmDialog', () => {
         onConfirm={mockOnConfirm}
       />
     )
-    
+
     expect(screen.getByText(/Plan de Prueba/)).toBeInTheDocument()
   })
 
@@ -45,7 +45,7 @@ describe('DeleteConfirmDialog', () => {
         onConfirm={mockOnConfirm}
       />
     )
-    
+
     expect(screen.queryByText(/¿Estás seguro/i)).not.toBeInTheDocument()
   })
 
@@ -59,10 +59,10 @@ describe('DeleteConfirmDialog', () => {
         onConfirm={mockOnConfirm}
       />
     )
-    
+
     const deleteButton = screen.getByRole('button', { name: /eliminar/i })
     await user.click(deleteButton)
-    
+
     expect(mockOnConfirm).toHaveBeenCalled()
   })
 
@@ -76,10 +76,10 @@ describe('DeleteConfirmDialog', () => {
         onConfirm={mockOnConfirm}
       />
     )
-    
+
     const cancelButton = screen.getByRole('button', { name: /cancelar/i })
     await user.click(cancelButton)
-    
+
     expect(mockOnOpenChange).toHaveBeenCalledWith(false)
   })
 
@@ -92,7 +92,7 @@ describe('DeleteConfirmDialog', () => {
         onConfirm={mockOnConfirm}
       />
     )
-    
+
     expect(screen.getByText(/no se puede deshacer/i)).toBeInTheDocument()
   })
 })

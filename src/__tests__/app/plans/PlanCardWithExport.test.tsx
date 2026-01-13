@@ -30,7 +30,9 @@ jest.mock('jspdf-autotable', () => jest.fn())
 // Mock fetch for delete functionality
 global.fetch = jest.fn(() => Promise.resolve({ ok: true })) as jest.Mock
 
-const mockPlan: NutritionalPlan & { customer?: { id: string; first_name: string; last_name: string } | null } = {
+const mockPlan: NutritionalPlan & {
+  customer?: { id: string; first_name: string; last_name: string } | null
+} = {
   id: '123e4567-e89b-12d3-a456-426614174001',
   name: 'Plan de Pérdida de Peso',
   description: 'Plan diseñado para pérdida de peso gradual',
@@ -62,63 +64,69 @@ describe('PlanCardWithExport', () => {
 
   it('renders plan name', () => {
     render(<PlanCardWithExport plan={mockPlan} />)
-    
+
     expect(screen.getByText('Plan de Pérdida de Peso')).toBeInTheDocument()
   })
 
   it('renders plan description', () => {
     render(<PlanCardWithExport plan={mockPlan} />)
-    
+
     expect(screen.getByText('Plan diseñado para pérdida de peso gradual')).toBeInTheDocument()
   })
 
   it('renders customer name badge', () => {
     render(<PlanCardWithExport plan={mockPlan} />)
-    
+
     expect(screen.getByText('Ivan Paz')).toBeInTheDocument()
   })
 
   it('renders view and edit links', () => {
     render(<PlanCardWithExport plan={mockPlan} />)
-    
-    expect(screen.getByRole('link', { name: /ver/i })).toHaveAttribute('href', `/plans/${mockPlan.id}`)
-    expect(screen.getByRole('link', { name: /editar/i })).toHaveAttribute('href', `/plans/${mockPlan.id}/edit`)
+
+    expect(screen.getByRole('link', { name: /ver/i })).toHaveAttribute(
+      'href',
+      `/plans/${mockPlan.id}`
+    )
+    expect(screen.getByRole('link', { name: /editar/i })).toHaveAttribute(
+      'href',
+      `/plans/${mockPlan.id}/edit`
+    )
   })
 
   it('renders export dropdown button', () => {
     render(<PlanCardWithExport plan={mockPlan} />)
-    
+
     expect(screen.getByRole('button', { name: /exportar/i })).toBeInTheDocument()
   })
 
   it('shows export options when dropdown is clicked', async () => {
     const user = userEvent.setup()
     render(<PlanCardWithExport plan={mockPlan} />)
-    
+
     const exportButton = screen.getByRole('button', { name: /exportar/i })
     await user.click(exportButton)
-    
+
     expect(screen.getByText(/exportar excel/i)).toBeInTheDocument()
     expect(screen.getByText(/exportar pdf/i)).toBeInTheDocument()
   })
 
   it('renders meal progress', () => {
     render(<PlanCardWithExport plan={mockPlan} />)
-    
+
     expect(screen.getByText('Comidas planificadas')).toBeInTheDocument()
     expect(screen.getByText(/completado/i)).toBeInTheDocument()
   })
 
   it('renders creation date', () => {
     render(<PlanCardWithExport plan={mockPlan} />)
-    
+
     expect(screen.getByText(/Creado:/)).toBeInTheDocument()
   })
 
   it('handles plan without customer', () => {
     const planWithoutCustomer = { ...mockPlan, customer: null }
     render(<PlanCardWithExport plan={planWithoutCustomer} />)
-    
+
     expect(screen.getByText('Plan de Pérdida de Peso')).toBeInTheDocument()
     expect(screen.queryByText('Ivan Paz')).not.toBeInTheDocument()
   })
@@ -126,7 +134,7 @@ describe('PlanCardWithExport', () => {
   it('handles plan without description', () => {
     const planWithoutDescription = { ...mockPlan, description: null }
     render(<PlanCardWithExport plan={planWithoutDescription} />)
-    
+
     expect(screen.getByText('Plan de Pérdida de Peso')).toBeInTheDocument()
   })
 
@@ -150,7 +158,7 @@ describe('PlanCardWithExport', () => {
       }),
     }
     render(<PlanCardWithExport plan={planWithMeals} />)
-    
+
     expect(screen.getByText(/20% completado/)).toBeInTheDocument()
   })
 })

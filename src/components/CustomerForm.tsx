@@ -6,7 +6,13 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { toast } from 'sonner'
 import type { Customer, Gender, ActivityLevel, GoalType } from '@/lib/types'
@@ -19,40 +25,48 @@ interface CustomerFormProps {
 export function CustomerForm({ initialData, mode }: CustomerFormProps) {
   const router = useRouter()
   const [isSubmitting, setIsSubmitting] = useState(false)
-  
+
   // Datos personales (requeridos)
   const [idCard, setIdCard] = useState(initialData?.id_card || '')
   const [firstName, setFirstName] = useState(initialData?.first_name || '')
   const [lastName, setLastName] = useState(initialData?.last_name || '')
-  
+
   // Datos personales (opcionales)
   const [email, setEmail] = useState(initialData?.email || '')
   const [cellPhone, setCellPhone] = useState(initialData?.cell_phone || '')
   const [gender, setGender] = useState<Gender | ''>(initialData?.gender || '')
   const [birthDate, setBirthDate] = useState(initialData?.birth_date?.split('T')[0] || '')
-  
+
   // Datos físicos
   const [weight, setWeight] = useState<string>(initialData?.weight?.toString() || '')
   const [height, setHeight] = useState<string>(initialData?.height?.toString() || '')
-  const [bodyFatPercentage, setBodyFatPercentage] = useState<string>(initialData?.body_fat_percentage?.toString() || '')
-  
+  const [bodyFatPercentage, setBodyFatPercentage] = useState<string>(
+    initialData?.body_fat_percentage?.toString() || ''
+  )
+
   // Información nutricional
-  const [activityLevel, setActivityLevel] = useState<ActivityLevel | ''>(initialData?.activity_level || '')
+  const [activityLevel, setActivityLevel] = useState<ActivityLevel | ''>(
+    initialData?.activity_level || ''
+  )
   const [goal, setGoal] = useState<GoalType | ''>(initialData?.goal || '')
-  const [dailyCalorieTarget, setDailyCalorieTarget] = useState<string>(initialData?.daily_calorie_target?.toString() || '')
-  
+  const [dailyCalorieTarget, setDailyCalorieTarget] = useState<string>(
+    initialData?.daily_calorie_target?.toString() || ''
+  )
+
   // Información médica
   const [allergies, setAllergies] = useState(initialData?.allergies || '')
   const [medicalConditions, setMedicalConditions] = useState(initialData?.medical_conditions || '')
   const [medications, setMedications] = useState(initialData?.medications || '')
-  const [dietaryRestrictions, setDietaryRestrictions] = useState(initialData?.dietary_restrictions || '')
-  
+  const [dietaryRestrictions, setDietaryRestrictions] = useState(
+    initialData?.dietary_restrictions || ''
+  )
+
   // Notas
   const [notes, setNotes] = useState(initialData?.notes || '')
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    
+
     if (!idCard.trim()) {
       toast.error('La cédula es requerida')
       return
@@ -76,43 +90,41 @@ export function CustomerForm({ initialData, mode }: CustomerFormProps) {
         id_card: idCard.trim(),
         first_name: firstName.trim(),
         last_name: lastName.trim(),
-        
+
         // Datos personales opcionales
         email: email.trim() || null,
         cell_phone: cellPhone.trim() || null,
         gender: gender || null,
         birth_date: birthDate || null,
-        
+
         // Datos físicos
         weight: weight ? parseFloat(weight) : null,
         height: height ? parseFloat(height) : null,
         body_fat_percentage: bodyFatPercentage ? parseFloat(bodyFatPercentage) : null,
-        
+
         // Información nutricional
         activity_level: activityLevel || null,
         goal: goal || null,
         daily_calorie_target: dailyCalorieTarget ? parseInt(dailyCalorieTarget) : null,
-        
+
         // Información médica
         allergies: allergies.trim() || null,
         medical_conditions: medicalConditions.trim() || null,
         medications: medications.trim() || null,
         dietary_restrictions: dietaryRestrictions.trim() || null,
-        
+
         // Notas
         notes: notes.trim() || null,
       }
 
-      const url = mode === 'create' 
-        ? '/api/customers' 
-        : `/api/customers/${initialData?.id}`
-      
+      const url = mode === 'create' ? '/api/customers' : `/api/customers/${initialData?.id}`
+
       const method = mode === 'create' ? 'POST' : 'PUT'
 
       const response = await fetch(url, {
         method,
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body)
+        body: JSON.stringify(body),
       })
 
       const result = await response.json()
@@ -121,7 +133,9 @@ export function CustomerForm({ initialData, mode }: CustomerFormProps) {
         throw new Error(result.error || 'Error al guardar el cliente')
       }
 
-      toast.success(mode === 'create' ? 'Cliente creado exitosamente' : 'Cliente actualizado exitosamente')
+      toast.success(
+        mode === 'create' ? 'Cliente creado exitosamente' : 'Cliente actualizado exitosamente'
+      )
       router.push(`/customers/${result.data.id}`)
       router.refresh()
     } catch (error) {
@@ -164,7 +178,7 @@ export function CustomerForm({ initialData, mode }: CustomerFormProps) {
               />
             </div>
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="firstName">Nombre *</Label>
@@ -200,10 +214,7 @@ export function CustomerForm({ initialData, mode }: CustomerFormProps) {
             </div>
             <div className="space-y-2">
               <Label htmlFor="gender">Género</Label>
-              <Select
-                value={gender}
-                onValueChange={(value) => setGender(value as Gender | '')}
-              >
+              <Select value={gender} onValueChange={(value) => setGender(value as Gender | '')}>
                 <SelectTrigger id="gender">
                   <SelectValue placeholder="Seleccionar..." />
                 </SelectTrigger>
@@ -306,10 +317,7 @@ export function CustomerForm({ initialData, mode }: CustomerFormProps) {
             </div>
             <div className="space-y-2">
               <Label htmlFor="goal">Objetivo</Label>
-              <Select
-                value={goal}
-                onValueChange={(value) => setGoal(value as GoalType | '')}
-              >
+              <Select value={goal} onValueChange={(value) => setGoal(value as GoalType | '')}>
                 <SelectTrigger id="goal">
                   <SelectValue placeholder="Seleccionar..." />
                 </SelectTrigger>
@@ -409,9 +417,9 @@ export function CustomerForm({ initialData, mode }: CustomerFormProps) {
       </Card>
 
       <div className="flex gap-4 justify-end">
-        <Button 
-          type="button" 
-          variant="outline" 
+        <Button
+          type="button"
+          variant="outline"
           onClick={() => router.back()}
           disabled={isSubmitting}
         >

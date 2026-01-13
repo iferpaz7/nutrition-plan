@@ -16,31 +16,31 @@ interface ExportPdfButtonProps {
 // Helper functions for labels
 const getGenderLabel = (gender: string | null): string => {
   const labels: Record<string, string> = {
-    'MASCULINO': 'Masculino',
-    'FEMENINO': 'Femenino',
-    'OTRO': 'Otro',
+    MASCULINO: 'Masculino',
+    FEMENINO: 'Femenino',
+    OTRO: 'Otro',
   }
   return gender ? labels[gender] || gender : '-'
 }
 
 const getActivityLabel = (level: string | null): string => {
   const labels: Record<string, string> = {
-    'SEDENTARIO': 'Sedentario',
-    'LIGERO': 'Ligero (1-3 días/sem)',
-    'MODERADO': 'Moderado (3-5 días/sem)',
-    'ACTIVO': 'Activo (6-7 días/sem)',
-    'MUY_ACTIVO': 'Muy activo',
+    SEDENTARIO: 'Sedentario',
+    LIGERO: 'Ligero (1-3 días/sem)',
+    MODERADO: 'Moderado (3-5 días/sem)',
+    ACTIVO: 'Activo (6-7 días/sem)',
+    MUY_ACTIVO: 'Muy activo',
   }
   return level ? labels[level] || level : '-'
 }
 
 const getGoalLabel = (goal: string | null): string => {
   const labels: Record<string, string> = {
-    'PERDER_PESO': 'Perder peso',
-    'MANTENER_PESO': 'Mantener peso',
-    'GANAR_PESO': 'Ganar peso',
-    'GANAR_MUSCULO': 'Ganar músculo',
-    'MEJORAR_SALUD': 'Mejorar salud',
+    PERDER_PESO: 'Perder peso',
+    MANTENER_PESO: 'Mantener peso',
+    GANAR_PESO: 'Ganar peso',
+    GANAR_MUSCULO: 'Ganar músculo',
+    MEJORAR_SALUD: 'Mejorar salud',
   }
   return goal ? labels[goal] || goal : '-'
 }
@@ -57,11 +57,11 @@ const getImcClassification = (imc: number | null): string => {
 
 const getStatusLabel = (status: string | null): string => {
   const labels: Record<string, string> = {
-    'BORRADOR': 'Borrador',
-    'ACTIVO': 'Activo',
-    'PAUSADO': 'Pausado',
-    'COMPLETADO': 'Completado',
-    'CANCELADO': 'Cancelado',
+    BORRADOR: 'Borrador',
+    ACTIVO: 'Activo',
+    PAUSADO: 'Pausado',
+    COMPLETADO: 'Completado',
+    CANCELADO: 'Cancelado',
   }
   return status ? labels[status] || status : '-'
 }
@@ -121,7 +121,10 @@ export function ExportPdfButton({ plan, customer }: ExportPdfButtonProps) {
           ['Peso', customer.weight ? `${customer.weight} kg` : '-'],
           ['Altura', customer.height ? `${customer.height} m` : '-'],
           ['IMC', customer.imc ? `${customer.imc} (${getImcClassification(customer.imc)})` : '-'],
-          ['% Grasa corporal', customer.body_fat_percentage ? `${customer.body_fat_percentage}%` : '-'],
+          [
+            '% Grasa corporal',
+            customer.body_fat_percentage ? `${customer.body_fat_percentage}%` : '-',
+          ],
           ['Nivel de actividad', getActivityLabel(customer.activity_level)],
           ['Objetivo', getGoalLabel(customer.goal)],
         ]
@@ -152,12 +155,16 @@ export function ExportPdfButton({ plan, customer }: ExportPdfButtonProps) {
         })
 
         // Get final Y from the longer table
-        const finalY1 = (doc as unknown as { lastAutoTable: { finalY: number } }).lastAutoTable.finalY
+        const finalY1 = (doc as unknown as { lastAutoTable: { finalY: number } }).lastAutoTable
+          .finalY
         yPosition = finalY1 + 5
 
         // Medical information if exists
-        const hasMedicalInfo = customer.allergies || customer.dietary_restrictions || 
-                               customer.medical_conditions || customer.medications
+        const hasMedicalInfo =
+          customer.allergies ||
+          customer.dietary_restrictions ||
+          customer.medical_conditions ||
+          customer.medications
 
         if (hasMedicalInfo) {
           doc.setFontSize(12)
@@ -167,8 +174,10 @@ export function ExportPdfButton({ plan, customer }: ExportPdfButtonProps) {
 
           const medicalData: string[][] = []
           if (customer.allergies) medicalData.push(['Alergias', customer.allergies])
-          if (customer.dietary_restrictions) medicalData.push(['Restricciones dietéticas', customer.dietary_restrictions])
-          if (customer.medical_conditions) medicalData.push(['Condiciones médicas', customer.medical_conditions])
+          if (customer.dietary_restrictions)
+            medicalData.push(['Restricciones dietéticas', customer.dietary_restrictions])
+          if (customer.medical_conditions)
+            medicalData.push(['Condiciones médicas', customer.medical_conditions])
           if (customer.medications) medicalData.push(['Medicamentos', customer.medications])
 
           autoTable(doc, {
@@ -180,7 +189,8 @@ export function ExportPdfButton({ plan, customer }: ExportPdfButtonProps) {
             margin: { left: 14 },
           })
 
-          yPosition = (doc as unknown as { lastAutoTable: { finalY: number } }).lastAutoTable.finalY + 5
+          yPosition =
+            (doc as unknown as { lastAutoTable: { finalY: number } }).lastAutoTable.finalY + 5
         }
       }
 
@@ -188,18 +198,25 @@ export function ExportPdfButton({ plan, customer }: ExportPdfButtonProps) {
       yPosition += 3
       doc.setFontSize(10)
       doc.setTextColor(100, 100, 100)
-      
+
       const planInfo: string[] = []
       planInfo.push(`Estado: ${getStatusLabel(plan.status)}`)
-      if (plan.start_date) planInfo.push(`Inicio: ${new Date(plan.start_date).toLocaleDateString('es-ES')}`)
-      if (plan.end_date) planInfo.push(`Fin: ${new Date(plan.end_date).toLocaleDateString('es-ES')}`)
-      
+      if (plan.start_date)
+        planInfo.push(`Inicio: ${new Date(plan.start_date).toLocaleDateString('es-ES')}`)
+      if (plan.end_date)
+        planInfo.push(`Fin: ${new Date(plan.end_date).toLocaleDateString('es-ES')}`)
+
       doc.text(planInfo.join('  |  '), 14, yPosition)
       yPosition += 5
 
       // Nutritional targets if exists
-      const hasTargets = plan.daily_calories || plan.protein_grams || plan.carbs_grams || 
-                         plan.fat_grams || plan.fiber_grams || plan.water_liters
+      const hasTargets =
+        plan.daily_calories ||
+        plan.protein_grams ||
+        plan.carbs_grams ||
+        plan.fat_grams ||
+        plan.fiber_grams ||
+        plan.water_liters
 
       if (hasTargets) {
         const targets: string[] = []
@@ -222,11 +239,11 @@ export function ExportPdfButton({ plan, customer }: ExportPdfButtonProps) {
       yPosition += 2
 
       // Prepare table data
-      const tableData = DAYS.map(day => {
+      const tableData = DAYS.map((day) => {
         const row = [day.label]
-        MEAL_TYPES.forEach(mealType => {
+        MEAL_TYPES.forEach((mealType) => {
           const meal = (plan.meal_entries || []).find(
-            m => m.day_of_week === day.key && m.meal_type === mealType.key
+            (m) => m.day_of_week === day.key && m.meal_type === mealType.key
           )
           row.push(meal?.meal_description || '-')
         })
@@ -236,18 +253,18 @@ export function ExportPdfButton({ plan, customer }: ExportPdfButtonProps) {
       // Create meal plan table
       autoTable(doc, {
         startY: yPosition,
-        head: [['Día', ...MEAL_TYPES.map(m => m.label)]],
+        head: [['Día', ...MEAL_TYPES.map((m) => m.label)]],
         body: tableData,
         theme: 'grid',
-        headStyles: { 
-          fillColor: primaryColor, 
+        headStyles: {
+          fillColor: primaryColor,
           fontSize: 10,
-          halign: 'center'
+          halign: 'center',
         },
-        bodyStyles: { 
+        bodyStyles: {
           fontSize: 8,
           cellPadding: 3,
-          valign: 'top'
+          valign: 'top',
         },
         columnStyles: {
           0: { fontStyle: 'bold', cellWidth: 25, halign: 'center' },
@@ -263,13 +280,14 @@ export function ExportPdfButton({ plan, customer }: ExportPdfButtonProps) {
           lineWidth: 0.5,
         },
         alternateRowStyles: {
-          fillColor: [245, 245, 245]
-        }
+          fillColor: [245, 245, 245],
+        },
       })
 
       // Plan notes
       if (plan.notes) {
-        const notesY = (doc as unknown as { lastAutoTable: { finalY: number } }).lastAutoTable.finalY + 8
+        const notesY =
+          (doc as unknown as { lastAutoTable: { finalY: number } }).lastAutoTable.finalY + 8
         doc.setFontSize(11)
         doc.setTextColor(...primaryColor)
         doc.text('Notas del Plan:', 14, notesY)
@@ -283,12 +301,12 @@ export function ExportPdfButton({ plan, customer }: ExportPdfButtonProps) {
       doc.setFontSize(8)
       doc.setTextColor(150, 150, 150)
       doc.text(
-        `Generado el ${new Date().toLocaleDateString('es-ES', { 
-          year: 'numeric', 
-          month: 'long', 
+        `Generado el ${new Date().toLocaleDateString('es-ES', {
+          year: 'numeric',
+          month: 'long',
           day: 'numeric',
           hour: '2-digit',
-          minute: '2-digit'
+          minute: '2-digit',
         })}`,
         pageWidth / 2,
         footerY,
@@ -296,9 +314,11 @@ export function ExportPdfButton({ plan, customer }: ExportPdfButtonProps) {
       )
 
       // Generate filename
-      const sanitizedName = plan.name.replace(/[^a-zA-Z0-9áéíóúñÁÉÍÓÚÑ\s]/g, '').replace(/\s+/g, '_')
-      const customerName = customer 
-        ? `_${customer.first_name}_${customer.last_name}`.replace(/\s+/g, '_') 
+      const sanitizedName = plan.name
+        .replace(/[^a-zA-Z0-9áéíóúñÁÉÍÓÚÑ\s]/g, '')
+        .replace(/\s+/g, '_')
+      const customerName = customer
+        ? `_${customer.first_name}_${customer.last_name}`.replace(/\s+/g, '_')
         : ''
       const date = new Date().toISOString().split('T')[0]
       const filename = `Plan_${sanitizedName}${customerName}_${date}.pdf`

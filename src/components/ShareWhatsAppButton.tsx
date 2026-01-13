@@ -12,13 +12,12 @@ interface ShareWhatsAppButtonProps {
 }
 
 export function ShareWhatsAppButton({ plan, customer }: ShareWhatsAppButtonProps) {
-  
   const formatPhoneNumber = (phone: string | null | undefined): string | null => {
     if (!phone) return null
-    
+
     // Remove all non-numeric characters
     let cleaned = phone.replace(/\D/g, '')
-    
+
     // If starts with 0, remove it and add country code
     if (cleaned.startsWith('0')) {
       cleaned = '593' + cleaned.substring(1)
@@ -27,17 +26,17 @@ export function ShareWhatsAppButton({ plan, customer }: ShareWhatsAppButtonProps
     else if (!cleaned.startsWith('593')) {
       cleaned = '593' + cleaned
     }
-    
+
     return cleaned
   }
 
   const generateWhatsAppMessage = (): string => {
     const lines: string[] = []
-    
+
     // Header
     lines.push(`🥗 *${plan.name}*`)
     lines.push('')
-    
+
     if (customer) {
       lines.push(`👤 Cliente: ${customer.first_name} ${customer.last_name}`)
       lines.push('')
@@ -61,16 +60,14 @@ export function ShareWhatsAppButton({ plan, customer }: ShareWhatsAppButtonProps
     // Meals by day
     lines.push('📅 *Plan Semanal:*')
     lines.push('')
-    
-    DAYS.forEach(day => {
-      const dayMeals = (plan.meal_entries || []).filter(
-        (m: MealEntry) => m.day_of_week === day.key
-      )
-      
+
+    DAYS.forEach((day) => {
+      const dayMeals = (plan.meal_entries || []).filter((m: MealEntry) => m.day_of_week === day.key)
+
       if (dayMeals.length > 0) {
         lines.push(`*${day.label.toUpperCase()}*`)
-        
-        MEAL_TYPES.forEach(mealType => {
+
+        MEAL_TYPES.forEach((mealType) => {
           const meal = dayMeals.find((m: MealEntry) => m.meal_type === mealType.key)
           if (meal && meal.meal_description) {
             lines.push(`• ${mealType.label}: ${meal.meal_description}`)
@@ -89,7 +86,7 @@ export function ShareWhatsAppButton({ plan, customer }: ShareWhatsAppButtonProps
 
   const handleShareWhatsApp = () => {
     const phoneNumber = formatPhoneNumber(customer?.cell_phone)
-    
+
     if (!phoneNumber) {
       toast.error('El cliente no tiene número de teléfono registrado')
       return
@@ -97,22 +94,22 @@ export function ShareWhatsAppButton({ plan, customer }: ShareWhatsAppButtonProps
 
     const message = generateWhatsAppMessage()
     const encodedMessage = encodeURIComponent(message)
-    
+
     // WhatsApp URL with phone number and message
     const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodedMessage}`
-    
+
     // Open in new tab
     window.open(whatsappUrl, '_blank')
-    
+
     toast.success('Abriendo WhatsApp...')
   }
 
   const hasPhone = customer?.cell_phone
 
   return (
-    <Button 
-      variant="outline" 
-      size="sm" 
+    <Button
+      variant="outline"
+      size="sm"
       onClick={handleShareWhatsApp}
       disabled={!hasPhone}
       className="bg-green-50 hover:bg-green-100 text-green-700 border-green-200"

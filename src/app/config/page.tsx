@@ -1,18 +1,22 @@
 'use client'
 
-import { useTheme, THEME_PALETTES, ThemePalette } from '@/lib/theme-context'
+import type { ThemePalette } from '@/lib/theme-context'
+import { useTheme } from '@/lib/theme-context'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
 import { Check, Palette, Settings } from 'lucide-react'
 import { toast } from 'sonner'
 
-function PalettePreview({ palette, isSelected, onSelect }: { 
+function PalettePreview({
+  palette,
+  isSelected,
+  onSelect,
+}: {
   palette: ThemePalette
   isSelected: boolean
-  onSelect: () => void 
+  onSelect: () => void
 }) {
   return (
-    <Card 
+    <Card
       className={`cursor-pointer transition-all hover:shadow-lg ${
         isSelected ? 'ring-2 ring-primary ring-offset-2' : ''
       }`}
@@ -34,71 +38,77 @@ function PalettePreview({ palette, isSelected, onSelect }: {
       <CardContent>
         {/* Vista previa de colores */}
         <div className="grid grid-cols-4 gap-2 mb-3">
-          <div 
-            className="h-10 rounded-md shadow-inner" 
+          <div
+            className="h-10 rounded-md shadow-inner"
             style={{ backgroundColor: `hsl(${palette.colors.primary})` }}
             title="Principal"
           />
-          <div 
-            className="h-10 rounded-md shadow-inner" 
+          <div
+            className="h-10 rounded-md shadow-inner"
             style={{ backgroundColor: `hsl(${palette.colors.secondary})` }}
             title="Secundario"
           />
-          <div 
-            className="h-10 rounded-md shadow-inner" 
+          <div
+            className="h-10 rounded-md shadow-inner"
             style={{ backgroundColor: `hsl(${palette.colors.accent})` }}
             title="Acento"
           />
-          <div 
-            className="h-10 rounded-md shadow-inner" 
+          <div
+            className="h-10 rounded-md shadow-inner"
             style={{ backgroundColor: `hsl(${palette.colors.destructive})` }}
             title="Destructivo"
           />
         </div>
         <div className="grid grid-cols-4 gap-2">
-          <div 
-            className="h-6 rounded-md border" 
+          <div
+            className="h-6 rounded-md border"
             style={{ backgroundColor: `hsl(${palette.colors.background})` }}
             title="Fondo"
           />
-          <div 
-            className="h-6 rounded-md border" 
+          <div
+            className="h-6 rounded-md border"
             style={{ backgroundColor: `hsl(${palette.colors.card})` }}
             title="Tarjeta"
           />
-          <div 
-            className="h-6 rounded-md border" 
+          <div
+            className="h-6 rounded-md border"
             style={{ backgroundColor: `hsl(${palette.colors.muted})` }}
             title="Atenuado"
           />
-          <div 
-            className="h-6 rounded-md border" 
+          <div
+            className="h-6 rounded-md border"
             style={{ backgroundColor: `hsl(${palette.colors.border})` }}
             title="Borde"
           />
         </div>
-        
+
         {/* Etiquetas */}
         <div className="mt-3 flex flex-wrap gap-1">
-          <span className="text-[10px] px-2 py-0.5 rounded-full" 
-            style={{ 
-              backgroundColor: `hsl(${palette.colors.primary})`, 
-              color: 'white' 
-            }}>
+          <span
+            className="text-[10px] px-2 py-0.5 rounded-full"
+            style={{
+              backgroundColor: `hsl(${palette.colors.primary})`,
+              color: 'white',
+            }}
+          >
             Principal
           </span>
-          <span className="text-[10px] px-2 py-0.5 rounded-full" 
-            style={{ 
-              backgroundColor: `hsl(${palette.colors.secondary})`, 
-              color: 'white' 
-            }}>
+          <span
+            className="text-[10px] px-2 py-0.5 rounded-full"
+            style={{
+              backgroundColor: `hsl(${palette.colors.secondary})`,
+              color: 'white',
+            }}
+          >
             Secundario
           </span>
-          <span className="text-[10px] px-2 py-0.5 rounded-full" 
-            style={{ 
-              backgroundColor: `hsl(${palette.colors.accent})`, 
-              color: 'white' 
-            }}>
+          <span
+            className="text-[10px] px-2 py-0.5 rounded-full"
+            style={{
+              backgroundColor: `hsl(${palette.colors.accent})`,
+              color: 'white',
+            }}
+          >
             Acento
           </span>
         </div>
@@ -112,7 +122,7 @@ export default function ConfigPage() {
 
   const handleSelectPalette = (paletteId: string) => {
     setPalette(paletteId)
-    const palette = palettes.find(p => p.id === paletteId)
+    const palette = palettes.find((p) => p.id === paletteId)
     toast.success(`Tema "${palette?.name}" aplicado correctamente`)
   }
 
@@ -137,8 +147,9 @@ export default function ConfigPage() {
             Paleta de Colores
           </CardTitle>
           <CardDescription>
-            Selecciona una paleta de colores para personalizar la apariencia de la aplicación. 
-            Los colores están inspirados en alimentos y elementos naturales relacionados con la nutrición.
+            Selecciona una paleta de colores para personalizar la apariencia de la aplicación. Los
+            colores están inspirados en alimentos y elementos naturales relacionados con la
+            nutrición.
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -147,12 +158,18 @@ export default function ConfigPage() {
             <p className="text-sm font-medium mb-2">Tema actual:</p>
             <div className="flex items-center gap-3">
               <div className="flex gap-1">
-                <div className="h-6 w-6 rounded-full shadow-md" 
-                  style={{ backgroundColor: `hsl(${currentPalette.colors.primary})` }} />
-                <div className="h-6 w-6 rounded-full shadow-md" 
-                  style={{ backgroundColor: `hsl(${currentPalette.colors.secondary})` }} />
-                <div className="h-6 w-6 rounded-full shadow-md" 
-                  style={{ backgroundColor: `hsl(${currentPalette.colors.accent})` }} />
+                <div
+                  className="h-6 w-6 rounded-full shadow-md"
+                  style={{ backgroundColor: `hsl(${currentPalette.colors.primary})` }}
+                />
+                <div
+                  className="h-6 w-6 rounded-full shadow-md"
+                  style={{ backgroundColor: `hsl(${currentPalette.colors.secondary})` }}
+                />
+                <div
+                  className="h-6 w-6 rounded-full shadow-md"
+                  style={{ backgroundColor: `hsl(${currentPalette.colors.accent})` }}
+                />
               </div>
               <span className="font-semibold text-primary">{currentPalette.name}</span>
               <span className="text-sm text-muted-foreground">— {currentPalette.description}</span>

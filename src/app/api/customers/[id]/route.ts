@@ -1,4 +1,5 @@
-import { NextRequest, NextResponse } from 'next/server'
+import type { NextRequest } from 'next/server'
+import { NextResponse } from 'next/server'
 import { createClient } from '@/utils/supabase/server'
 import type { ApiResponse, Customer, ApiError } from '@/lib/types'
 
@@ -14,13 +15,15 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
 
     const { data: customer, error } = await supabase
       .from('customer')
-      .select(`
+      .select(
+        `
         *,
         nutritional_plans:nutritional_plan (
           *,
           meal_entries:meal_entry (*)
         )
-      `)
+      `
+      )
       .eq('id', id)
       .single()
 
@@ -110,7 +113,10 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
       }
     }
 
-    if (body.first_name !== undefined && (typeof body.first_name !== 'string' || body.first_name.trim() === '')) {
+    if (
+      body.first_name !== undefined &&
+      (typeof body.first_name !== 'string' || body.first_name.trim() === '')
+    ) {
       return NextResponse.json<ApiError>(
         {
           success: false,
@@ -121,7 +127,10 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
       )
     }
 
-    if (body.last_name !== undefined && (typeof body.last_name !== 'string' || body.last_name.trim() === '')) {
+    if (
+      body.last_name !== undefined &&
+      (typeof body.last_name !== 'string' || body.last_name.trim() === '')
+    ) {
       return NextResponse.json<ApiError>(
         {
           success: false,
@@ -140,31 +149,52 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
         id_card: body.id_card?.trim() ?? existingCustomer.id_card,
         first_name: body.first_name?.trim() ?? existingCustomer.first_name,
         last_name: body.last_name?.trim() ?? existingCustomer.last_name,
-        
+
         // Datos personales opcionales
-        email: body.email !== undefined ? (body.email || null) : existingCustomer.email,
-        cell_phone: body.cell_phone !== undefined ? (body.cell_phone?.trim() || null) : existingCustomer.cell_phone,
-        gender: body.gender !== undefined ? (body.gender || null) : existingCustomer.gender,
-        birth_date: body.birth_date !== undefined ? (body.birth_date || null) : existingCustomer.birth_date,
-        
+        email: body.email !== undefined ? body.email || null : existingCustomer.email,
+        cell_phone:
+          body.cell_phone !== undefined
+            ? body.cell_phone?.trim() || null
+            : existingCustomer.cell_phone,
+        gender: body.gender !== undefined ? body.gender || null : existingCustomer.gender,
+        birth_date:
+          body.birth_date !== undefined ? body.birth_date || null : existingCustomer.birth_date,
+
         // Datos físicos
-        weight: body.weight !== undefined ? (body.weight || null) : existingCustomer.weight,
-        height: body.height !== undefined ? (body.height || null) : existingCustomer.height,
-        body_fat_percentage: body.body_fat_percentage !== undefined ? (body.body_fat_percentage || null) : existingCustomer.body_fat_percentage,
-        
+        weight: body.weight !== undefined ? body.weight || null : existingCustomer.weight,
+        height: body.height !== undefined ? body.height || null : existingCustomer.height,
+        body_fat_percentage:
+          body.body_fat_percentage !== undefined
+            ? body.body_fat_percentage || null
+            : existingCustomer.body_fat_percentage,
+
         // Información nutricional
-        activity_level: body.activity_level !== undefined ? (body.activity_level || null) : existingCustomer.activity_level,
-        goal: body.goal !== undefined ? (body.goal || null) : existingCustomer.goal,
-        daily_calorie_target: body.daily_calorie_target !== undefined ? (body.daily_calorie_target || null) : existingCustomer.daily_calorie_target,
-        
+        activity_level:
+          body.activity_level !== undefined
+            ? body.activity_level || null
+            : existingCustomer.activity_level,
+        goal: body.goal !== undefined ? body.goal || null : existingCustomer.goal,
+        daily_calorie_target:
+          body.daily_calorie_target !== undefined
+            ? body.daily_calorie_target || null
+            : existingCustomer.daily_calorie_target,
+
         // Información médica
-        allergies: body.allergies !== undefined ? (body.allergies || null) : existingCustomer.allergies,
-        medical_conditions: body.medical_conditions !== undefined ? (body.medical_conditions || null) : existingCustomer.medical_conditions,
-        medications: body.medications !== undefined ? (body.medications || null) : existingCustomer.medications,
-        dietary_restrictions: body.dietary_restrictions !== undefined ? (body.dietary_restrictions || null) : existingCustomer.dietary_restrictions,
-        
+        allergies:
+          body.allergies !== undefined ? body.allergies || null : existingCustomer.allergies,
+        medical_conditions:
+          body.medical_conditions !== undefined
+            ? body.medical_conditions || null
+            : existingCustomer.medical_conditions,
+        medications:
+          body.medications !== undefined ? body.medications || null : existingCustomer.medications,
+        dietary_restrictions:
+          body.dietary_restrictions !== undefined
+            ? body.dietary_restrictions || null
+            : existingCustomer.dietary_restrictions,
+
         // Notas
-        notes: body.notes !== undefined ? (body.notes || null) : existingCustomer.notes,
+        notes: body.notes !== undefined ? body.notes || null : existingCustomer.notes,
       })
       .eq('id', id)
       .select()
@@ -214,10 +244,7 @@ export async function DELETE(request: NextRequest, { params }: RouteParams) {
     }
 
     // Delete the customer (cascade will delete nutritional plans and meal entries)
-    const { error: deleteError } = await supabase
-      .from('customer')
-      .delete()
-      .eq('id', id)
+    const { error: deleteError } = await supabase.from('customer').delete().eq('id', id)
 
     if (deleteError) throw deleteError
 

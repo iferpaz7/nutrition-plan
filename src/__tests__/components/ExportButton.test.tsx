@@ -48,23 +48,23 @@ describe('ExportButton', () => {
 
   it('renders export button correctly', () => {
     render(<ExportButton plan={mockPlan} />)
-    
+
     expect(screen.getByRole('button', { name: /exportar a excel/i })).toBeInTheDocument()
   })
 
   it('shows download icon', () => {
     render(<ExportButton plan={mockPlan} />)
-    
+
     expect(screen.getByText(/exportar a excel/i)).toBeInTheDocument()
   })
 
   it('calls XLSX functions when clicked', async () => {
     const user = userEvent.setup()
     render(<ExportButton plan={mockPlan} />)
-    
+
     const button = screen.getByRole('button', { name: /exportar a excel/i })
     await user.click(button)
-    
+
     expect(XLSX.utils.book_new).toHaveBeenCalled()
     expect(XLSX.utils.aoa_to_sheet).toHaveBeenCalled()
     expect(XLSX.utils.book_append_sheet).toHaveBeenCalled()
@@ -74,10 +74,10 @@ describe('ExportButton', () => {
   it('generates correct filename format', async () => {
     const user = userEvent.setup()
     render(<ExportButton plan={mockPlan} />)
-    
+
     const button = screen.getByRole('button', { name: /exportar a excel/i })
     await user.click(button)
-    
+
     // Check that writeFile was called with a filename containing plan name
     expect(XLSX.writeFile).toHaveBeenCalledWith(
       expect.anything(),

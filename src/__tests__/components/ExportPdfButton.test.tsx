@@ -75,43 +75,43 @@ describe('ExportPdfButton', () => {
 
   it('renders export PDF button correctly', () => {
     render(<ExportPdfButton plan={mockPlan} />)
-    
+
     expect(screen.getByRole('button', { name: /exportar pdf/i })).toBeInTheDocument()
   })
 
   it('shows PDF icon', () => {
     render(<ExportPdfButton plan={mockPlan} />)
-    
+
     expect(screen.getByText(/exportar pdf/i)).toBeInTheDocument()
   })
 
   it('creates jsPDF instance when clicked', async () => {
     const user = userEvent.setup()
     render(<ExportPdfButton plan={mockPlan} customer={mockCustomer} />)
-    
+
     const button = screen.getByRole('button', { name: /exportar pdf/i })
     await user.click(button)
-    
+
     expect(jsPDF).toHaveBeenCalledWith('landscape', 'mm', 'a4')
   })
 
   it('works without customer data', async () => {
     const user = userEvent.setup()
     render(<ExportPdfButton plan={mockPlan} />)
-    
+
     const button = screen.getByRole('button', { name: /exportar pdf/i })
     await user.click(button)
-    
+
     expect(jsPDF).toHaveBeenCalled()
   })
 
   it('works with null customer', async () => {
     const user = userEvent.setup()
     render(<ExportPdfButton plan={mockPlan} customer={null} />)
-    
+
     const button = screen.getByRole('button', { name: /exportar pdf/i })
     await user.click(button)
-    
+
     expect(jsPDF).toHaveBeenCalled()
   })
 })

@@ -2,22 +2,16 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Menu, X, Apple, Users, ClipboardList, Home } from 'lucide-react'
+import { Menu, Apple, Users, ClipboardList, Home } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
-import { useState } from 'react'
 
 export function Header({ onMenuToggle }: { onMenuToggle?: () => void }) {
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/60">
       <div className="flex h-16 items-center px-4 md:px-6">
         {/* Mobile menu button */}
-        <Button
-          variant="ghost"
-          size="icon"
-          className="md:hidden mr-2"
-          onClick={onMenuToggle}
-        >
+        <Button variant="ghost" size="icon" className="md:hidden mr-2" onClick={onMenuToggle}>
           <Menu className="h-5 w-5" />
           <span className="sr-only">Toggle menu</span>
         </Button>
@@ -27,9 +21,7 @@ export function Header({ onMenuToggle }: { onMenuToggle?: () => void }) {
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-white">
             <Apple className="h-5 w-5" />
           </div>
-          <span className="hidden sm:inline-block text-lg text-primary">
-            NutriPlan
-          </span>
+          <span className="hidden sm:inline-block text-lg text-primary">NutriPlan</span>
         </Link>
 
         {/* Desktop Navigation */}
@@ -60,16 +52,16 @@ function HeaderNav() {
   return (
     <>
       {links.map((link) => {
-        const isActive = pathname === link.href || 
-          (link.href !== '/' && pathname.startsWith(link.href))
-        
+        const isActive =
+          pathname === link.href || (link.href !== '/' && pathname.startsWith(link.href))
+
         return (
           <Link
             key={link.href}
             href={link.href}
             className={cn(
-              "flex items-center gap-2 text-sm font-medium transition-colors hover:text-primary",
-              isActive ? "text-primary" : "text-muted-foreground"
+              'flex items-center gap-2 text-sm font-medium transition-colors hover:text-primary',
+              isActive ? 'text-primary' : 'text-muted-foreground'
             )}
           >
             <link.icon className="h-4 w-4" />

@@ -1,8 +1,24 @@
-import { NextRequest, NextResponse } from 'next/server'
+import type { NextRequest } from 'next/server'
+import { NextResponse } from 'next/server'
 import { createClient } from '@/utils/supabase/server'
-import type { ApiResponse, NutritionalPlan, MealEntry, DayOfWeek, MealType, ApiError } from '@/lib/types'
+import type {
+  ApiResponse,
+  NutritionalPlan,
+  MealEntry,
+  DayOfWeek,
+  MealType,
+  ApiError,
+} from '@/lib/types'
 
-const VALID_DAYS: DayOfWeek[] = ['LUNES', 'MARTES', 'MIERCOLES', 'JUEVES', 'VIERNES', 'SABADO', 'DOMINGO']
+const VALID_DAYS: DayOfWeek[] = [
+  'LUNES',
+  'MARTES',
+  'MIERCOLES',
+  'JUEVES',
+  'VIERNES',
+  'SABADO',
+  'DOMINGO',
+]
 const VALID_MEAL_TYPES: MealType[] = ['DESAYUNO', 'COLACION_1', 'ALMUERZO', 'COLACION_2', 'CENA']
 
 interface RouteParams {
@@ -17,11 +33,13 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
 
     const { data: plan, error } = await supabase
       .from('nutritional_plan')
-      .select(`
+      .select(
+        `
         *,
         customer (*),
         meal_entries:meal_entry (*)
-      `)
+      `
+      )
       .eq('id', id)
       .single()
 
@@ -93,7 +111,12 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
     }
 
     // Prepare meal entries for update
-    const meals: Array<{ day_of_week: DayOfWeek; meal_type: MealType; meal_description: string; nutritional_plan_id: string }> = []
+    const meals: Array<{
+      day_of_week: DayOfWeek
+      meal_type: MealType
+      meal_description: string
+      nutritional_plan_id: string
+    }> = []
 
     if (body.meals && typeof body.meals === 'object') {
       for (const [day, mealTypes] of Object.entries(body.meals)) {
@@ -110,7 +133,9 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
         }
 
         if (mealTypes && typeof mealTypes === 'object') {
-          for (const [mealType, description] of Object.entries(mealTypes as Record<string, string>)) {
+          for (const [mealType, description] of Object.entries(
+            mealTypes as Record<string, string>
+          )) {
             // Validate meal type
             if (!VALID_MEAL_TYPES.includes(mealType as MealType)) {
               return NextResponse.json<ApiError>(
@@ -148,10 +173,7 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
 
     // Delete existing meal entries if new meals are provided
     if (body.meals) {
-      await supabase
-        .from('meal_entry')
-        .delete()
-        .eq('nutritional_plan_id', id)
+      await supabase.from('meal_entry').delete().eq('nutritional_plan_id', id)
     }
 
     // Update the plan
@@ -159,15 +181,18 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
       .from('nutritional_plan')
       .update({
         name: body.name?.trim() ?? existingPlan.name,
-        description: body.description !== undefined 
-          ? (body.description?.trim() || null) 
-          : existingPlan.description,
+        description:
+          body.description !== undefined
+            ? body.description?.trim() || null
+            : existingPlan.description,
       })
       .eq('id', id)
-      .select(`
+      .select(
+        `
         *,
         customer (*)
-      `)
+      `
+      )
       .single()
 
     if (updateError) throw updateError
@@ -226,10 +251,7 @@ export async function DELETE(request: NextRequest, { params }: RouteParams) {
     }
 
     // Delete the plan (cascade will delete meal entries)
-    const { error: deleteError } = await supabase
-      .from('nutritional_plan')
-      .delete()
-      .eq('id', id)
+    const { error: deleteError } = await supabase.from('nutritional_plan').delete().eq('id', id)
 
     if (deleteError) throw deleteError
 

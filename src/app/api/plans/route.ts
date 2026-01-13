@@ -1,8 +1,24 @@
-import { NextRequest, NextResponse } from 'next/server'
+import type { NextRequest } from 'next/server'
+import { NextResponse } from 'next/server'
 import { createClient } from '@/utils/supabase/server'
-import type { ApiResponse, NutritionalPlan, MealEntry, DayOfWeek, MealType, ApiError } from '@/lib/types'
+import type {
+  ApiResponse,
+  NutritionalPlan,
+  MealEntry,
+  DayOfWeek,
+  MealType,
+  ApiError,
+} from '@/lib/types'
 
-const VALID_DAYS: DayOfWeek[] = ['LUNES', 'MARTES', 'MIERCOLES', 'JUEVES', 'VIERNES', 'SABADO', 'DOMINGO']
+const VALID_DAYS: DayOfWeek[] = [
+  'LUNES',
+  'MARTES',
+  'MIERCOLES',
+  'JUEVES',
+  'VIERNES',
+  'SABADO',
+  'DOMINGO',
+]
 const VALID_MEAL_TYPES: MealType[] = ['DESAYUNO', 'COLACION_1', 'ALMUERZO', 'COLACION_2', 'CENA']
 
 // GET /api/plans - List all nutritional plans
@@ -14,11 +30,13 @@ export async function GET(request: NextRequest) {
 
     let query = supabase
       .from('nutritional_plan')
-      .select(`
+      .select(
+        `
         *,
         customer (*),
         meal_entries:meal_entry (*)
-      `)
+      `
+      )
       .order('created_at', { ascending: false })
 
     if (customerId) {
@@ -95,7 +113,12 @@ export async function POST(request: NextRequest) {
     }
 
     // Validate meals if provided
-    const meals: Array<{ day_of_week: DayOfWeek; meal_type: MealType; meal_description: string; nutritional_plan_id?: string }> = []
+    const meals: Array<{
+      day_of_week: DayOfWeek
+      meal_type: MealType
+      meal_description: string
+      nutritional_plan_id?: string
+    }> = []
 
     if (body.meals && typeof body.meals === 'object') {
       for (const [day, mealTypes] of Object.entries(body.meals)) {
@@ -112,7 +135,9 @@ export async function POST(request: NextRequest) {
         }
 
         if (mealTypes && typeof mealTypes === 'object') {
-          for (const [mealType, description] of Object.entries(mealTypes as Record<string, string>)) {
+          for (const [mealType, description] of Object.entries(
+            mealTypes as Record<string, string>
+          )) {
             // Validate meal type
             if (!VALID_MEAL_TYPES.includes(mealType as MealType)) {
               return NextResponse.json<ApiError>(
@@ -155,10 +180,12 @@ export async function POST(request: NextRequest) {
         description: body.description?.trim() || null,
         customer_id: body.customer_id,
       })
-      .select(`
+      .select(
+        `
         *,
         customer (*)
-      `)
+      `
+      )
       .single()
 
     if (planError || !plan) throw planError
@@ -166,7 +193,7 @@ export async function POST(request: NextRequest) {
     // Create meal entries if any
     let mealEntries: MealEntry[] = []
     if (meals.length > 0) {
-      const mealsWithPlanId = meals.map(meal => ({
+      const mealsWithPlanId = meals.map((meal) => ({
         ...meal,
         nutritional_plan_id: plan.id,
       }))

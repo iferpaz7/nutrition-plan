@@ -7,7 +7,13 @@ import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog'
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from '@/components/ui/dialog'
 import { PlanGrid, DAYS, MEAL_TYPES } from '@/components/PlanGrid'
 import { toast } from 'sonner'
 import { Search, UserPlus, X, Check, User } from 'lucide-react'
@@ -26,14 +32,14 @@ export function PlanForm({ initialData, mode, customerId: initialCustomerId }: P
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [name, setName] = useState(initialData?.name || '')
   const [description, setDescription] = useState(initialData?.description || '')
-  
+
   // Customer selection state
   const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null)
   const [searchQuery, setSearchQuery] = useState('')
   const [searchResults, setSearchResults] = useState<Customer[]>([])
   const [isSearching, setIsSearching] = useState(false)
   const [showNewCustomerDialog, setShowNewCustomerDialog] = useState(false)
-  
+
   // New customer form state
   const [newCustomerIdCard, setNewCustomerIdCard] = useState('')
   const [newCustomerFirstName, setNewCustomerFirstName] = useState('')
@@ -73,7 +79,7 @@ export function PlanForm({ initialData, mode, customerId: initialCustomerId }: P
     try {
       const response = await fetch(`/api/customers?search=${encodeURIComponent(query.trim())}`)
       const result = await response.json()
-      
+
       if (result.success && result.data) {
         setSearchResults(result.data)
       }
@@ -121,8 +127,8 @@ export function PlanForm({ initialData, mode, customerId: initialCustomerId }: P
           id_card: newCustomerIdCard.trim(),
           first_name: newCustomerFirstName.trim(),
           last_name: newCustomerLastName.trim(),
-          cell_phone: newCustomerCellPhone.trim() || undefined
-        })
+          cell_phone: newCustomerCellPhone.trim() || undefined,
+        }),
       })
 
       const result = await response.json()
@@ -134,7 +140,7 @@ export function PlanForm({ initialData, mode, customerId: initialCustomerId }: P
       toast.success('Cliente creado exitosamente')
       setSelectedCustomer(result.data)
       setShowNewCustomerDialog(false)
-      
+
       // Reset form
       setNewCustomerIdCard('')
       setNewCustomerFirstName('')
@@ -149,11 +155,11 @@ export function PlanForm({ initialData, mode, customerId: initialCustomerId }: P
   // Initialize meals from existing data
   const initializeMeals = (): MealsState => {
     const meals: MealsState = {}
-    DAYS.forEach(day => {
+    DAYS.forEach((day) => {
       meals[day.key] = {}
-      MEAL_TYPES.forEach(mealType => {
+      MEAL_TYPES.forEach((mealType) => {
         const existingMeal = (initialData?.meal_entries || []).find(
-          m => m.day_of_week === day.key && m.meal_type === mealType.key
+          (m) => m.day_of_week === day.key && m.meal_type === mealType.key
         )
         meals[day.key][mealType.key] = existingMeal?.meal_description || ''
       })
@@ -164,22 +170,25 @@ export function PlanForm({ initialData, mode, customerId: initialCustomerId }: P
   const [meals, setMeals] = useState<MealsState>(initializeMeals)
 
   const handleMealChange = useCallback((day: DayOfWeek, mealType: MealType, value: string) => {
-    setMeals(prev => ({
+    setMeals((prev) => ({
       ...prev,
       [day]: {
         ...prev[day],
-        [mealType]: value
-      }
+        [mealType]: value,
+      },
     }))
   }, [])
 
-  const getMealValue = useCallback((day: DayOfWeek, mealType: MealType): string => {
-    return meals[day]?.[mealType] || ''
-  }, [meals])
+  const getMealValue = useCallback(
+    (day: DayOfWeek, mealType: MealType): string => {
+      return meals[day]?.[mealType] || ''
+    },
+    [meals]
+  )
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    
+
     if (!name.trim()) {
       toast.error('El nombre del plan es requerido')
       return
@@ -209,19 +218,17 @@ export function PlanForm({ initialData, mode, customerId: initialCustomerId }: P
         name: name.trim(),
         description: description.trim() || undefined,
         meals: filteredMeals,
-        customer_id: selectedCustomer?.id || initialCustomerId || initialData?.customer_id
+        customer_id: selectedCustomer?.id || initialCustomerId || initialData?.customer_id,
       }
 
-      const url = mode === 'create' 
-        ? '/api/plans' 
-        : `/api/plans/${initialData?.id}`
-      
+      const url = mode === 'create' ? '/api/plans' : `/api/plans/${initialData?.id}`
+
       const method = mode === 'create' ? 'POST' : 'PUT'
 
       const response = await fetch(url, {
         method,
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body)
+        body: JSON.stringify(body),
       })
 
       const result = await response.json()
@@ -230,8 +237,10 @@ export function PlanForm({ initialData, mode, customerId: initialCustomerId }: P
         throw new Error(result.error || 'Error al guardar el plan')
       }
 
-      toast.success(mode === 'create' ? 'Plan creado exitosamente' : 'Plan actualizado exitosamente')
-      
+      toast.success(
+        mode === 'create' ? 'Plan creado exitosamente' : 'Plan actualizado exitosamente'
+      )
+
       // Redirect to customer page if customer exists, otherwise to plan page
       const redirectCustomerId = selectedCustomer?.id || initialCustomerId
       if (redirectCustomerId) {
@@ -258,9 +267,7 @@ export function PlanForm({ initialData, mode, customerId: initialCustomerId }: P
                 <User className="h-5 w-5" />
                 Cliente
               </CardTitle>
-              <CardDescription>
-                Busque un cliente existente o cree uno nuevo
-              </CardDescription>
+              <CardDescription>Busque un cliente existente o cree uno nuevo</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               {selectedCustomer ? (
@@ -279,12 +286,7 @@ export function PlanForm({ initialData, mode, customerId: initialCustomerId }: P
                       </p>
                     </div>
                   </div>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="icon"
-                    onClick={handleClearCustomer}
-                  >
+                  <Button type="button" variant="ghost" size="icon" onClick={handleClearCustomer}>
                     <X className="h-4 w-4" />
                   </Button>
                 </div>
@@ -299,11 +301,9 @@ export function PlanForm({ initialData, mode, customerId: initialCustomerId }: P
                       className="pl-10"
                     />
                   </div>
-                  
+
                   {isSearching && (
-                    <p className="text-sm text-muted-foreground text-center py-2">
-                      Buscando...
-                    </p>
+                    <p className="text-sm text-muted-foreground text-center py-2">Buscando...</p>
                   )}
 
                   {searchResults.length > 0 && (
@@ -319,9 +319,7 @@ export function PlanForm({ initialData, mode, customerId: initialCustomerId }: P
                             <p className="font-medium">
                               {customer.first_name} {customer.last_name}
                             </p>
-                            <p className="text-sm text-muted-foreground">
-                              {customer.id_card}
-                            </p>
+                            <p className="text-sm text-muted-foreground">{customer.id_card}</p>
                           </div>
                           <Check className="h-4 w-4 text-primary opacity-0 group-hover:opacity-100 transition-opacity" />
                         </button>
@@ -391,8 +389,8 @@ export function PlanForm({ initialData, mode, customerId: initialCustomerId }: P
             <CardTitle className="text-primary">Planificación Semanal</CardTitle>
           </CardHeader>
           <CardContent>
-            <PlanGrid 
-              meals={[]} 
+            <PlanGrid
+              meals={[]}
               editMode={true}
               onMealChange={handleMealChange}
               getMealValue={getMealValue}
@@ -401,15 +399,20 @@ export function PlanForm({ initialData, mode, customerId: initialCustomerId }: P
         </Card>
 
         <div className="flex gap-4 justify-end">
-          <Button 
-            type="button" 
-            variant="outline" 
+          <Button
+            type="button"
+            variant="outline"
             onClick={() => router.back()}
             disabled={isSubmitting}
           >
             Cancelar
           </Button>
-          <Button type="submit" disabled={isSubmitting || (mode === 'create' && !selectedCustomer && !initialCustomerId)}>
+          <Button
+            type="submit"
+            disabled={
+              isSubmitting || (mode === 'create' && !selectedCustomer && !initialCustomerId)
+            }
+          >
             {isSubmitting ? 'Guardando...' : mode === 'create' ? 'Crear Plan' : 'Guardar Cambios'}
           </Button>
         </div>
@@ -420,9 +423,7 @@ export function PlanForm({ initialData, mode, customerId: initialCustomerId }: P
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle>Nuevo Cliente</DialogTitle>
-            <DialogDescription>
-              Complete los datos del nuevo cliente
-            </DialogDescription>
+            <DialogDescription>Complete los datos del nuevo cliente</DialogDescription>
           </DialogHeader>
           <div className="space-y-4 py-4">
             <div className="space-y-2">
@@ -473,11 +474,7 @@ export function PlanForm({ initialData, mode, customerId: initialCustomerId }: P
             >
               Cancelar
             </Button>
-            <Button
-              type="button"
-              onClick={handleCreateCustomer}
-              disabled={isCreatingCustomer}
-            >
+            <Button type="button" onClick={handleCreateCustomer} disabled={isCreatingCustomer}>
               {isCreatingCustomer ? 'Creando...' : 'Crear Cliente'}
             </Button>
           </div>

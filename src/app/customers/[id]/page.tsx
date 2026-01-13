@@ -4,9 +4,24 @@ import { createClient } from '@/utils/supabase/server'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { PlanCard } from '@/components/PlanCard'
-import { 
-  ArrowLeft, Pencil, Plus, Phone, IdCard, Calendar, User, Scale, Ruler, Activity,
-  Mail, Target, Flame, AlertTriangle, Pill, UtensilsCrossed, FileText
+import {
+  ArrowLeft,
+  Pencil,
+  Plus,
+  Phone,
+  IdCard,
+  Calendar,
+  User,
+  Scale,
+  Ruler,
+  Activity,
+  Mail,
+  Target,
+  Flame,
+  AlertTriangle,
+  Pill,
+  UtensilsCrossed,
+  FileText,
 } from 'lucide-react'
 import { DeleteCustomerButton } from './DeleteCustomerButton'
 import type { Customer } from '@/lib/types'
@@ -14,25 +29,25 @@ import { getImcClassification } from '@/lib/types'
 
 // Labels para enums
 const activityLabels: Record<string, string> = {
-  'SEDENTARIO': 'Sedentario',
-  'LIGERO': 'Ligero',
-  'MODERADO': 'Moderado',
-  'ACTIVO': 'Activo',
-  'MUY_ACTIVO': 'Muy Activo'
+  SEDENTARIO: 'Sedentario',
+  LIGERO: 'Ligero',
+  MODERADO: 'Moderado',
+  ACTIVO: 'Activo',
+  MUY_ACTIVO: 'Muy Activo',
 }
 
 const goalLabels: Record<string, string> = {
-  'PERDER_PESO': 'Perder Peso',
-  'MANTENER_PESO': 'Mantener Peso',
-  'GANAR_PESO': 'Ganar Peso',
-  'GANAR_MUSCULO': 'Ganar Músculo',
-  'MEJORAR_SALUD': 'Mejorar Salud'
+  PERDER_PESO: 'Perder Peso',
+  MANTENER_PESO: 'Mantener Peso',
+  GANAR_PESO: 'Ganar Peso',
+  GANAR_MUSCULO: 'Ganar Músculo',
+  MEJORAR_SALUD: 'Mejorar Salud',
 }
 
 const genderLabels: Record<string, string> = {
-  'MASCULINO': 'Masculino',
-  'FEMENINO': 'Femenino',
-  'OTRO': 'Otro'
+  MASCULINO: 'Masculino',
+  FEMENINO: 'Femenino',
+  OTRO: 'Otro',
 }
 
 interface PageProps {
@@ -43,16 +58,18 @@ async function getCustomer(id: string): Promise<Customer | null> {
   const supabase = await createClient()
   const { data: customer, error } = await supabase
     .from('customer')
-    .select(`
+    .select(
+      `
       *,
       nutritional_plans:nutritional_plan (
         *,
         meal_entries:meal_entry (*)
       )
-    `)
+    `
+    )
     .eq('id', id)
     .single()
-  
+
   if (error) return null
   return customer
 }
@@ -69,7 +86,7 @@ export default async function CustomerViewPage({ params }: PageProps) {
     return new Date(date).toLocaleDateString('es-ES', {
       year: 'numeric',
       month: 'long',
-      day: 'numeric'
+      day: 'numeric',
     })
   }
 
@@ -132,13 +149,20 @@ export default async function CustomerViewPage({ params }: PageProps) {
                   Editar
                 </Link>
               </Button>
-              <DeleteCustomerButton customerId={customer.id} customerName={`${customer.first_name} ${customer.last_name}`} />
+              <DeleteCustomerButton
+                customerId={customer.id}
+                customerName={`${customer.first_name} ${customer.last_name}`}
+              />
             </div>
           </div>
         </CardHeader>
-        
+
         {/* Datos físicos e IMC */}
-        {(customer.age || customer.weight || customer.height || customer.imc || customer.body_fat_percentage) && (
+        {(customer.age ||
+          customer.weight ||
+          customer.height ||
+          customer.imc ||
+          customer.body_fat_percentage) && (
           <CardContent className="border-t pt-4">
             <h3 className="text-sm font-medium text-muted-foreground mb-3">Datos Físicos</h3>
             <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
@@ -233,7 +257,10 @@ export default async function CustomerViewPage({ params }: PageProps) {
         )}
 
         {/* Información Médica */}
-        {(customer.allergies || customer.medical_conditions || customer.medications || customer.dietary_restrictions) && (
+        {(customer.allergies ||
+          customer.medical_conditions ||
+          customer.medications ||
+          customer.dietary_restrictions) && (
           <CardContent className="border-t pt-4">
             <h3 className="text-sm font-medium text-muted-foreground mb-3">Información Médica</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -298,7 +325,7 @@ export default async function CustomerViewPage({ params }: PageProps) {
 
       {customer.nutritional_plans && customer.nutritional_plans.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {customer.nutritional_plans.map(plan => (
+          {customer.nutritional_plans.map((plan) => (
             <PlanCard key={plan.id} plan={plan} />
           ))}
         </div>

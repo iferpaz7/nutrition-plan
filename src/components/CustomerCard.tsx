@@ -1,7 +1,14 @@
 'use client'
 
 import Link from 'next/link'
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Eye, Pencil, Trash2, Phone, IdCard, FileText } from 'lucide-react'
 import type { Customer } from '@/lib/types'
@@ -36,7 +43,9 @@ export function CustomerCard({ customer, onDelete }: CustomerCardProps) {
       <CardContent>
         <div className="flex items-center gap-2 text-sm text-muted-foreground">
           <FileText className="h-4 w-4" />
-          <span>{planCount} {planCount === 1 ? 'plan' : 'planes'} nutricionales</span>
+          <span>
+            {planCount} {planCount === 1 ? 'plan' : 'planes'} nutricionales
+          </span>
         </div>
       </CardContent>
       <CardFooter className="gap-2">
@@ -52,11 +61,7 @@ export function CustomerCard({ customer, onDelete }: CustomerCardProps) {
             Editar
           </Link>
         </Button>
-        <Button 
-          variant="destructive" 
-          size="sm"
-          onClick={() => onDelete?.(customer.id)}
-        >
+        <Button variant="destructive" size="sm" onClick={() => onDelete?.(customer.id)}>
           <Trash2 className="h-4 w-4" />
         </Button>
       </CardFooter>

@@ -2,15 +2,15 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { 
-  Home, 
-  ClipboardList, 
-  Users, 
+import {
+  Home,
+  ClipboardList,
+  Users,
   PlusCircle,
   Settings,
   HelpCircle,
   X,
-  Apple
+  Apple,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
@@ -27,14 +27,14 @@ const menuItems = [
       { href: '/', label: 'Inicio', icon: Home },
       { href: '/plans', label: 'Planes', icon: ClipboardList },
       { href: '/customers', label: 'Clientes', icon: Users },
-    ]
+    ],
   },
   {
     title: 'Acciones Rápidas',
     items: [
       { href: '/plans/new', label: 'Nuevo Plan', icon: PlusCircle },
       { href: '/customers/new', label: 'Nuevo Cliente', icon: PlusCircle },
-    ]
+    ],
   },
 ]
 
@@ -44,18 +44,13 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
   return (
     <>
       {/* Backdrop for mobile */}
-      {isOpen && (
-        <div 
-          className="fixed inset-0 z-40 bg-black/50 md:hidden"
-          onClick={onClose}
-        />
-      )}
+      {isOpen && <div className="fixed inset-0 z-40 bg-black/50 md:hidden" onClick={onClose} />}
 
       {/* Sidebar */}
       <aside
         className={cn(
-          "fixed left-0 top-0 z-50 h-full w-64 bg-white border-r shadow-lg transition-transform duration-300 ease-in-out md:translate-x-0 md:static md:shadow-none md:z-0",
-          isOpen ? "translate-x-0" : "-translate-x-full"
+          'fixed left-0 top-0 z-50 h-full w-64 bg-white border-r shadow-lg transition-transform duration-300 ease-in-out md:translate-x-0 md:static md:shadow-none md:z-0',
+          isOpen ? 'translate-x-0' : '-translate-x-full'
         )}
       >
         {/* Mobile Header */}
@@ -88,19 +83,17 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
               </h3>
               <ul className="space-y-1">
                 {section.items.map((item) => {
-                  const isActive = pathname === item.href || 
-                    (item.href !== '/' && pathname.startsWith(item.href))
-                  
+                  const isActive =
+                    pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href))
+
                   return (
                     <li key={item.href}>
                       <Link
                         href={item.href}
                         onClick={onClose}
                         className={cn(
-                          "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-all hover:bg-primary/10 hover:text-primary",
-                          isActive 
-                            ? "bg-primary/10 text-primary" 
-                            : "text-muted-foreground"
+                          'flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-all hover:bg-primary/10 hover:text-primary',
+                          isActive ? 'bg-primary/10 text-primary' : 'text-muted-foreground'
                         )}
                       >
                         <item.icon className="h-4 w-4" />

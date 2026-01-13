@@ -37,43 +37,43 @@ describe('ExportImageButton', () => {
 
   it('renders export image button correctly', () => {
     render(<ExportImageButton plan={mockPlan} />)
-    
+
     expect(screen.getByRole('button', { name: /exportar imagen/i })).toBeInTheDocument()
   })
 
   it('shows image icon', () => {
     render(<ExportImageButton plan={mockPlan} />)
-    
+
     expect(screen.getByText(/exportar imagen/i)).toBeInTheDocument()
   })
 
   it('calls dom-to-image when clicked', async () => {
     const user = userEvent.setup()
     render(<ExportImageButton plan={mockPlan} />)
-    
+
     const button = screen.getByRole('button', { name: /exportar imagen/i })
     await user.click(button)
-    
+
     expect(domtoimage.toBlob).toHaveBeenCalled()
   })
 
   it('uses default targetId if not provided', async () => {
     const user = userEvent.setup()
     render(<ExportImageButton plan={mockPlan} />)
-    
+
     const button = screen.getByRole('button', { name: /exportar imagen/i })
     await user.click(button)
-    
+
     expect(document.getElementById).toHaveBeenCalledWith('plan-grid-container')
   })
 
   it('uses custom targetId when provided', async () => {
     const user = userEvent.setup()
     render(<ExportImageButton plan={mockPlan} targetId="custom-container" />)
-    
+
     const button = screen.getByRole('button', { name: /exportar imagen/i })
     await user.click(button)
-    
+
     expect(document.getElementById).toHaveBeenCalledWith('custom-container')
   })
 })

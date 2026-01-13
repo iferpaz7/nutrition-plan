@@ -1,7 +1,14 @@
 'use client'
 
 import Link from 'next/link'
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Eye, Pencil, Trash2, Calendar, FileText } from 'lucide-react'
 import type { NutritionalPlan } from '@/lib/types'
@@ -20,7 +27,7 @@ export function PlanCard({ plan, onDelete }: PlanCardProps) {
     return new Date(date).toLocaleDateString('es-ES', {
       year: 'numeric',
       month: 'short',
-      day: 'numeric'
+      day: 'numeric',
     })
   }
 
@@ -32,9 +39,7 @@ export function PlanCard({ plan, onDelete }: PlanCardProps) {
           {plan.name}
         </CardTitle>
         {plan.description && (
-          <CardDescription className="line-clamp-2">
-            {plan.description}
-          </CardDescription>
+          <CardDescription className="line-clamp-2">{plan.description}</CardDescription>
         )}
       </CardHeader>
       <CardContent>
@@ -46,10 +51,12 @@ export function PlanCard({ plan, onDelete }: PlanCardProps) {
           <div className="space-y-1">
             <div className="flex justify-between text-sm">
               <span>Comidas planificadas</span>
-              <span className="font-medium">{mealCount} / {totalPossibleMeals}</span>
+              <span className="font-medium">
+                {mealCount} / {totalPossibleMeals}
+              </span>
             </div>
             <div className="h-2 bg-muted rounded-full overflow-hidden">
-              <div 
+              <div
                 className="h-full bg-primary transition-all duration-300"
                 style={{ width: `${completionPercentage}%` }}
               />
@@ -73,11 +80,7 @@ export function PlanCard({ plan, onDelete }: PlanCardProps) {
             Editar
           </Link>
         </Button>
-        <Button 
-          variant="destructive" 
-          size="sm"
-          onClick={() => onDelete?.(plan.id)}
-        >
+        <Button variant="destructive" size="sm" onClick={() => onDelete?.(plan.id)}>
           <Trash2 className="h-4 w-4" />
         </Button>
       </CardFooter>

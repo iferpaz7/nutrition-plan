@@ -1,4 +1,5 @@
-import { NextRequest, NextResponse } from 'next/server'
+import type { NextRequest } from 'next/server'
+import { NextResponse } from 'next/server'
 import { createClient } from '@/utils/supabase/server'
 import type { ApiResponse, Customer, ApiError } from '@/lib/types'
 
@@ -9,9 +10,7 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url)
     const search = searchParams.get('search')
 
-    let query = supabase
-      .from('customer')
-      .select(`
+    let query = supabase.from('customer').select(`
         *,
         nutritional_plans:nutritional_plan (
           id,
@@ -23,7 +22,9 @@ export async function GET(request: NextRequest) {
     // If search query provided, filter by id_card, first_name, or last_name
     if (search && search.trim().length >= 2) {
       const searchTerm = `%${search.trim()}%`
-      query = query.or(`id_card.ilike.${searchTerm},first_name.ilike.${searchTerm},last_name.ilike.${searchTerm}`)
+      query = query.or(
+        `id_card.ilike.${searchTerm},first_name.ilike.${searchTerm},last_name.ilike.${searchTerm}`
+      )
     }
 
     const { data: customers, error } = await query.order('created_at', { ascending: false })
@@ -113,36 +114,38 @@ export async function POST(request: NextRequest) {
         id_card: body.id_card.trim(),
         first_name: body.first_name.trim(),
         last_name: body.last_name.trim(),
-        
+
         // Datos personales opcionales
         email: body.email || null,
         cell_phone: body.cell_phone?.trim() || null,
         gender: body.gender || null,
         birth_date: body.birth_date || null,
-        
+
         // Datos físicos
         weight: body.weight || null,
         height: body.height || null,
         body_fat_percentage: body.body_fat_percentage || null,
-        
+
         // Información nutricional
         activity_level: body.activity_level || null,
         goal: body.goal || null,
         daily_calorie_target: body.daily_calorie_target || null,
-        
+
         // Información médica
         allergies: body.allergies || null,
         medical_conditions: body.medical_conditions || null,
         medications: body.medications || null,
         dietary_restrictions: body.dietary_restrictions || null,
-        
+
         // Notas
         notes: body.notes || null,
       })
-      .select(`
+      .select(
+        `
         *,
         nutritional_plans:nutritional_plan (*)
-      `)
+      `
+      )
       .single()
 
     if (error) throw error

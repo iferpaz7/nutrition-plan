@@ -42,7 +42,7 @@ export function PlanGrid({ meals, editMode = false, onMealChange, getMealValue }
     if (getMealValue) {
       return getMealValue(day, mealType)
     }
-    const meal = meals.find(m => m.day_of_week === day && m.meal_type === mealType)
+    const meal = meals.find((m) => m.day_of_week === day && m.meal_type === mealType)
     return meal?.meal_description || ''
   }
 
@@ -53,7 +53,10 @@ export function PlanGrid({ meals, editMode = false, onMealChange, getMealValue }
           <TableRow className="bg-primary/10">
             <TableHead className="w-28 font-semibold text-primary">Día</TableHead>
             {MEAL_TYPES.map((mealType) => (
-              <TableHead key={mealType.key} className={cn("text-center font-semibold min-w-[140px]", mealType.color)}>
+              <TableHead
+                key={mealType.key}
+                className={cn('text-center font-semibold min-w-[140px]', mealType.color)}
+              >
                 {mealType.label}
               </TableHead>
             ))}
@@ -62,9 +65,7 @@ export function PlanGrid({ meals, editMode = false, onMealChange, getMealValue }
         <TableBody>
           {DAYS.map((day) => (
             <TableRow key={day.key} className="hover:bg-muted/30">
-              <TableCell className="font-medium bg-primary/20 text-primary">
-                {day.label}
-              </TableCell>
+              <TableCell className="font-medium bg-primary/20 text-primary">{day.label}</TableCell>
               {MEAL_TYPES.map((mealType) => (
                 <TableCell key={`${day.key}-${mealType.key}`} className="p-2">
                   {editMode ? (

@@ -19,11 +19,11 @@ interface DeleteConfirmDialogProps {
   onConfirm: () => Promise<void>
 }
 
-export function DeleteConfirmDialog({ 
-  open, 
-  onOpenChange, 
-  planName, 
-  onConfirm 
+export function DeleteConfirmDialog({
+  open,
+  onOpenChange,
+  planName,
+  onConfirm,
 }: DeleteConfirmDialogProps) {
   const [isDeleting, setIsDeleting] = useState(false)
 
@@ -51,18 +51,10 @@ export function DeleteConfirmDialog({
           </DialogDescription>
         </DialogHeader>
         <DialogFooter className="gap-2 sm:gap-0">
-          <Button 
-            variant="outline" 
-            onClick={() => onOpenChange(false)}
-            disabled={isDeleting}
-          >
+          <Button variant="outline" onClick={() => onOpenChange(false)} disabled={isDeleting}>
             Cancelar
           </Button>
-          <Button 
-            variant="destructive" 
-            onClick={handleConfirm}
-            disabled={isDeleting}
-          >
+          <Button variant="destructive" onClick={handleConfirm} disabled={isDeleting}>
             {isDeleting ? 'Eliminando...' : 'Eliminar'}
           </Button>
         </DialogFooter>

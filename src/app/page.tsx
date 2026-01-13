@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { PlanCard } from '@/components/PlanCard'
 import { DeleteConfirmDialog } from '@/components/DeleteConfirmDialog'
-import { Plus, Salad, Users } from 'lucide-react'
+import { Plus, Salad } from 'lucide-react'
 import { toast } from 'sonner'
 import type { NutritionalPlan, ApiResponse } from '@/lib/types'
 
@@ -21,7 +21,7 @@ export default function HomePage() {
     try {
       const response = await fetch('/api/plans')
       const result: ApiResponse<NutritionalPlan[]> = await response.json()
-      
+
       if (result.success && result.data) {
         setPlans(result.data)
       } else {
@@ -39,7 +39,7 @@ export default function HomePage() {
   }, [fetchPlans])
 
   const handleDeleteClick = (id: string) => {
-    const plan = plans.find(p => p.id === id)
+    const plan = plans.find((p) => p.id === id)
     if (plan) {
       setPlanToDelete(plan)
       setDeleteDialogOpen(true)
@@ -51,13 +51,13 @@ export default function HomePage() {
 
     try {
       const response = await fetch(`/api/plans/${planToDelete.id}`, {
-        method: 'DELETE'
+        method: 'DELETE',
       })
       const result = await response.json()
 
       if (result.success) {
         toast.success('Plan eliminado exitosamente')
-        setPlans(prev => prev.filter(p => p.id !== planToDelete.id))
+        setPlans((prev) => prev.filter((p) => p.id !== planToDelete.id))
         setDeleteDialogOpen(false)
         setPlanToDelete(null)
         router.refresh()
@@ -87,7 +87,9 @@ export default function HomePage() {
             <Salad className="h-10 w-10 text-primary" />
             <div>
               <h1 className="text-2xl sm:text-3xl font-bold text-primary">Planes Nutricionales</h1>
-              <p className="text-muted-foreground text-sm sm:text-base">Gestiona tus planes de alimentación semanales</p>
+              <p className="text-muted-foreground text-sm sm:text-base">
+                Gestiona tus planes de alimentación semanales
+              </p>
             </div>
           </div>
           <div className="flex gap-2 w-full sm:w-auto">
@@ -117,12 +119,8 @@ export default function HomePage() {
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {plans.map(plan => (
-            <PlanCard 
-              key={plan.id} 
-              plan={plan} 
-              onDelete={handleDeleteClick}
-            />
+          {plans.map((plan) => (
+            <PlanCard key={plan.id} plan={plan} onDelete={handleDeleteClick} />
           ))}
         </div>
       )}

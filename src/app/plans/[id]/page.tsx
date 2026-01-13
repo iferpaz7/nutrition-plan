@@ -15,14 +15,16 @@ async function getPlan(id: string): Promise<NutritionalPlan | null> {
   const supabase = await createClient()
   const { data: plan, error } = await supabase
     .from('nutritional_plan')
-    .select(`
+    .select(
+      `
       *,
       customer (*),
       meal_entries:meal_entry (*)
-    `)
+    `
+    )
     .eq('id', id)
     .single()
-  
+
   if (error) return null
   return plan
 }

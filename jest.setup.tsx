@@ -34,9 +34,13 @@ jest.mock('sonner', () => ({
 }))
 
 // Mock html2canvas
-jest.mock('html2canvas', () => jest.fn(() => Promise.resolve({
-  toBlob: jest.fn((callback) => callback(new Blob(['test'], { type: 'image/png' }))),
-})))
+jest.mock('html2canvas', () =>
+  jest.fn(() =>
+    Promise.resolve({
+      toBlob: jest.fn((callback) => callback(new Blob(['test'], { type: 'image/png' }))),
+    })
+  )
+)
 
 // Mock dom-to-image-more
 jest.mock('dom-to-image-more', () => ({
@@ -77,11 +81,10 @@ beforeAll(() => {
     const message = args[0]
     // Suppress known jsdom navigation errors and React deprecation warnings
     if (
-      (typeof message === 'string' && 
+      (typeof message === 'string' &&
         (message.includes('Warning: ReactDOM.render is no longer supported') ||
-         message.includes('Not implemented: navigation'))) ||
-      (message instanceof Error && 
-        message.message.includes('Not implemented: navigation'))
+          message.includes('Not implemented: navigation'))) ||
+      (message instanceof Error && message.message.includes('Not implemented: navigation'))
     ) {
       return
     }

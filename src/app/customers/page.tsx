@@ -21,7 +21,7 @@ export default function CustomersPage() {
     try {
       const response = await fetch('/api/customers')
       const result: ApiResponse<Customer[]> = await response.json()
-      
+
       if (result.success && result.data) {
         setCustomers(result.data)
       } else {
@@ -39,7 +39,7 @@ export default function CustomersPage() {
   }, [fetchCustomers])
 
   const handleDeleteClick = (id: string) => {
-    const customer = customers.find(c => c.id === id)
+    const customer = customers.find((c) => c.id === id)
     if (customer) {
       setCustomerToDelete(customer)
       setDeleteDialogOpen(true)
@@ -51,13 +51,13 @@ export default function CustomersPage() {
 
     try {
       const response = await fetch(`/api/customers/${customerToDelete.id}`, {
-        method: 'DELETE'
+        method: 'DELETE',
       })
       const result = await response.json()
 
       if (result.success) {
         toast.success('Cliente eliminado exitosamente')
-        setCustomers(prev => prev.filter(c => c.id !== customerToDelete.id))
+        setCustomers((prev) => prev.filter((c) => c.id !== customerToDelete.id))
         setDeleteDialogOpen(false)
         setCustomerToDelete(null)
         router.refresh()
@@ -87,7 +87,9 @@ export default function CustomersPage() {
             <Users className="h-10 w-10 text-primary" />
             <div>
               <h1 className="text-2xl sm:text-3xl font-bold text-primary">Clientes</h1>
-              <p className="text-muted-foreground text-sm sm:text-base">Gestiona tus clientes y sus planes nutricionales</p>
+              <p className="text-muted-foreground text-sm sm:text-base">
+                Gestiona tus clientes y sus planes nutricionales
+              </p>
             </div>
           </div>
           <Button asChild className="w-full sm:w-auto">
@@ -115,12 +117,8 @@ export default function CustomersPage() {
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {customers.map(customer => (
-            <CustomerCard 
-              key={customer.id} 
-              customer={customer} 
-              onDelete={handleDeleteClick}
-            />
+          {customers.map((customer) => (
+            <CustomerCard key={customer.id} customer={customer} onDelete={handleDeleteClick} />
           ))}
         </div>
       )}
@@ -128,7 +126,9 @@ export default function CustomersPage() {
       <DeleteConfirmDialog
         open={deleteDialogOpen}
         onOpenChange={setDeleteDialogOpen}
-        planName={customerToDelete ? `${customerToDelete.first_name} ${customerToDelete.last_name}` : ''}
+        planName={
+          customerToDelete ? `${customerToDelete.first_name} ${customerToDelete.last_name}` : ''
+        }
         onConfirm={handleDeleteConfirm}
       />
     </div>

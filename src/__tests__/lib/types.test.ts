@@ -3,14 +3,14 @@ import { getImcClassification } from '@/lib/types'
 describe('getImcClassification', () => {
   it('returns "No calculado" for null IMC', () => {
     const result = getImcClassification(null)
-    
+
     expect(result.label).toBe('No calculado')
     expect(result.color).toBe('text-muted-foreground')
   })
 
   it('returns "Bajo peso" for IMC < 18.5', () => {
     const result = getImcClassification(17.5)
-    
+
     expect(result.label).toBe('Bajo peso')
     expect(result.color).toBe('text-blue-500')
   })
@@ -19,7 +19,7 @@ describe('getImcClassification', () => {
     const result1 = getImcClassification(18.5)
     const result2 = getImcClassification(22)
     const result3 = getImcClassification(24.9)
-    
+
     expect(result1.label).toBe('Normal')
     expect(result2.label).toBe('Normal')
     expect(result3.label).toBe('Normal')
@@ -30,7 +30,7 @@ describe('getImcClassification', () => {
     const result1 = getImcClassification(25)
     const result2 = getImcClassification(27.5)
     const result3 = getImcClassification(29.9)
-    
+
     expect(result1.label).toBe('Sobrepeso')
     expect(result2.label).toBe('Sobrepeso')
     expect(result3.label).toBe('Sobrepeso')
@@ -41,7 +41,7 @@ describe('getImcClassification', () => {
     const result1 = getImcClassification(30)
     const result2 = getImcClassification(32)
     const result3 = getImcClassification(34.9)
-    
+
     expect(result1.label).toBe('Obesidad I')
     expect(result2.label).toBe('Obesidad I')
     expect(result3.label).toBe('Obesidad I')
@@ -52,7 +52,7 @@ describe('getImcClassification', () => {
     const result1 = getImcClassification(35)
     const result2 = getImcClassification(37)
     const result3 = getImcClassification(39.9)
-    
+
     expect(result1.label).toBe('Obesidad II')
     expect(result2.label).toBe('Obesidad II')
     expect(result3.label).toBe('Obesidad II')
@@ -63,7 +63,7 @@ describe('getImcClassification', () => {
     const result1 = getImcClassification(40)
     const result2 = getImcClassification(45)
     const result3 = getImcClassification(50)
-    
+
     expect(result1.label).toBe('Obesidad III')
     expect(result2.label).toBe('Obesidad III')
     expect(result3.label).toBe('Obesidad III')

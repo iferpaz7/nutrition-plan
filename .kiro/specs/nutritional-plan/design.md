@@ -7,6 +7,7 @@ A full-stack web application built with Next.js 16, TypeScript, and Supabase for
 ## Architecture
 
 ### Technology Stack
+
 - **Frontend**: Next.js 16.1.1 with App Router, TypeScript, Tailwind CSS
 - **Backend**: Next.js API Routes (serverless functions)
 - **Database**: Supabase (PostgreSQL) with @supabase/ssr
@@ -16,6 +17,7 @@ A full-stack web application built with Next.js 16, TypeScript, and Supabase for
 - **Notifications**: Sonner for toast notifications
 
 ### Application Structure
+
 ```
 nutritional-plan/
 ├── src/
@@ -85,33 +87,35 @@ nutritional-plan/
 ### Design System & Color Palette
 
 #### Nutritional Color Palette
+
 The application uses a carefully selected color palette inspired by fresh, healthy foods:
 
 ```css
 :root {
   /* Primary Colors - Fresh Greens */
-  --primary: 142 76% 36%;          /* Fresh spinach green */
+  --primary: 142 76% 36%; /* Fresh spinach green */
   --primary-foreground: 355 100% 97%;
 
   /* Secondary Colors - Vibrant Orange */
-  --secondary: 25 95% 53%;         /* Carrot orange */
+  --secondary: 25 95% 53%; /* Carrot orange */
   --secondary-foreground: 210 40% 2%;
 
   /* Accent Colors - Berry Purple */
-  --accent: 270 95% 75%;           /* Blueberry purple */
+  --accent: 270 95% 75%; /* Blueberry purple */
   --accent-foreground: 210 40% 2%;
 
   /* Neutral Colors - Natural Tones */
-  --background: 36 39% 88%;        /* Warm cream */
-  --foreground: 84 6% 10%;         /* Dark charcoal */
-  
+  --background: 36 39% 88%; /* Warm cream */
+  --foreground: 84 6% 10%; /* Dark charcoal */
+
   /* Destructive Colors - Tomato Red */
-  --destructive: 0 84% 60%;        /* Tomato red */
+  --destructive: 0 84% 60%; /* Tomato red */
   --destructive-foreground: 355 100% 97%;
 }
 ```
 
 #### IMC Classification Colors
+
 ```typescript
 // BMI color coding
 < 18.5  → text-blue-500    (Bajo peso)
@@ -138,7 +142,7 @@ CREATE TYPE meal_type AS ENUM ('DESAYUNO', 'COLACION_1', 'ALMUERZO', 'COLACION_2
 -- Customer table
 CREATE TABLE customer (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  
+
   -- Personal data (required: id_card, first_name, last_name)
   id_card TEXT UNIQUE NOT NULL,
   first_name TEXT NOT NULL,
@@ -147,25 +151,25 @@ CREATE TABLE customer (
   cell_phone TEXT,
   gender gender,
   birth_date DATE,
-  
+
   -- Physical data
   age INTEGER,                    -- Auto-calculated from birth_date
   weight DECIMAL(5,2),            -- kg
   height DECIMAL(3,2),            -- meters
   imc DECIMAL(4,2),               -- Auto-calculated (weight/height²)
   body_fat_percentage DECIMAL(4,2),
-  
+
   -- Nutritional info
   activity_level activity_level DEFAULT 'MODERADO',
   goal goal_type DEFAULT 'MANTENER_PESO',
   daily_calorie_target INTEGER,
-  
+
   -- Medical info
   allergies TEXT,
   medical_conditions TEXT,
   medications TEXT,
   dietary_restrictions TEXT,
-  
+
   notes TEXT,
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
@@ -179,7 +183,7 @@ CREATE TABLE nutritional_plan (
   status plan_status DEFAULT 'BORRADOR',
   start_date DATE,
   end_date DATE,
-  
+
   -- Nutritional targets
   daily_calories INTEGER,
   protein_grams INTEGER,
@@ -187,7 +191,7 @@ CREATE TABLE nutritional_plan (
   fat_grams INTEGER,
   fiber_grams INTEGER,
   water_liters DECIMAL(3,1),
-  
+
   notes TEXT,
   customer_id UUID NOT NULL REFERENCES customer(id) ON DELETE CASCADE,
   created_at TIMESTAMPTZ DEFAULT NOW(),
@@ -200,7 +204,7 @@ CREATE TABLE meal_entry (
   day_of_week day_of_week NOT NULL,
   meal_type meal_type NOT NULL,
   meal_description TEXT NOT NULL,
-  
+
   -- Nutritional info per meal (optional)
   calories INTEGER,
   protein_grams DECIMAL(5,1),
@@ -209,7 +213,7 @@ CREATE TABLE meal_entry (
   fiber_grams DECIMAL(5,1),
   portion_size TEXT,
   preparation_notes TEXT,
-  
+
   nutritional_plan_id UUID NOT NULL REFERENCES nutritional_plan(id) ON DELETE CASCADE,
   UNIQUE(nutritional_plan_id, day_of_week, meal_type)
 );
@@ -228,86 +232,99 @@ CREATE TRIGGER calculate_customer_age
 
 ```typescript
 // Enums
-export type Gender = 'MASCULINO' | 'FEMENINO' | 'OTRO';
-export type ActivityLevel = 'SEDENTARIO' | 'LIGERO' | 'MODERADO' | 'ACTIVO' | 'MUY_ACTIVO';
-export type GoalType = 'PERDER_PESO' | 'MANTENER_PESO' | 'GANAR_PESO' | 'GANAR_MUSCULO' | 'MEJORAR_SALUD';
-export type PlanStatus = 'BORRADOR' | 'ACTIVO' | 'PAUSADO' | 'COMPLETADO' | 'CANCELADO';
-export type DayOfWeek = 'LUNES' | 'MARTES' | 'MIERCOLES' | 'JUEVES' | 'VIERNES' | 'SABADO' | 'DOMINGO';
-export type MealType = 'DESAYUNO' | 'COLACION_1' | 'ALMUERZO' | 'COLACION_2' | 'CENA';
+export type Gender = 'MASCULINO' | 'FEMENINO' | 'OTRO'
+export type ActivityLevel = 'SEDENTARIO' | 'LIGERO' | 'MODERADO' | 'ACTIVO' | 'MUY_ACTIVO'
+export type GoalType =
+  | 'PERDER_PESO'
+  | 'MANTENER_PESO'
+  | 'GANAR_PESO'
+  | 'GANAR_MUSCULO'
+  | 'MEJORAR_SALUD'
+export type PlanStatus = 'BORRADOR' | 'ACTIVO' | 'PAUSADO' | 'COMPLETADO' | 'CANCELADO'
+export type DayOfWeek =
+  | 'LUNES'
+  | 'MARTES'
+  | 'MIERCOLES'
+  | 'JUEVES'
+  | 'VIERNES'
+  | 'SABADO'
+  | 'DOMINGO'
+export type MealType = 'DESAYUNO' | 'COLACION_1' | 'ALMUERZO' | 'COLACION_2' | 'CENA'
 
 // Customer interface
 export interface Customer {
-  id: string;
-  id_card: string;
-  first_name: string;
-  last_name: string;
-  email: string | null;
-  cell_phone: string | null;
-  gender: Gender | null;
-  birth_date: string | null;
-  age: number | null;
-  weight: number | null;
-  height: number | null;
-  imc: number | null;
-  body_fat_percentage: number | null;
-  activity_level: ActivityLevel | null;
-  goal: GoalType | null;
-  daily_calorie_target: number | null;
-  allergies: string | null;
-  medical_conditions: string | null;
-  medications: string | null;
-  dietary_restrictions: string | null;
-  notes: string | null;
-  created_at: string;
-  updated_at: string;
-  nutritional_plans?: NutritionalPlan[];
+  id: string
+  id_card: string
+  first_name: string
+  last_name: string
+  email: string | null
+  cell_phone: string | null
+  gender: Gender | null
+  birth_date: string | null
+  age: number | null
+  weight: number | null
+  height: number | null
+  imc: number | null
+  body_fat_percentage: number | null
+  activity_level: ActivityLevel | null
+  goal: GoalType | null
+  daily_calorie_target: number | null
+  allergies: string | null
+  medical_conditions: string | null
+  medications: string | null
+  dietary_restrictions: string | null
+  notes: string | null
+  created_at: string
+  updated_at: string
+  nutritional_plans?: NutritionalPlan[]
 }
 
 // Nutritional Plan interface
 export interface NutritionalPlan {
-  id: string;
-  name: string;
-  description: string | null;
-  status: PlanStatus;
-  start_date: string | null;
-  end_date: string | null;
-  daily_calories: number | null;
-  protein_grams: number | null;
-  carbs_grams: number | null;
-  fat_grams: number | null;
-  fiber_grams: number | null;
-  water_liters: number | null;
-  notes: string | null;
-  customer_id: string;
-  customer?: Customer;
-  meal_entries?: MealEntry[];
-  created_at: string;
-  updated_at: string;
+  id: string
+  name: string
+  description: string | null
+  status: PlanStatus
+  start_date: string | null
+  end_date: string | null
+  daily_calories: number | null
+  protein_grams: number | null
+  carbs_grams: number | null
+  fat_grams: number | null
+  fiber_grams: number | null
+  water_liters: number | null
+  notes: string | null
+  customer_id: string
+  customer?: Customer
+  meal_entries?: MealEntry[]
+  created_at: string
+  updated_at: string
 }
 
 // Meal Entry interface
 export interface MealEntry {
-  id: string;
-  day_of_week: DayOfWeek;
-  meal_type: MealType;
-  meal_description: string;
-  calories: number | null;
-  protein_grams: number | null;
-  carbs_grams: number | null;
-  fat_grams: number | null;
-  fiber_grams: number | null;
-  portion_size: string | null;
-  preparation_notes: string | null;
-  nutritional_plan_id: string;
+  id: string
+  day_of_week: DayOfWeek
+  meal_type: MealType
+  meal_description: string
+  calories: number | null
+  protein_grams: number | null
+  carbs_grams: number | null
+  fat_grams: number | null
+  fiber_grams: number | null
+  portion_size: string | null
+  preparation_notes: string | null
+  nutritional_plan_id: string
 }
 
 // Helper function
-export function getImcClassification(imc: number | null): { label: string; color: string };
+export function getImcClassification(imc: number | null): { label: string; color: string }
 ```
 
 ### API Endpoints
 
 #### Customers
+
 - `GET /api/customers` - List all customers (supports `?search=` query param)
 - `POST /api/customers` - Create a new customer
 - `GET /api/customers/[id]` - Get customer with their plans
@@ -315,6 +332,7 @@ export function getImcClassification(imc: number | null): { label: string; color
 - `DELETE /api/customers/[id]` - Delete customer (cascades to plans)
 
 #### Plans
+
 - `GET /api/plans` - List all plans with customer info
 - `POST /api/plans` - Create a new plan
 - `GET /api/plans/[id]` - Get plan with meal entries
@@ -324,26 +342,34 @@ export function getImcClassification(imc: number | null): { label: string; color
 ## Key Features
 
 ### 1. Customer Search & Inline Creation
+
 When creating a plan, users can:
+
 - Search existing customers by cédula, nombre, or apellido
 - View search results in a dropdown
 - Select a customer to assign the plan
 - Create a new customer inline via dialog without leaving the page
 
 ### 2. Automatic Calculations
+
 Database triggers automatically calculate:
+
 - **IMC (BMI)**: `weight / (height * height)` - updated when weight or height changes
 - **Age**: Calculated from birth_date - updated when birth_date changes
 
 ### 3. Medical Information Display
+
 Customer detail page displays medical information with color-coded sections:
+
 - 🔴 Allergies (red background)
 - 🟡 Dietary Restrictions (yellow background)
 - 🟣 Medical Conditions (purple background)
 - 🔵 Medications (blue background)
 
 ### 4. Plan Status Management
+
 Plans have a status lifecycle:
+
 - `BORRADOR` (Draft) - Initial state
 - `ACTIVO` (Active) - Currently in use
 - `PAUSADO` (Paused) - Temporarily suspended
@@ -353,12 +379,14 @@ Plans have a status lifecycle:
 ## Deployment
 
 ### Environment Variables
+
 ```env
 NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
 ```
 
 ### Netlify Deployment
+
 1. Connect GitHub repository to Netlify
 2. Build command: `npm run build`
 3. Publish directory: `.next`

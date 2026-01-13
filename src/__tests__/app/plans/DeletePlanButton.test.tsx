@@ -16,7 +16,7 @@ describe('DeletePlanButton', () => {
 
   it('renders delete button', () => {
     render(<DeletePlanButton planId={mockPlanId} planName={mockPlanName} />)
-    
+
     const button = screen.getByRole('button')
     expect(button).toBeInTheDocument()
   })
@@ -24,10 +24,10 @@ describe('DeletePlanButton', () => {
   it('opens confirmation dialog when clicked', async () => {
     const user = userEvent.setup()
     render(<DeletePlanButton planId={mockPlanId} planName={mockPlanName} />)
-    
+
     const button = screen.getByRole('button')
     await user.click(button)
-    
+
     // Dialog should appear with plan name mention
     expect(screen.getByText(/¿Estás seguro/i)).toBeInTheDocument()
   })
@@ -35,15 +35,15 @@ describe('DeletePlanButton', () => {
   it('closes dialog when cancel is clicked', async () => {
     const user = userEvent.setup()
     render(<DeletePlanButton planId={mockPlanId} planName={mockPlanName} />)
-    
+
     // Open dialog
     const button = screen.getByRole('button')
     await user.click(button)
-    
+
     // Click cancel
     const cancelButton = screen.getByRole('button', { name: /cancelar/i })
     await user.click(cancelButton)
-    
+
     // Dialog should be closed
     expect(screen.queryByRole('alertdialog')).not.toBeInTheDocument()
   })
@@ -51,15 +51,15 @@ describe('DeletePlanButton', () => {
   it('calls delete API when confirmed', async () => {
     const user = userEvent.setup()
     render(<DeletePlanButton planId={mockPlanId} planName={mockPlanName} />)
-    
+
     // Open dialog
     const button = screen.getByRole('button')
     await user.click(button)
-    
+
     // Click confirm
     const confirmButton = screen.getByRole('button', { name: /eliminar/i })
     await user.click(confirmButton)
-    
+
     expect(global.fetch).toHaveBeenCalledWith(
       `/api/plans/${mockPlanId}`,
       expect.objectContaining({ method: 'DELETE' })
@@ -68,7 +68,7 @@ describe('DeletePlanButton', () => {
 
   it('has destructive styling', () => {
     render(<DeletePlanButton planId={mockPlanId} planName={mockPlanName} />)
-    
+
     const button = screen.getByRole('button')
     expect(button.className).toContain('destructive')
   })

@@ -17,7 +17,7 @@ async function getCustomer(id: string): Promise<Customer | null> {
     .select('*')
     .eq('id', id)
     .single()
-  
+
   if (error) return null
   return customer
 }

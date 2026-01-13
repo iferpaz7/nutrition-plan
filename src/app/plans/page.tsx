@@ -9,7 +9,8 @@ async function getPlans(): Promise<NutritionalPlan[]> {
   const supabase = await createClient()
   const { data: plans, error } = await supabase
     .from('nutritional_plan')
-    .select(`
+    .select(
+      `
       *,
       customer:customer (
         id,
@@ -18,9 +19,10 @@ async function getPlans(): Promise<NutritionalPlan[]> {
         cell_phone
       ),
       meal_entries:meal_entry (*)
-    `)
+    `
+    )
     .order('created_at', { ascending: false })
-  
+
   if (error) {
     console.error('Error fetching plans:', error)
     return []
@@ -55,9 +57,7 @@ export default async function PlansPage() {
         <div className="text-center py-12">
           <ClipboardList className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
           <h3 className="text-lg font-semibold mb-2">No hay planes nutricionales</h3>
-          <p className="text-muted-foreground mb-4">
-            Comienza creando tu primer plan nutricional
-          </p>
+          <p className="text-muted-foreground mb-4">Comienza creando tu primer plan nutricional</p>
           <Button asChild>
             <Link href="/plans/new">
               <Plus className="h-4 w-4 mr-2" />

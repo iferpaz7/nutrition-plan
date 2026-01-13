@@ -19,7 +19,7 @@ export function DeleteCustomerButton({ customerId, customerName }: DeleteCustome
   const handleDelete = async () => {
     try {
       const response = await fetch(`/api/customers/${customerId}`, {
-        method: 'DELETE'
+        method: 'DELETE',
       })
       const result = await response.json()
 

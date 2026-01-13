@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
   <head>
     <meta charset="UTF-8" />
@@ -13,7 +13,7 @@
       }
 
       body {
-        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         background: linear-gradient(135deg, #ffd6e8 0%, #ffb3d9 100%);
         min-height: 100vh;
         padding: 20px;
@@ -226,98 +226,86 @@
         </table>
       </div>
 
-      <button class="download-btn" onclick="downloadExcel()">
-        📥 Descargar Excel
-      </button>
+      <button class="download-btn" onclick="downloadExcel()">📥 Descargar Excel</button>
 
-      <p class="info">
-        ✨ El archivo incluye formato y está listo para editar en Excel
-      </p>
+      <p class="info">✨ El archivo incluye formato y está listo para editar en Excel</p>
     </div>
 
     <script>
       function downloadExcel() {
         const data = [
-          ["PLANNER DE COMIDA SEMANAL"],
+          ['PLANNER DE COMIDA SEMANAL'],
           [],
+          ['DÍA', 'DESAYUNO', 'COLACIÓN', 'ALMUERZO', 'COLACIÓN', 'MERIENDA', 'CENA'],
           [
-            "DÍA",
-            "DESAYUNO",
-            "COLACIÓN",
-            "ALMUERZO",
-            "COLACIÓN",
-            "MERIENDA",
-            "CENA",
+            'LUNES',
+            'Menú para el Desayuno',
+            'Menú para la Colación',
+            'Menú para el Almuerzo',
+            'Menú para la Colación',
+            'Menú para la Merienda',
+            'Menú para la Cena',
           ],
           [
-            "LUNES",
-            "Menú para el Desayuno",
-            "Menú para la Colación",
-            "Menú para el Almuerzo",
-            "Menú para la Colación",
-            "Menú para la Merienda",
-            "Menú para la Cena",
+            'MARTES',
+            'Menú para el Desayuno',
+            'Menú para la Colación',
+            'Menú para el Almuerzo',
+            'Menú para la Colación',
+            'Menú para la Merienda',
+            'Menú para la Cena',
           ],
           [
-            "MARTES",
-            "Menú para el Desayuno",
-            "Menú para la Colación",
-            "Menú para el Almuerzo",
-            "Menú para la Colación",
-            "Menú para la Merienda",
-            "Menú para la Cena",
+            'MIÉRCOLES',
+            'Menú para el Desayuno',
+            'Menú para la Colación',
+            'Menú para el Almuerzo',
+            'Menú para la Colación',
+            'Menú para la Merienda',
+            'Menú para la Cena',
           ],
           [
-            "MIÉRCOLES",
-            "Menú para el Desayuno",
-            "Menú para la Colación",
-            "Menú para el Almuerzo",
-            "Menú para la Colación",
-            "Menú para la Merienda",
-            "Menú para la Cena",
+            'JUEVES',
+            'Menú para el Desayuno',
+            'Menú para la Colación',
+            'Menú para el Almuerzo',
+            'Menú para la Colación',
+            'Menú para la Merienda',
+            'Menú para la Cena',
           ],
           [
-            "JUEVES",
-            "Menú para el Desayuno",
-            "Menú para la Colación",
-            "Menú para el Almuerzo",
-            "Menú para la Colación",
-            "Menú para la Merienda",
-            "Menú para la Cena",
+            'VIERNES',
+            'Menú para el Desayuno',
+            'Menú para la Colación',
+            'Menú para el Almuerzo',
+            'Menú para la Colación',
+            'Menú para la Merienda',
+            'Menú para la Cena',
           ],
           [
-            "VIERNES",
-            "Menú para el Desayuno",
-            "Menú para la Colación",
-            "Menú para el Almuerzo",
-            "Menú para la Colación",
-            "Menú para la Merienda",
-            "Menú para la Cena",
+            'SÁBADO',
+            'Menú para el Desayuno',
+            'Menú para la Colación',
+            'Menú para el Almuerzo',
+            'Menú para la Colación',
+            'Menú para la Merienda',
+            'Menú para la Cena',
           ],
           [
-            "SÁBADO",
-            "Menú para el Desayuno",
-            "Menú para la Colación",
-            "Menú para el Almuerzo",
-            "Menú para la Colación",
-            "Menú para la Merienda",
-            "Menú para la Cena",
+            'DOMINGO',
+            'Menú para el Desayuno',
+            'Menú para la Colación',
+            'Menú para el Almuerzo',
+            'Menú para la Colación',
+            'Menú para la Merienda',
+            'Menú para la Cena',
           ],
-          [
-            "DOMINGO",
-            "Menú para el Desayuno",
-            "Menú para la Colación",
-            "Menú para el Almuerzo",
-            "Menú para la Colación",
-            "Menú para la Merienda",
-            "Menú para la Cena",
-          ],
-        ];
+        ]
 
-        const ws = XLSX.utils.aoa_to_sheet(data);
+        const ws = XLSX.utils.aoa_to_sheet(data)
 
         // Ajustar anchos de columna
-        ws["!cols"] = [
+        ws['!cols'] = [
           { wch: 12 },
           { wch: 25 },
           { wch: 25 },
@@ -325,47 +313,47 @@
           { wch: 25 },
           { wch: 25 },
           { wch: 25 },
-        ];
+        ]
 
         // Ajustar altura de filas
-        ws["!rows"] = [{ hpt: 30 }, { hpt: 15 }];
+        ws['!rows'] = [{ hpt: 30 }, { hpt: 15 }]
 
         // Aplicar estilos al título
-        if (!ws["A1"].s) ws["A1"].s = {};
-        ws["A1"].s = {
-          font: { bold: true, sz: 16, color: { rgb: "FF4D94" } },
-          alignment: { horizontal: "center", vertical: "center" },
-        };
+        if (!ws['A1'].s) ws['A1'].s = {}
+        ws['A1'].s = {
+          font: { bold: true, sz: 16, color: { rgb: 'FF4D94' } },
+          alignment: { horizontal: 'center', vertical: 'center' },
+        }
 
         // Merge del título
-        ws["!merges"] = [{ s: { r: 0, c: 0 }, e: { r: 0, c: 6 } }];
+        ws['!merges'] = [{ s: { r: 0, c: 0 }, e: { r: 0, c: 6 } }]
 
         // Aplicar estilos a los encabezados
-        const headerCells = ["A3", "B3", "C3", "D3", "E3", "F3", "G3"];
+        const headerCells = ['A3', 'B3', 'C3', 'D3', 'E3', 'F3', 'G3']
         headerCells.forEach((cell) => {
-          if (!ws[cell].s) ws[cell].s = {};
+          if (!ws[cell].s) ws[cell].s = {}
           ws[cell].s = {
-            font: { bold: true, color: { rgb: "FFFFFF" } },
-            fill: { fgColor: { rgb: "FF4D94" } },
-            alignment: { horizontal: "center", vertical: "center" },
-          };
-        });
+            font: { bold: true, color: { rgb: 'FFFFFF' } },
+            fill: { fgColor: { rgb: 'FF4D94' } },
+            alignment: { horizontal: 'center', vertical: 'center' },
+          }
+        })
 
         // Aplicar estilos a las celdas de días
-        const dayCells = ["A4", "A5", "A6", "A7", "A8", "A9", "A10"];
+        const dayCells = ['A4', 'A5', 'A6', 'A7', 'A8', 'A9', 'A10']
         dayCells.forEach((cell) => {
-          if (!ws[cell].s) ws[cell].s = {};
+          if (!ws[cell].s) ws[cell].s = {}
           ws[cell].s = {
-            font: { bold: true, color: { rgb: "FFFFFF" } },
-            fill: { fgColor: { rgb: "FFB3D9" } },
-            alignment: { horizontal: "center", vertical: "center" },
-          };
-        });
+            font: { bold: true, color: { rgb: 'FFFFFF' } },
+            fill: { fgColor: { rgb: 'FFB3D9' } },
+            alignment: { horizontal: 'center', vertical: 'center' },
+          }
+        })
 
-        const wb = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(wb, ws, "Planner Semanal");
+        const wb = XLSX.utils.book_new()
+        XLSX.utils.book_append_sheet(wb, ws, 'Planner Semanal')
 
-        XLSX.writeFile(wb, "Planner_de_Comida_Semanal.xlsx");
+        XLSX.writeFile(wb, 'Planner_de_Comida_Semanal.xlsx')
       }
     </script>
   </body>
