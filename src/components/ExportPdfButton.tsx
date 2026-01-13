@@ -334,9 +334,10 @@ export function ExportPdfButton({ plan, customer }: ExportPdfButtonProps) {
   }
 
   return (
-    <Button variant="secondary" onClick={handleExportPdf}>
-      <FileText className="h-4 w-4 mr-2" />
-      Exportar PDF
+    <Button variant="secondary" onClick={handleExportPdf} className="min-w-0">
+      <FileText className="h-4 w-4 sm:mr-2" />
+      <span className="hidden sm:inline">Exportar PDF</span>
+      <span className="sm:hidden">PDF</span>
     </Button>
   )
 }

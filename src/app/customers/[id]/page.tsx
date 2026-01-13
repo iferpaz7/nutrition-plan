@@ -91,7 +91,7 @@ export default async function CustomerViewPage({ params }: PageProps) {
   }
 
   return (
-    <div className="container mx-auto py-10 px-4 max-w-7xl">
+    <div className="container mx-auto py-6 sm:py-10 px-4 max-w-7xl">
       <div className="mb-6">
         <Button asChild variant="ghost" size="sm">
           <Link href="/customers">
@@ -103,9 +103,9 @@ export default async function CustomerViewPage({ params }: PageProps) {
 
       <Card className="mb-6">
         <CardHeader>
-          <div className="flex items-start justify-between">
-            <div>
-              <CardTitle className="text-2xl text-primary">
+          <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
+            <div className="min-w-0 flex-1">
+              <CardTitle className="text-xl sm:text-2xl text-primary break-words">
                 {customer.first_name} {customer.last_name}
               </CardTitle>
               <CardDescription className="mt-2 space-y-1">
@@ -142,8 +142,8 @@ export default async function CustomerViewPage({ params }: PageProps) {
                 </div>
               </CardDescription>
             </div>
-            <div className="flex gap-2">
-              <Button asChild variant="outline">
+            <div className="flex gap-2 flex-wrap sm:flex-nowrap w-full sm:w-auto">
+              <Button asChild variant="outline" className="flex-1 sm:flex-none">
                 <Link href={`/customers/${customer.id}/edit`}>
                   <Pencil className="h-4 w-4 mr-2" />
                   Editar
@@ -165,7 +165,7 @@ export default async function CustomerViewPage({ params }: PageProps) {
           customer.body_fat_percentage) && (
           <CardContent className="border-t pt-4">
             <h3 className="text-sm font-medium text-muted-foreground mb-3">Datos Físicos</h3>
-            <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 sm:gap-4">
               {customer.age && (
                 <div className="flex items-center gap-2 p-3 bg-muted/50 rounded-lg">
                   <User className="h-5 w-5 text-muted-foreground" />
@@ -313,9 +313,9 @@ export default async function CustomerViewPage({ params }: PageProps) {
         )}
       </Card>
 
-      <div className="mb-6 flex items-center justify-between">
-        <h2 className="text-xl font-semibold text-primary">Planes Nutricionales</h2>
-        <Button asChild>
+      <div className="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <h2 className="text-lg sm:text-xl font-semibold text-primary">Planes Nutricionales</h2>
+        <Button asChild className="w-full sm:w-auto">
           <Link href={`/customers/${customer.id}/plans/new`}>
             <Plus className="h-4 w-4 mr-2" />
             Nuevo Plan

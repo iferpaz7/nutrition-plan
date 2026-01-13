@@ -23,16 +23,16 @@ import { AppTour } from '@/components/AppTour'
 
 export default function HelpPage() {
   return (
-    <div className="container mx-auto py-10 px-4 max-w-5xl">
+    <div className="container mx-auto py-6 sm:py-10 px-4 max-w-5xl">
       {/* Header */}
-      <div className="text-center mb-12">
+      <div className="text-center mb-8 sm:mb-12">
         <div className="flex justify-center mb-4">
-          <div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary/10">
-            <HelpCircle className="h-8 w-8 text-primary" />
+          <div className="flex h-12 w-12 sm:h-16 sm:w-16 items-center justify-center rounded-full bg-primary/10">
+            <HelpCircle className="h-6 w-6 sm:h-8 sm:w-8 text-primary" />
           </div>
         </div>
-        <h1 className="text-4xl font-bold text-primary mb-4">Centro de Ayuda</h1>
-        <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-6">
+        <h1 className="text-2xl sm:text-4xl font-bold text-primary mb-4">Centro de Ayuda</h1>
+        <p className="text-base sm:text-xl text-muted-foreground max-w-2xl mx-auto mb-6">
           Guía completa para utilizar NutriPlan, tu sistema de gestión de planes nutricionales
           semanales.
         </p>
@@ -55,31 +55,31 @@ export default function HelpPage() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="grid gap-4 md:grid-cols-3">
+          <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3">
             <div className="flex flex-col items-center text-center p-4 rounded-lg bg-primary/5">
-              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary text-white mb-3">
+              <div className="flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full bg-primary text-white mb-3">
                 <span className="font-bold">1</span>
               </div>
-              <h4 className="font-semibold mb-2">Registra un Cliente</h4>
-              <p className="text-sm text-muted-foreground">
+              <h4 className="font-semibold mb-2 text-sm sm:text-base">Registra un Cliente</h4>
+              <p className="text-xs sm:text-sm text-muted-foreground">
                 Crea el perfil del cliente con sus datos personales y médicos
               </p>
             </div>
             <div className="flex flex-col items-center text-center p-4 rounded-lg bg-primary/5">
-              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary text-white mb-3">
+              <div className="flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full bg-primary text-white mb-3">
                 <span className="font-bold">2</span>
               </div>
-              <h4 className="font-semibold mb-2">Crea un Plan</h4>
-              <p className="text-sm text-muted-foreground">
+              <h4 className="font-semibold mb-2 text-sm sm:text-base">Crea un Plan</h4>
+              <p className="text-xs sm:text-sm text-muted-foreground">
                 Diseña un plan nutricional semanal personalizado
               </p>
             </div>
-            <div className="flex flex-col items-center text-center p-4 rounded-lg bg-primary/5">
-              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary text-white mb-3">
+            <div className="flex flex-col items-center text-center p-4 rounded-lg bg-primary/5 sm:col-span-2 md:col-span-1">
+              <div className="flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full bg-primary text-white mb-3">
                 <span className="font-bold">3</span>
               </div>
-              <h4 className="font-semibold mb-2">Exporta y Comparte</h4>
-              <p className="text-sm text-muted-foreground">
+              <h4 className="font-semibold mb-2 text-sm sm:text-base">Exporta y Comparte</h4>
+              <p className="text-xs sm:text-sm text-muted-foreground">
                 Descarga en PDF, Excel o comparte por WhatsApp
               </p>
             </div>

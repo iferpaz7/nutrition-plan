@@ -96,14 +96,14 @@ export default function ConfigPage() {
   }
 
   return (
-    <div className="container mx-auto py-10 px-4 max-w-6xl">
+    <div className="container mx-auto py-6 sm:py-10 px-4 max-w-6xl">
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-primary flex items-center gap-3">
-          <Settings className="h-8 w-8" />
+        <h1 className="text-2xl sm:text-3xl font-bold text-primary flex items-center gap-3">
+          <Settings className="h-6 w-6 sm:h-8 sm:w-8" />
           Configuración
         </h1>
-        <p className="text-muted-foreground mt-2">
+        <p className="text-muted-foreground mt-2 text-sm sm:text-base">
           Personaliza la apariencia de NutriPlan según tus preferencias
         </p>
       </div>

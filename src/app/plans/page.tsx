@@ -34,18 +34,18 @@ export default async function PlansPage() {
   const plans = await getPlans()
 
   return (
-    <div className="container mx-auto py-10 px-4 max-w-7xl">
-      <div className="flex items-center justify-between mb-8">
+    <div className="container mx-auto py-6 sm:py-10 px-4 max-w-7xl">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
         <div>
-          <h1 className="text-3xl font-bold text-primary flex items-center gap-3">
-            <ClipboardList className="h-8 w-8" />
+          <h1 className="text-2xl sm:text-3xl font-bold text-primary flex items-center gap-3">
+            <ClipboardList className="h-6 w-6 sm:h-8 sm:w-8" />
             Planes Nutricionales
           </h1>
-          <p className="text-muted-foreground mt-2">
+          <p className="text-muted-foreground mt-2 text-sm sm:text-base">
             Gestiona todos los planes nutricionales de tus clientes
           </p>
         </div>
-        <Button asChild>
+        <Button asChild className="w-full sm:w-auto">
           <Link href="/plans/new">
             <Plus className="h-4 w-4 mr-2" />
             Nuevo Plan

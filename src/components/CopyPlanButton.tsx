@@ -151,12 +151,12 @@ export function CopyPlanButton({ plan, currentCustomerId }: CopyPlanButtonProps)
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline" size="sm">
-          <Copy className="h-4 w-4 mr-1" />
-          Copiar
+        <Button variant="outline" size="sm" className="min-w-0">
+          <Copy className="h-4 w-4 sm:mr-1" />
+          <span className="hidden sm:inline">Copiar</span>
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-[425px] max-w-[calc(100vw-2rem)] mx-auto">
         <DialogHeader>
           <DialogTitle>Copiar Plan Nutricional</DialogTitle>
           <DialogDescription>
@@ -202,11 +202,15 @@ export function CopyPlanButton({ plan, currentCustomerId }: CopyPlanButtonProps)
             </p>
           )}
         </div>
-        <DialogFooter>
-          <Button variant="outline" onClick={() => setOpen(false)}>
+        <DialogFooter className="flex-col sm:flex-row gap-2">
+          <Button variant="outline" onClick={() => setOpen(false)} className="w-full sm:w-auto">
             Cancelar
           </Button>
-          <Button onClick={handleCopyPlan} disabled={isLoading || isFetchingCustomers}>
+          <Button
+            onClick={handleCopyPlan}
+            disabled={isLoading || isFetchingCustomers}
+            className="w-full sm:w-auto"
+          >
             {isLoading && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
             Copiar Plan
           </Button>

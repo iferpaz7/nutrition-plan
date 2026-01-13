@@ -78,9 +78,10 @@ export function ExportImageButton({
   }
 
   return (
-    <Button variant="secondary" onClick={handleExportImage}>
-      <ImageIcon className="h-4 w-4 mr-2" />
-      Exportar Imagen
+    <Button variant="secondary" onClick={handleExportImage} className="min-w-0">
+      <ImageIcon className="h-4 w-4 sm:mr-2" />
+      <span className="hidden sm:inline">Exportar Imagen</span>
+      <span className="sm:hidden">Imagen</span>
     </Button>
   )
 }

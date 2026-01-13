@@ -62,7 +62,7 @@ export function PlanViewClient({ plan, children }: PlanViewClientProps) {
       </div>
 
       {/* Action buttons - outside the export area */}
-      <div className="px-4 sm:px-6 pb-6 pt-2 flex flex-wrap gap-2 justify-center sm:justify-end border-t">
+      <div className="px-4 sm:px-6 pb-6 pt-4 flex flex-wrap gap-2 justify-center sm:justify-end border-t">
         <ExportPdfButton plan={plan} customer={customer} />
         <ExportImageButton plan={plan} />
         <ExportButton plan={plan} />

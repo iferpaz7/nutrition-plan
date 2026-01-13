@@ -38,7 +38,7 @@ export function DeleteConfirmDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent>
+      <DialogContent className="max-w-[calc(100vw-2rem)] sm:max-w-lg">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 text-destructive">
             <AlertTriangle className="h-5 w-5" />
@@ -50,11 +50,21 @@ export function DeleteConfirmDialog({
             <span className="text-destructive">Esta acción no se puede deshacer.</span>
           </DialogDescription>
         </DialogHeader>
-        <DialogFooter className="gap-2 sm:gap-0">
-          <Button variant="outline" onClick={() => onOpenChange(false)} disabled={isDeleting}>
+        <DialogFooter className="flex-col-reverse sm:flex-row gap-2">
+          <Button
+            variant="outline"
+            onClick={() => onOpenChange(false)}
+            disabled={isDeleting}
+            className="w-full sm:w-auto"
+          >
             Cancelar
           </Button>
-          <Button variant="destructive" onClick={handleConfirm} disabled={isDeleting}>
+          <Button
+            variant="destructive"
+            onClick={handleConfirm}
+            disabled={isDeleting}
+            className="w-full sm:w-auto"
+          >
             {isDeleting ? 'Eliminando...' : 'Eliminar'}
           </Button>
         </DialogFooter>

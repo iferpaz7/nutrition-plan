@@ -66,9 +66,10 @@ export function ExportButton({ plan }: ExportButtonProps) {
   }
 
   return (
-    <Button variant="secondary" onClick={handleExport}>
-      <Download className="h-4 w-4 mr-2" />
-      Exportar a Excel
+    <Button variant="secondary" onClick={handleExport} className="min-w-0">
+      <Download className="h-4 w-4 sm:mr-2" />
+      <span className="hidden sm:inline">Exportar a Excel</span>
+      <span className="sm:hidden">Excel</span>
     </Button>
   )
 }

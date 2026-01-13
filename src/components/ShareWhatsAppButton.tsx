@@ -119,11 +119,11 @@ export function ShareWhatsAppButton({ plan, customer, onGeneratePdf }: ShareWhat
       size="sm"
       onClick={handleShareWhatsApp}
       disabled={!hasPhone}
-      className="bg-green-50 hover:bg-green-100 text-green-700 border-green-200"
+      className="bg-green-50 hover:bg-green-100 text-green-700 border-green-200 min-w-0"
       title={hasPhone ? 'Compartir por WhatsApp' : 'El cliente no tiene teléfono registrado'}
     >
-      <Phone className="h-4 w-4 mr-1" />
-      WhatsApp
+      <Phone className="h-4 w-4 sm:mr-1" />
+      <span className="hidden sm:inline">WhatsApp</span>
     </Button>
   )
 }

@@ -72,7 +72,7 @@ export default function CustomersPage() {
   if (isLoading) {
     return (
       <div className="p-6 md:p-8 max-w-7xl mx-auto">
-        <div className="flex items-center justify-center min-h-100">
+        <div className="flex items-center justify-center min-h-[400px]">
           <div className="animate-pulse text-muted-foreground">Cargando clientes...</div>
         </div>
       </div>
@@ -102,10 +102,12 @@ export default function CustomersPage() {
       </header>
 
       {customers.length === 0 ? (
-        <div className="flex flex-col items-center justify-center min-h-100 bg-card rounded-lg border border-border p-10">
-          <Users className="h-20 w-20 text-muted-foreground mb-4" />
-          <h2 className="text-xl font-semibold mb-2">No hay clientes registrados</h2>
-          <p className="text-muted-foreground mb-6 text-center">
+        <div className="flex flex-col items-center justify-center min-h-[400px] bg-card rounded-lg border border-border p-6 sm:p-10">
+          <Users className="h-16 w-16 sm:h-20 sm:w-20 text-muted-foreground mb-4" />
+          <h2 className="text-lg sm:text-xl font-semibold mb-2 text-center">
+            No hay clientes registrados
+          </h2>
+          <p className="text-muted-foreground mb-6 text-center text-sm sm:text-base">
             Registra tu primer cliente para comenzar a crear planes nutricionales.
           </p>
           <Button asChild>

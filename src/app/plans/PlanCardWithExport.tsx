@@ -221,24 +221,29 @@ export function PlanCardWithExport({ plan }: PlanCardWithExportProps) {
         </div>
       </CardContent>
 
-      <CardFooter className="gap-2 flex-wrap">
-        <Button asChild variant="default" size="sm">
+      <CardFooter className="gap-2 flex-wrap justify-center sm:justify-start">
+        <Button asChild variant="default" size="sm" className="flex-1 sm:flex-none min-w-0">
           <Link href={`/plans/${plan.id}`}>
             <Eye className="h-4 w-4 mr-1" />
-            Ver
+            <span className="truncate">Ver</span>
           </Link>
         </Button>
-        <Button asChild variant="outline" size="sm">
+        <Button asChild variant="outline" size="sm" className="flex-1 sm:flex-none min-w-0">
           <Link href={`/plans/${plan.id}/edit`}>
             <Pencil className="h-4 w-4 mr-1" />
-            Editar
+            <span className="truncate">Editar</span>
           </Link>
         </Button>
 
         {/* Export PDF Button */}
-        <Button variant="outline" size="sm" onClick={handleExportPdf}>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={handleExportPdf}
+          className="flex-1 sm:flex-none min-w-0"
+        >
           <FileDown className="h-4 w-4 mr-1" />
-          Exportar PDF
+          <span className="hidden sm:inline">Exportar </span>PDF
         </Button>
 
         <CopyPlanButton plan={plan} />

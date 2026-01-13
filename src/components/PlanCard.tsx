@@ -67,20 +67,25 @@ export function PlanCard({ plan, onDelete }: PlanCardProps) {
           </div>
         </div>
       </CardContent>
-      <CardFooter className="gap-2">
-        <Button asChild variant="default" size="sm" className="flex-1">
+      <CardFooter className="gap-2 flex-wrap justify-center sm:justify-start">
+        <Button asChild variant="default" size="sm" className="flex-1 sm:flex-none min-w-0">
           <Link href={`/plans/${plan.id}`}>
             <Eye className="h-4 w-4 mr-1" />
             Ver
           </Link>
         </Button>
-        <Button asChild variant="outline" size="sm" className="flex-1">
+        <Button asChild variant="outline" size="sm" className="flex-1 sm:flex-none min-w-0">
           <Link href={`/plans/${plan.id}/edit`}>
             <Pencil className="h-4 w-4 mr-1" />
             Editar
           </Link>
         </Button>
-        <Button variant="destructive" size="sm" onClick={() => onDelete?.(plan.id)}>
+        <Button
+          variant="destructive"
+          size="sm"
+          onClick={() => onDelete?.(plan.id)}
+          className="sm:flex-none"
+        >
           <Trash2 className="h-4 w-4" />
         </Button>
       </CardFooter>

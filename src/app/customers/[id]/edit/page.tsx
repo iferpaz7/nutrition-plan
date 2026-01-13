@@ -31,7 +31,7 @@ export default async function EditCustomerPage({ params }: PageProps) {
   }
 
   return (
-    <div className="container mx-auto py-10 px-4 max-w-2xl">
+    <div className="container mx-auto py-6 sm:py-10 px-4 max-w-3xl">
       <div className="mb-6">
         <Button asChild variant="ghost" size="sm">
           <Link href={`/customers/${id}`}>
