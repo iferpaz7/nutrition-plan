@@ -1,26 +1,11 @@
-export enum DayOfWeek {
-  LUNES = 'LUNES',
-  MARTES = 'MARTES',
-  MIERCOLES = 'MIERCOLES',
-  JUEVES = 'JUEVES',
-  VIERNES = 'VIERNES',
-  SABADO = 'SABADO',
-  DOMINGO = 'DOMINGO'
-}
-
-export enum MealType {
-  DESAYUNO = 'DESAYUNO',
-  COLACION_1 = 'COLACION_1',
-  ALMUERZO = 'ALMUERZO',
-  COLACION_2 = 'COLACION_2',
-  MERIENDA = 'MERIENDA',
-  CENA = 'CENA'
-}
+// Re-export Prisma types for consistency
+export { DayOfWeek, MealType } from '@prisma/client'
+import type { DayOfWeek, MealType } from '@prisma/client'
 
 export interface NutritionalPlan {
   id: string;
   name: string;
-  description?: string;
+  description: string | null;
   createdAt: Date;
   updatedAt: Date;
   mealEntries: MealEntry[];

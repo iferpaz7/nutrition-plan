@@ -23,7 +23,7 @@ Implementation of a complete CRUD system for managing weekly nutritional plans u
     - **Property 1: Complete Plan Structure**
     - **Validates: Requirements 1.1**
 
-  - [ ] 2.3 Initialize database and run migrations
+  - [x] 2.3 Initialize database and run migrations
     - Generate Prisma client
     - Create database file and apply schema
     - _Requirements: 5.2_
@@ -32,13 +32,13 @@ Implementation of a complete CRUD system for managing weekly nutritional plans u
     - **Property 4: Unique Plan Identifiers**
     - **Validates: Requirements 1.5**
 
-- [ ] 3. Core API Routes Implementation
-  - [ ] 3.1 Implement GET /api/plans endpoint
+- [-] 3. Core API Routes Implementation
+  - [x] 3.1 Implement GET /api/plans endpoint
     - Create route handler for listing all plans
     - Include error handling and validation
     - _Requirements: 2.1_
 
-  - [ ] 3.2 Implement POST /api/plans endpoint
+  - [x] 3.2 Implement POST /api/plans endpoint
     - Create route handler for plan creation
     - Validate input data and meal descriptions
     - _Requirements: 1.1, 1.2, 1.3, 1.4_
@@ -51,17 +51,17 @@ Implementation of a complete CRUD system for managing weekly nutritional plans u
     - **Property 3: Meal Description Validation**
     - **Validates: Requirements 1.4, 3.2**
 
-  - [ ] 3.5 Implement GET /api/plans/[id] endpoint
+  - [x] 3.5 Implement GET /api/plans/[id] endpoint
     - Create route handler for single plan retrieval
     - Include meal entries in response
     - _Requirements: 2.2, 2.3, 3.1_
 
-  - [ ] 3.6 Implement PUT /api/plans/[id] endpoint
+  - [x] 3.6 Implement PUT /api/plans/[id] endpoint
     - Create route handler for plan updates
     - Validate updates and maintain data integrity
     - _Requirements: 3.1, 3.2, 3.3, 3.4_
 
-  - [ ] 3.7 Implement DELETE /api/plans/[id] endpoint
+  - [x] 3.7 Implement DELETE /api/plans/[id] endpoint
     - Create route handler for plan deletion
     - Ensure cascade deletion of meal entries
     - _Requirements: 4.2_
