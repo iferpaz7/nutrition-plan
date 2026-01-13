@@ -80,24 +80,18 @@ export default function HomePage() {
   }
 
   return (
-    <div className="container mx-auto py-10 px-4">
+    <div className="p-6 md:p-8 max-w-7xl mx-auto">
       <header className="mb-8">
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div className="flex items-center gap-3">
             <Salad className="h-10 w-10 text-primary" />
             <div>
-              <h1 className="text-3xl font-bold text-primary">Planes Nutricionales</h1>
-              <p className="text-muted-foreground">Gestiona tus planes de alimentación semanales</p>
+              <h1 className="text-2xl sm:text-3xl font-bold text-primary">Planes Nutricionales</h1>
+              <p className="text-muted-foreground text-sm sm:text-base">Gestiona tus planes de alimentación semanales</p>
             </div>
           </div>
-          <div className="flex gap-2">
-            <Button asChild variant="outline">
-              <Link href="/customers">
-                <Users className="h-4 w-4 mr-2" />
-                Clientes
-              </Link>
-            </Button>
-            <Button asChild>
+          <div className="flex gap-2 w-full sm:w-auto">
+            <Button asChild className="flex-1 sm:flex-none">
               <Link href="/plans/new">
                 <Plus className="h-4 w-4 mr-2" />
                 Nuevo Plan

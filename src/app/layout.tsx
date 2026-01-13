@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Toaster } from "@/components/ui/sonner";
+import { AppLayout } from "@/components/layout";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -14,8 +15,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Plan Nutricional",
-  description: "Sistema de gestión de planes nutricionales semanales",
+  title: "NutriPlan - Sistema de Planes Nutricionales",
+  description: "Sistema de gestión de planes nutricionales semanales para nutricionistas",
 };
 
 export default function RootLayout({
@@ -29,9 +30,9 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         suppressHydrationWarning
       >
-        <main className="min-h-screen">
+        <AppLayout>
           {children}
-        </main>
+        </AppLayout>
         <Toaster position="top-right" richColors />
       </body>
     </html>

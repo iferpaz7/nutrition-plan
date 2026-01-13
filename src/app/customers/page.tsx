@@ -71,7 +71,7 @@ export default function CustomersPage() {
 
   if (isLoading) {
     return (
-      <div className="container mx-auto py-10 px-4">
+      <div className="p-6 md:p-8 max-w-7xl mx-auto">
         <div className="flex items-center justify-center min-h-100">
           <div className="animate-pulse text-muted-foreground">Cargando clientes...</div>
         </div>
@@ -80,17 +80,17 @@ export default function CustomersPage() {
   }
 
   return (
-    <div className="container mx-auto py-10 px-4">
+    <div className="p-6 md:p-8 max-w-7xl mx-auto">
       <header className="mb-8">
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div className="flex items-center gap-3">
             <Users className="h-10 w-10 text-primary" />
             <div>
-              <h1 className="text-3xl font-bold text-primary">Clientes</h1>
-              <p className="text-muted-foreground">Gestiona tus clientes y sus planes nutricionales</p>
+              <h1 className="text-2xl sm:text-3xl font-bold text-primary">Clientes</h1>
+              <p className="text-muted-foreground text-sm sm:text-base">Gestiona tus clientes y sus planes nutricionales</p>
             </div>
           </div>
-          <Button asChild>
+          <Button asChild className="w-full sm:w-auto">
             <Link href="/customers/new">
               <Plus className="h-4 w-4 mr-2" />
               Nuevo Cliente
