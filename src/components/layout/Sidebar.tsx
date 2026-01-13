@@ -118,7 +118,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
         <div className="border-t p-4">
           <div className="flex flex-col gap-1">
             <Link
-              href="#"
+              href="/config"
               className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
             >
               <Settings className="h-4 w-4" />

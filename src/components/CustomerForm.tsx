@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
-import { Select } from '@/components/ui/select'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { toast } from 'sonner'
 import type { Customer, Gender, ActivityLevel, GoalType } from '@/lib/types'
@@ -201,14 +201,17 @@ export function CustomerForm({ initialData, mode }: CustomerFormProps) {
             <div className="space-y-2">
               <Label htmlFor="gender">Género</Label>
               <Select
-                id="gender"
                 value={gender}
-                onChange={(e) => setGender(e.target.value as Gender | '')}
+                onValueChange={(value) => setGender(value as Gender | '')}
               >
-                <option value="">Seleccionar...</option>
-                <option value="MASCULINO">Masculino</option>
-                <option value="FEMENINO">Femenino</option>
-                <option value="OTRO">Otro</option>
+                <SelectTrigger id="gender">
+                  <SelectValue placeholder="Seleccionar..." />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="MASCULINO">Masculino</SelectItem>
+                  <SelectItem value="FEMENINO">Femenino</SelectItem>
+                  <SelectItem value="OTRO">Otro</SelectItem>
+                </SelectContent>
               </Select>
             </div>
             <div className="space-y-2">
@@ -286,31 +289,37 @@ export function CustomerForm({ initialData, mode }: CustomerFormProps) {
             <div className="space-y-2">
               <Label htmlFor="activityLevel">Nivel de Actividad</Label>
               <Select
-                id="activityLevel"
                 value={activityLevel}
-                onChange={(e) => setActivityLevel(e.target.value as ActivityLevel | '')}
+                onValueChange={(value) => setActivityLevel(value as ActivityLevel | '')}
               >
-                <option value="">Seleccionar...</option>
-                <option value="SEDENTARIO">Sedentario (poco ejercicio)</option>
-                <option value="LIGERO">Ligero (1-3 días/semana)</option>
-                <option value="MODERADO">Moderado (3-5 días/semana)</option>
-                <option value="ACTIVO">Activo (6-7 días/semana)</option>
-                <option value="MUY_ACTIVO">Muy Activo (intenso diario)</option>
+                <SelectTrigger id="activityLevel">
+                  <SelectValue placeholder="Seleccionar..." />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="SEDENTARIO">Sedentario (poco ejercicio)</SelectItem>
+                  <SelectItem value="LIGERO">Ligero (1-3 días/semana)</SelectItem>
+                  <SelectItem value="MODERADO">Moderado (3-5 días/semana)</SelectItem>
+                  <SelectItem value="ACTIVO">Activo (6-7 días/semana)</SelectItem>
+                  <SelectItem value="MUY_ACTIVO">Muy Activo (intenso diario)</SelectItem>
+                </SelectContent>
               </Select>
             </div>
             <div className="space-y-2">
               <Label htmlFor="goal">Objetivo</Label>
               <Select
-                id="goal"
                 value={goal}
-                onChange={(e) => setGoal(e.target.value as GoalType | '')}
+                onValueChange={(value) => setGoal(value as GoalType | '')}
               >
-                <option value="">Seleccionar...</option>
-                <option value="PERDER_PESO">Perder Peso</option>
-                <option value="MANTENER_PESO">Mantener Peso</option>
-                <option value="GANAR_PESO">Ganar Peso</option>
-                <option value="GANAR_MUSCULO">Ganar Músculo</option>
-                <option value="MEJORAR_SALUD">Mejorar Salud</option>
+                <SelectTrigger id="goal">
+                  <SelectValue placeholder="Seleccionar..." />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="PERDER_PESO">Perder Peso</SelectItem>
+                  <SelectItem value="MANTENER_PESO">Mantener Peso</SelectItem>
+                  <SelectItem value="GANAR_PESO">Ganar Peso</SelectItem>
+                  <SelectItem value="GANAR_MUSCULO">Ganar Músculo</SelectItem>
+                  <SelectItem value="MEJORAR_SALUD">Mejorar Salud</SelectItem>
+                </SelectContent>
               </Select>
             </div>
             <div className="space-y-2">

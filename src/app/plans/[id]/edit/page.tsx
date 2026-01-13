@@ -16,6 +16,13 @@ async function getPlan(id: string): Promise<NutritionalPlan | null> {
     .from('nutritional_plan')
     .select(`
       *,
+      customer:customer (
+        id,
+        first_name,
+        last_name,
+        email,
+        cell_phone
+      ),
       meal_entries:meal_entry (*)
     `)
     .eq('id', id)
