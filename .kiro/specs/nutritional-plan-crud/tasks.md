@@ -2,12 +2,12 @@
 
 ## Overview
 
-Implementation of a complete CRUD system for managing weekly nutritional plans using Next.js 15, TypeScript, Prisma ORM, SQLite, and shadcn/ui components with a beautiful nutritional color palette.
+Implementation of a complete CRUD system for managing weekly nutritional plans using Next.js 16, TypeScript, Prisma ORM, SQLite, and shadcn/ui components with a beautiful nutritional color palette.
 
 ## Tasks
 
 - [-] 1. Project Setup and Configuration
-  - Initialize Next.js 15 project with TypeScript and App Router
+  - Initialize Next.js 16 project with TypeScript and App Router
   - Configure Tailwind CSS with nutritional color palette
   - Set up shadcn/ui component library
   - Install and configure Prisma with SQLite
