@@ -13,7 +13,7 @@ Implementation of a complete CRUD system for managing weekly nutritional plans u
   - _Requirements: 5.1, 5.2, 6.1_
 
 - [-] 2. Database Schema and Models
-  - [ ] 2.1 Create Prisma schema for nutritional plans and meal entries
+  - [x] 2.1 Create Prisma schema for nutritional plans and meal entries
     - Define NutritionalPlan and MealEntry models
     - Set up enums for DayOfWeek and MealType
     - Configure relationships and constraints
