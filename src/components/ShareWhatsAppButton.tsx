@@ -3,15 +3,15 @@
 import { Button } from '@/components/ui/button'
 import { Phone } from 'lucide-react'
 import { toast } from 'sonner'
-import type { NutritionalPlan, Customer, MealEntry } from '@/lib/types'
-import { DAYS, MEAL_TYPES } from '@/components/PlanGrid'
+import type { NutritionalPlan, Customer } from '@/lib/types'
 
 interface ShareWhatsAppButtonProps {
   plan: NutritionalPlan
   customer?: Customer | null
+  onGeneratePdf?: () => Blob
 }
 
-export function ShareWhatsAppButton({ plan, customer }: ShareWhatsAppButtonProps) {
+export function ShareWhatsAppButton({ plan, customer, onGeneratePdf }: ShareWhatsAppButtonProps) {
   const formatPhoneNumber = (phone: string | null | undefined): string | null => {
     if (!phone) return null
 
@@ -30,58 +30,51 @@ export function ShareWhatsAppButton({ plan, customer }: ShareWhatsAppButtonProps
     return cleaned
   }
 
-  const generateWhatsAppMessage = (): string => {
+  const generateCordialMessage = (): string => {
+    const customerName = customer ? customer.first_name : 'estimado/a cliente'
+
     const lines: string[] = []
 
-    // Header
-    lines.push(`🥗 *${plan.name}*`)
+    lines.push(`¡Hola ${customerName}! 👋`)
     lines.push('')
-
-    if (customer) {
-      lines.push(`👤 Cliente: ${customer.first_name} ${customer.last_name}`)
-      lines.push('')
-    }
-
+    lines.push(`Espero que te encuentres muy bien. 🌟`)
+    lines.push('')
+    lines.push(
+      `Te envío tu plan nutricional *"${plan.name}"* en formato PDF para que puedas consultarlo fácilmente.`
+    )
+    lines.push('')
+    lines.push(
+      `📎 *El archivo PDF ha sido descargado en tu dispositivo.* Por favor, adjúntalo a esta conversación para compartirlo.`
+    )
+    lines.push('')
     if (plan.description) {
       lines.push(`📝 ${plan.description}`)
       lines.push('')
     }
-
-    // Nutritional targets
-    if (plan.daily_calories || plan.protein_grams || plan.carbs_grams || plan.fat_grams) {
-      lines.push('📊 *Objetivos Nutricionales:*')
-      if (plan.daily_calories) lines.push(`• Calorías: ${plan.daily_calories} kcal`)
-      if (plan.protein_grams) lines.push(`• Proteínas: ${plan.protein_grams}g`)
-      if (plan.carbs_grams) lines.push(`• Carbohidratos: ${plan.carbs_grams}g`)
-      if (plan.fat_grams) lines.push(`• Grasas: ${plan.fat_grams}g`)
-      lines.push('')
-    }
-
-    // Meals by day
-    lines.push('📅 *Plan Semanal:*')
+    lines.push(
+      `Si tienes alguna duda o necesitas ajustes en el plan, no dudes en escribirme. Estoy aquí para ayudarte a alcanzar tus objetivos. 💪`
+    )
     lines.push('')
-
-    DAYS.forEach((day) => {
-      const dayMeals = (plan.meal_entries || []).filter((m: MealEntry) => m.day_of_week === day.key)
-
-      if (dayMeals.length > 0) {
-        lines.push(`*${day.label.toUpperCase()}*`)
-
-        MEAL_TYPES.forEach((mealType) => {
-          const meal = dayMeals.find((m: MealEntry) => m.meal_type === mealType.key)
-          if (meal && meal.meal_description) {
-            lines.push(`• ${mealType.label}: ${meal.meal_description}`)
-          }
-        })
-        lines.push('')
-      }
-    })
-
-    // Footer
-    lines.push('---')
-    lines.push('_Generado por NutriPlan_ 🌿')
+    lines.push(`¡Mucho éxito con tu alimentación! 🥗🌿`)
+    lines.push('')
+    lines.push(`_— Tu nutricionista de confianza_`)
 
     return lines.join('\n')
+  }
+
+  const downloadPdf = (blob: Blob) => {
+    const sanitizedName = plan.name.replace(/[^a-zA-Z0-9áéíóúñÁÉÍÓÚÑ\s]/g, '').replace(/\s+/g, '_')
+    const date = new Date().toISOString().split('T')[0]
+    const filename = `${sanitizedName}_${date}.pdf`
+
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    link.href = url
+    link.download = filename
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+    URL.revokeObjectURL(url)
   }
 
   const handleShareWhatsApp = () => {
@@ -92,7 +85,21 @@ export function ShareWhatsAppButton({ plan, customer }: ShareWhatsAppButtonProps
       return
     }
 
-    const message = generateWhatsAppMessage()
+    // Generate and download PDF first
+    if (onGeneratePdf) {
+      try {
+        const pdfBlob = onGeneratePdf()
+        downloadPdf(pdfBlob)
+        toast.success('PDF descargado. Adjúntalo al chat de WhatsApp.')
+      } catch (error) {
+        console.error('Error generating PDF:', error)
+        toast.error('Error al generar el PDF')
+        return
+      }
+    }
+
+    // Generate cordial message
+    const message = generateCordialMessage()
     const encodedMessage = encodeURIComponent(message)
 
     // WhatsApp URL with phone number and message

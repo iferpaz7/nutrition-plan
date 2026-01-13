@@ -10,15 +10,8 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { Eye, Pencil, Calendar, FileText, Download, FileDown } from 'lucide-react'
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
+import { Eye, Pencil, Calendar, FileText, FileDown } from 'lucide-react'
 import { toast } from 'sonner'
-import * as XLSX from 'xlsx'
 import jsPDF from 'jspdf'
 import autoTable from 'jspdf-autotable'
 import type { NutritionalPlan } from '@/lib/types'
@@ -51,42 +44,63 @@ export function PlanCardWithExport({ plan }: PlanCardWithExportProps) {
     })
   }
 
-  // Export to Excel
-  const handleExportExcel = () => {
-    try {
-      const wb = XLSX.utils.book_new()
-      const data: (string | undefined)[][] = []
+  // Generate PDF and return blob
+  const generatePdfBlob = (): Blob => {
+    const doc = new jsPDF('l', 'mm', 'a4')
+    const pageWidth = doc.internal.pageSize.getWidth()
 
-      const headerRow = ['DÍA', ...MEAL_TYPES.map((m) => m.label.toUpperCase())]
-      data.push(headerRow)
+    // Header
+    doc.setFontSize(18)
+    doc.setTextColor(34, 139, 34) // Forest green
+    doc.text(plan.name, pageWidth / 2, 15, { align: 'center' })
 
-      DAYS.forEach((day) => {
-        const row: (string | undefined)[] = [day.label.toUpperCase()]
-        MEAL_TYPES.forEach((mealType) => {
-          const meal = (plan.meal_entries || []).find(
-            (m) => m.day_of_week === day.key && m.meal_type === mealType.key
-          )
-          row.push(meal?.meal_description || '')
-        })
-        data.push(row)
-      })
-
-      const ws = XLSX.utils.aoa_to_sheet(data)
-      ws['!cols'] = [{ wch: 12 }, ...MEAL_TYPES.map(() => ({ wch: 25 }))]
-
-      XLSX.utils.book_append_sheet(wb, ws, 'Plan Nutricional')
-
-      const sanitizedName = plan.name
-        .replace(/[^a-zA-Z0-9áéíóúñÁÉÍÓÚÑ\s]/g, '')
-        .replace(/\s+/g, '_')
-      const date = new Date().toISOString().split('T')[0]
-
-      XLSX.writeFile(wb, `${sanitizedName}_${date}.xlsx`)
-      toast.success('Plan exportado a Excel correctamente')
-    } catch (error) {
-      console.error('Export error:', error)
-      toast.error('Error al exportar el plan')
+    if (plan.customer) {
+      doc.setFontSize(12)
+      doc.setTextColor(100, 100, 100)
+      doc.text(
+        `Cliente: ${plan.customer.first_name} ${plan.customer.last_name}`,
+        pageWidth / 2,
+        22,
+        { align: 'center' }
+      )
     }
+
+    // Table data
+    const tableData = DAYS.map((day) => {
+      const row = [day.label]
+      MEAL_TYPES.forEach((mealType) => {
+        const meal = (plan.meal_entries || []).find(
+          (m) => m.day_of_week === day.key && m.meal_type === mealType.key
+        )
+        row.push(meal?.meal_description || '-')
+      })
+      return row
+    })
+
+    autoTable(doc, {
+      startY: 30,
+      head: [['Día', ...MEAL_TYPES.map((m) => m.label)]],
+      body: tableData,
+      theme: 'grid',
+      headStyles: {
+        fillColor: [34, 139, 34],
+        textColor: 255,
+        fontSize: 9,
+        fontStyle: 'bold',
+      },
+      bodyStyles: {
+        fontSize: 8,
+      },
+      columnStyles: {
+        0: { fontStyle: 'bold', fillColor: [240, 248, 240] },
+      },
+      styles: {
+        cellPadding: 3,
+        overflow: 'linebreak',
+      },
+    })
+
+    return doc.output('blob')
   }
 
   // Export to PDF
@@ -221,25 +235,11 @@ export function PlanCardWithExport({ plan }: PlanCardWithExportProps) {
           </Link>
         </Button>
 
-        {/* Export Dropdown */}
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline" size="sm">
-              <Download className="h-4 w-4 mr-1" />
-              Exportar
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuItem onClick={handleExportExcel}>
-              <FileDown className="h-4 w-4 mr-2" />
-              Exportar Excel
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={handleExportPdf}>
-              <FileText className="h-4 w-4 mr-2" />
-              Exportar PDF
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        {/* Export PDF Button */}
+        <Button variant="outline" size="sm" onClick={handleExportPdf}>
+          <FileDown className="h-4 w-4 mr-1" />
+          Exportar PDF
+        </Button>
 
         <CopyPlanButton plan={plan} />
 
@@ -253,6 +253,7 @@ export function PlanCardWithExport({ plan }: PlanCardWithExportProps) {
               created_at: '',
               updated_at: '',
             }}
+            onGeneratePdf={generatePdfBlob}
           />
         )}
 

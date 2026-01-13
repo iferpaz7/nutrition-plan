@@ -17,7 +17,8 @@ function PalettePreview({
 }) {
   return (
     <div
-      className={`cursor-pointer rounded-xl bg-card p-5 shadow-md transition-all hover:shadow-xl hover:-translate-y-1 ${        isSelected ? 'ring-2 ring-primary ring-offset-2 shadow-lg' : ''
+      className={`cursor-pointer rounded-xl bg-card p-5 shadow-md transition-all hover:shadow-xl hover:-translate-y-1 ${
+        isSelected ? 'ring-2 ring-primary ring-offset-2 shadow-lg' : ''
       }`}
       onClick={onSelect}
     >
@@ -80,7 +81,6 @@ function PalettePreview({
             title="Borde"
           />
         </div>
-
       </div>
     </div>
   )

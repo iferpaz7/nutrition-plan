@@ -113,25 +113,25 @@ describe('ShareWhatsAppButton', () => {
     expect(decodedMessage).toContain('Plan de Prueba')
   })
 
-  it('includes customer name in WhatsApp message', () => {
+  it('includes customer first name in WhatsApp message', () => {
     render(<ShareWhatsAppButton plan={mockPlan} customer={mockCustomer} />)
 
     fireEvent.click(screen.getByRole('button', { name: /whatsapp/i }))
 
     const callArg = mockWindowOpen.mock.calls[0][0]
     const decodedMessage = decodeURIComponent(callArg.split('text=')[1])
-    expect(decodedMessage).toContain('Juan Pérez')
+    expect(decodedMessage).toContain('Juan')
   })
 
-  it('includes nutritional targets in message', () => {
+  it('includes cordial message with PDF reference', () => {
     render(<ShareWhatsAppButton plan={mockPlan} customer={mockCustomer} />)
 
     fireEvent.click(screen.getByRole('button', { name: /whatsapp/i }))
 
     const callArg = mockWindowOpen.mock.calls[0][0]
     const decodedMessage = decodeURIComponent(callArg.split('text=')[1])
-    expect(decodedMessage).toContain('2000')
-    expect(decodedMessage).toContain('150')
+    expect(decodedMessage).toContain('PDF')
+    expect(decodedMessage).toContain('adjúntalo')
   })
 
   it('button is disabled when customer is null', async () => {

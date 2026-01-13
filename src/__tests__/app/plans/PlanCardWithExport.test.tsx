@@ -3,16 +3,7 @@ import userEvent from '@testing-library/user-event'
 import { PlanCardWithExport } from '@/app/plans/PlanCardWithExport'
 import type { NutritionalPlan } from '@/lib/types'
 
-// Mock XLSX and jsPDF
-jest.mock('xlsx', () => ({
-  utils: {
-    book_new: jest.fn(() => ({})),
-    aoa_to_sheet: jest.fn(() => ({})),
-    book_append_sheet: jest.fn(),
-  },
-  writeFile: jest.fn(),
-}))
-
+// Mock jsPDF
 jest.mock('jspdf', () => {
   return jest.fn().mockImplementation(() => ({
     internal: {
@@ -22,6 +13,7 @@ jest.mock('jspdf', () => {
     setTextColor: jest.fn(),
     text: jest.fn(),
     save: jest.fn(),
+    output: jest.fn(() => new Blob(['test'], { type: 'application/pdf' })),
   }))
 })
 
@@ -93,21 +85,10 @@ describe('PlanCardWithExport', () => {
     )
   })
 
-  it('renders export dropdown button', () => {
+  it('renders export PDF button', () => {
     render(<PlanCardWithExport plan={mockPlan} />)
 
-    expect(screen.getByRole('button', { name: /exportar/i })).toBeInTheDocument()
-  })
-
-  it('shows export options when dropdown is clicked', async () => {
-    const user = userEvent.setup()
-    render(<PlanCardWithExport plan={mockPlan} />)
-
-    const exportButton = screen.getByRole('button', { name: /exportar/i })
-    await user.click(exportButton)
-
-    expect(screen.getByText(/exportar excel/i)).toBeInTheDocument()
-    expect(screen.getByText(/exportar pdf/i)).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /exportar pdf/i })).toBeInTheDocument()
   })
 
   it('renders meal progress', () => {
