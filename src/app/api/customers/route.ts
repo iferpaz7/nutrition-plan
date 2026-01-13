@@ -2,12 +2,14 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/utils/supabase/server'
 import type { ApiResponse, Customer, ApiError } from '@/lib/types'
 
-// GET /api/customers - List all customers
-export async function GET() {
+// GET /api/customers - List all customers or search
+export async function GET(request: NextRequest) {
   try {
     const supabase = await createClient()
+    const { searchParams } = new URL(request.url)
+    const search = searchParams.get('search')
 
-    const { data: customers, error } = await supabase
+    let query = supabase
       .from('customer')
       .select(`
         *,
@@ -17,7 +19,14 @@ export async function GET() {
           created_at
         )
       `)
-      .order('created_at', { ascending: false })
+
+    // If search query provided, filter by id_card, first_name, or last_name
+    if (search && search.trim().length >= 2) {
+      const searchTerm = `%${search.trim()}%`
+      query = query.or(`id_card.ilike.${searchTerm},first_name.ilike.${searchTerm},last_name.ilike.${searchTerm}`)
+    }
+
+    const { data: customers, error } = await query.order('created_at', { ascending: false })
 
     if (error) throw error
 
