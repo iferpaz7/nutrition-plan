@@ -17,17 +17,17 @@ export function ExportButton({ plan }: ExportButtonProps) {
       // Create workbook and worksheet
       const wb = XLSX.utils.book_new()
       
-      // Prepare data for export
+      // Prepare data for export (days as rows, meals as columns - like original template)
       const data: (string | undefined)[][] = []
       
-      // Header row with days
-      const headerRow = ['Comida', ...DAYS.map(d => d.label)]
+      // Header row with meal types
+      const headerRow = ['DÍA', ...MEAL_TYPES.map(m => m.label.toUpperCase())]
       data.push(headerRow)
       
-      // Data rows for each meal type
-      MEAL_TYPES.forEach(mealType => {
-        const row: (string | undefined)[] = [mealType.label]
-        DAYS.forEach(day => {
+      // Data rows for each day
+      DAYS.forEach(day => {
+        const row: (string | undefined)[] = [day.label.toUpperCase()]
+        MEAL_TYPES.forEach(mealType => {
           const meal = plan.mealEntries.find(
             m => m.dayOfWeek === day.key && m.mealType === mealType.key
           )
@@ -41,8 +41,8 @@ export function ExportButton({ plan }: ExportButtonProps) {
       
       // Set column widths
       ws['!cols'] = [
-        { wch: 15 }, // Meal type column
-        ...DAYS.map(() => ({ wch: 25 })) // Day columns
+        { wch: 12 }, // Day column
+        ...MEAL_TYPES.map(() => ({ wch: 25 })) // Meal columns
       ]
       
       // Add worksheet to workbook

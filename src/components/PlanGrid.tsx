@@ -32,10 +32,9 @@ const DAYS: { key: DayOfWeek; label: string }[] = [
 
 const MEAL_TYPES: { key: MealType; label: string; color: string }[] = [
   { key: MealType.DESAYUNO, label: 'Desayuno', color: 'bg-amber-100' },
-  { key: MealType.COLACION_1, label: 'Colación 1', color: 'bg-green-100' },
+  { key: MealType.COLACION_1, label: 'Colación', color: 'bg-green-100' },
   { key: MealType.ALMUERZO, label: 'Almuerzo', color: 'bg-orange-100' },
-  { key: MealType.COLACION_2, label: 'Colación 2', color: 'bg-green-100' },
-  { key: MealType.MERIENDA, label: 'Merienda', color: 'bg-purple-100' },
+  { key: MealType.COLACION_2, label: 'Colación', color: 'bg-green-100' },
   { key: MealType.CENA, label: 'Cena', color: 'bg-blue-100' },
 ]
 
@@ -53,33 +52,33 @@ export function PlanGrid({ meals, editMode = false, onMealChange, getMealValue }
       <Table>
         <TableHeader>
           <TableRow className="bg-primary/10">
-            <TableHead className="w-32 font-semibold text-primary">Comida</TableHead>
-            {DAYS.map((day) => (
-              <TableHead key={day.key} className="text-center font-semibold text-primary min-w-[120px]">
-                {day.label}
+            <TableHead className="w-28 font-semibold text-primary">Día</TableHead>
+            {MEAL_TYPES.map((mealType) => (
+              <TableHead key={mealType.key} className={cn("text-center font-semibold min-w-[140px]", mealType.color)}>
+                {mealType.label}
               </TableHead>
             ))}
           </TableRow>
         </TableHeader>
         <TableBody>
-          {MEAL_TYPES.map((mealType) => (
-            <TableRow key={mealType.key} className="hover:bg-muted/30">
-              <TableCell className={cn('font-medium', mealType.color)}>
-                {mealType.label}
+          {DAYS.map((day) => (
+            <TableRow key={day.key} className="hover:bg-muted/30">
+              <TableCell className="font-medium bg-primary/20 text-primary">
+                {day.label}
               </TableCell>
-              {DAYS.map((day) => (
+              {MEAL_TYPES.map((mealType) => (
                 <TableCell key={`${day.key}-${mealType.key}`} className="p-2">
                   {editMode ? (
                     <Textarea
-                      className="min-h-[80px] text-sm resize-none"
+                      className="min-h-20 text-sm resize-none"
                       placeholder={`${mealType.label}...`}
                       value={getMealDescription(day.key, mealType.key)}
                       onChange={(e) => onMealChange?.(day.key, mealType.key, e.target.value)}
                     />
                   ) : (
-                    <div className="min-h-[60px] text-sm whitespace-pre-wrap">
+                    <div className="min-h-15 text-sm whitespace-pre-wrap">
                       {getMealDescription(day.key, mealType.key) || (
-                        <span className="text-muted-foreground italic">Sin especificar</span>
+                        <span className="text-muted-foreground italic">-</span>
                       )}
                     </div>
                   )}

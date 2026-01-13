@@ -13,7 +13,7 @@ interface PlanCardProps {
 
 export function PlanCard({ plan, onDelete }: PlanCardProps) {
   const mealCount = plan.mealEntries.length
-  const totalPossibleMeals = 7 * 6 // 7 days * 6 meal types
+  const totalPossibleMeals = 7 * 5 // 7 days * 5 meal types
   const completionPercentage = Math.round((mealCount / totalPossibleMeals) * 100)
 
   const formatDate = (date: Date) => {

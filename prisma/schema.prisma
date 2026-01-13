@@ -44,6 +44,5 @@ enum MealType {
   COLACION_1
   ALMUERZO
   COLACION_2
-  MERIENDA
   CENA
 }
