@@ -136,12 +136,35 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
     const { data: updatedCustomer, error: updateError } = await supabase
       .from('customer')
       .update({
+        // Requeridos
         id_card: body.id_card?.trim() ?? existingCustomer.id_card,
         first_name: body.first_name?.trim() ?? existingCustomer.first_name,
         last_name: body.last_name?.trim() ?? existingCustomer.last_name,
-        cell_phone: body.cell_phone !== undefined 
-          ? (body.cell_phone?.trim() || null) 
-          : existingCustomer.cell_phone,
+        
+        // Datos personales opcionales
+        email: body.email !== undefined ? (body.email || null) : existingCustomer.email,
+        cell_phone: body.cell_phone !== undefined ? (body.cell_phone?.trim() || null) : existingCustomer.cell_phone,
+        gender: body.gender !== undefined ? (body.gender || null) : existingCustomer.gender,
+        birth_date: body.birth_date !== undefined ? (body.birth_date || null) : existingCustomer.birth_date,
+        
+        // Datos físicos
+        weight: body.weight !== undefined ? (body.weight || null) : existingCustomer.weight,
+        height: body.height !== undefined ? (body.height || null) : existingCustomer.height,
+        body_fat_percentage: body.body_fat_percentage !== undefined ? (body.body_fat_percentage || null) : existingCustomer.body_fat_percentage,
+        
+        // Información nutricional
+        activity_level: body.activity_level !== undefined ? (body.activity_level || null) : existingCustomer.activity_level,
+        goal: body.goal !== undefined ? (body.goal || null) : existingCustomer.goal,
+        daily_calorie_target: body.daily_calorie_target !== undefined ? (body.daily_calorie_target || null) : existingCustomer.daily_calorie_target,
+        
+        // Información médica
+        allergies: body.allergies !== undefined ? (body.allergies || null) : existingCustomer.allergies,
+        medical_conditions: body.medical_conditions !== undefined ? (body.medical_conditions || null) : existingCustomer.medical_conditions,
+        medications: body.medications !== undefined ? (body.medications || null) : existingCustomer.medications,
+        dietary_restrictions: body.dietary_restrictions !== undefined ? (body.dietary_restrictions || null) : existingCustomer.dietary_restrictions,
+        
+        // Notas
+        notes: body.notes !== undefined ? (body.notes || null) : existingCustomer.notes,
       })
       .eq('id', id)
       .select()

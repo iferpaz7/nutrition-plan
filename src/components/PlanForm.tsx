@@ -71,20 +71,11 @@ export function PlanForm({ initialData, mode, customerId: initialCustomerId }: P
 
     setIsSearching(true)
     try {
-      const response = await fetch('/api/customers')
+      const response = await fetch(`/api/customers?search=${encodeURIComponent(query.trim())}`)
       const result = await response.json()
       
       if (result.success && result.data) {
-        const filtered = result.data.filter((customer: Customer) => {
-          const searchLower = query.toLowerCase()
-          return (
-            customer.id_card.toLowerCase().includes(searchLower) ||
-            customer.first_name.toLowerCase().includes(searchLower) ||
-            customer.last_name.toLowerCase().includes(searchLower) ||
-            `${customer.first_name} ${customer.last_name}`.toLowerCase().includes(searchLower)
-          )
-        })
-        setSearchResults(filtered)
+        setSearchResults(result.data)
       }
     } catch (error) {
       console.error('Error searching customers:', error)

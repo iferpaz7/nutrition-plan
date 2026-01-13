@@ -109,10 +109,35 @@ export async function POST(request: NextRequest) {
     const { data: customer, error } = await supabase
       .from('customer')
       .insert({
+        // Requeridos
         id_card: body.id_card.trim(),
         first_name: body.first_name.trim(),
         last_name: body.last_name.trim(),
+        
+        // Datos personales opcionales
+        email: body.email || null,
         cell_phone: body.cell_phone?.trim() || null,
+        gender: body.gender || null,
+        birth_date: body.birth_date || null,
+        
+        // Datos físicos
+        weight: body.weight || null,
+        height: body.height || null,
+        body_fat_percentage: body.body_fat_percentage || null,
+        
+        // Información nutricional
+        activity_level: body.activity_level || null,
+        goal: body.goal || null,
+        daily_calorie_target: body.daily_calorie_target || null,
+        
+        // Información médica
+        allergies: body.allergies || null,
+        medical_conditions: body.medical_conditions || null,
+        medications: body.medications || null,
+        dietary_restrictions: body.dietary_restrictions || null,
+        
+        // Notas
+        notes: body.notes || null,
       })
       .select(`
         *,
