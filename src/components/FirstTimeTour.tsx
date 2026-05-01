@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import Joyride, { CallBackProps, STATUS, Step } from 'react-joyride'
+import { Joyride, STATUS, type EventData, type Step } from 'react-joyride'
 
 const TOUR_STORAGE_KEY = 'nutriplan_tour_completed'
 
@@ -15,7 +15,7 @@ const tourSteps: Step[] = [
         <p>Te guiaremos en un recorrido rápido por las funciones principales de la aplicación.</p>
       </div>
     ),
-    disableBeacon: true,
+
   },
   {
     target: '[data-tour="sidebar-home"]',
@@ -25,7 +25,7 @@ const tourSteps: Step[] = [
         <p>Aquí encontrarás un resumen general con estadísticas y accesos rápidos.</p>
       </div>
     ),
-    disableBeacon: true,
+
   },
   {
     target: '[data-tour="sidebar-plans"]',
@@ -35,7 +35,7 @@ const tourSteps: Step[] = [
         <p>Gestiona todos los planes de alimentación semanal de tus clientes.</p>
       </div>
     ),
-    disableBeacon: true,
+
   },
   {
     target: '[data-tour="sidebar-customers"]',
@@ -48,7 +48,7 @@ const tourSteps: Step[] = [
         </p>
       </div>
     ),
-    disableBeacon: true,
+
   },
   {
     target: '[data-tour="sidebar-new-plan"]',
@@ -58,7 +58,7 @@ const tourSteps: Step[] = [
         <p>Crea rápidamente un nuevo plan nutricional para un cliente.</p>
       </div>
     ),
-    disableBeacon: true,
+
   },
   {
     target: '[data-tour="sidebar-new-customer"]',
@@ -68,7 +68,7 @@ const tourSteps: Step[] = [
         <p>Registra un nuevo paciente con todos sus datos.</p>
       </div>
     ),
-    disableBeacon: true,
+
   },
   {
     target: '[data-tour="sidebar-config"]',
@@ -78,7 +78,7 @@ const tourSteps: Step[] = [
         <p>Personaliza la aplicación: tema, colores y preferencias.</p>
       </div>
     ),
-    disableBeacon: true,
+
   },
   {
     target: '[data-tour="sidebar-help"]',
@@ -88,7 +88,7 @@ const tourSteps: Step[] = [
         <p>Accede a la guía completa cuando necesites información.</p>
       </div>
     ),
-    disableBeacon: true,
+
   },
   {
     target: 'body',
@@ -107,7 +107,7 @@ const tourSteps: Step[] = [
         </p>
       </div>
     ),
-    disableBeacon: true,
+
   },
 ]
 
@@ -130,7 +130,7 @@ export function FirstTimeTour() {
     }
   }, [])
 
-  const handleJoyrideCallback = (data: CallBackProps) => {
+  const handleJoyrideCallback = (data: EventData) => {
     const { status } = data
     const finishedStatuses: string[] = [STATUS.FINISHED, STATUS.SKIPPED]
 
@@ -147,11 +147,16 @@ export function FirstTimeTour() {
       steps={tourSteps}
       run={run}
       continuous
-      showProgress
-      showSkipButton
       scrollToFirstStep
-      disableOverlayClose
-      callback={handleJoyrideCallback}
+      onEvent={handleJoyrideCallback}
+      options={{
+        showProgress: true,
+        overlayClickAction: false,
+        skipBeacon: true,
+        buttons: ['back', 'close', 'primary', 'skip'],
+        primaryColor: 'hsl(142, 76%, 36%)',
+        zIndex: 10000,
+      }}
       locale={{
         back: 'Anterior',
         close: 'Cerrar',
@@ -160,15 +165,11 @@ export function FirstTimeTour() {
         skip: 'Saltar tour',
       }}
       styles={{
-        options: {
-          primaryColor: 'hsl(142, 76%, 36%)',
-          zIndex: 10000,
-        },
         tooltip: {
           borderRadius: 12,
           padding: 16,
         },
-        buttonNext: {
+        buttonPrimary: {
           borderRadius: 8,
           padding: '8px 16px',
         },
@@ -178,12 +179,8 @@ export function FirstTimeTour() {
         buttonSkip: {
           color: '#6b7280',
         },
-      }}
-      floaterProps={{
-        styles: {
-          floater: {
-            filter: 'drop-shadow(0 4px 12px rgba(0,0,0,0.15))',
-          },
+        floater: {
+          filter: 'drop-shadow(0 4px 12px rgba(0,0,0,0.15))',
         },
       }}
     />

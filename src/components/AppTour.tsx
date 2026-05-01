@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import Joyride, { CallBackProps, STATUS, Step } from 'react-joyride'
+import { Joyride, STATUS, type EventData, type Step } from 'react-joyride'
 import { Button } from '@/components/ui/button'
 import { PlayCircle } from 'lucide-react'
 
@@ -17,7 +17,7 @@ const tourSteps: Step[] = [
         <p>Te guiaremos en un recorrido rápido por las funciones principales de la aplicación.</p>
       </div>
     ),
-    disableBeacon: true,
+
   },
   {
     target: '[data-tour="sidebar-home"]',
@@ -27,7 +27,7 @@ const tourSteps: Step[] = [
         <p>Aquí encontrarás un resumen general con estadísticas y accesos rápidos.</p>
       </div>
     ),
-    disableBeacon: true,
+
   },
   {
     target: '[data-tour="sidebar-plans"]',
@@ -37,7 +37,7 @@ const tourSteps: Step[] = [
         <p>Gestiona todos los planes de alimentación semanal de tus clientes.</p>
       </div>
     ),
-    disableBeacon: true,
+
   },
   {
     target: '[data-tour="sidebar-customers"]',
@@ -50,7 +50,7 @@ const tourSteps: Step[] = [
         </p>
       </div>
     ),
-    disableBeacon: true,
+
   },
   {
     target: '[data-tour="sidebar-new-plan"]',
@@ -60,7 +60,7 @@ const tourSteps: Step[] = [
         <p>Crea rápidamente un nuevo plan nutricional para un cliente.</p>
       </div>
     ),
-    disableBeacon: true,
+
   },
   {
     target: '[data-tour="sidebar-new-customer"]',
@@ -70,7 +70,7 @@ const tourSteps: Step[] = [
         <p>Registra un nuevo paciente con todos sus datos.</p>
       </div>
     ),
-    disableBeacon: true,
+
   },
   {
     target: '[data-tour="sidebar-config"]',
@@ -80,7 +80,7 @@ const tourSteps: Step[] = [
         <p>Personaliza la aplicación: tema, colores y preferencias.</p>
       </div>
     ),
-    disableBeacon: true,
+
   },
   {
     target: '[data-tour="sidebar-help"]',
@@ -90,7 +90,7 @@ const tourSteps: Step[] = [
         <p>Accede a esta guía completa cuando necesites información.</p>
       </div>
     ),
-    disableBeacon: true,
+
   },
   {
     target: 'body',
@@ -106,7 +106,7 @@ const tourSteps: Step[] = [
         </ol>
       </div>
     ),
-    disableBeacon: true,
+
   },
 ]
 
@@ -133,7 +133,7 @@ export function AppTour({ autoStart = false }: AppTourProps) {
     }
   }, [autoStart])
 
-  const handleJoyrideCallback = (data: CallBackProps) => {
+  const handleJoyrideCallback = (data: EventData) => {
     const { status } = data
     const finishedStatuses: string[] = [STATUS.FINISHED, STATUS.SKIPPED]
 
@@ -160,11 +160,16 @@ export function AppTour({ autoStart = false }: AppTourProps) {
         steps={tourSteps}
         run={run}
         continuous
-        showProgress
-        showSkipButton
         scrollToFirstStep
-        disableOverlayClose
-        callback={handleJoyrideCallback}
+        onEvent={handleJoyrideCallback}
+        options={{
+          showProgress: true,
+          overlayClickAction: false,
+          skipBeacon: true,
+          buttons: ['back', 'close', 'primary', 'skip'],
+          primaryColor: 'hsl(var(--primary))',
+          zIndex: 10000,
+        }}
         locale={{
           back: 'Anterior',
           close: 'Cerrar',
@@ -173,15 +178,11 @@ export function AppTour({ autoStart = false }: AppTourProps) {
           skip: 'Saltar tour',
         }}
         styles={{
-          options: {
-            primaryColor: 'hsl(var(--primary))',
-            zIndex: 10000,
-          },
           tooltip: {
             borderRadius: 12,
             padding: 16,
           },
-          buttonNext: {
+          buttonPrimary: {
             borderRadius: 8,
             padding: '8px 16px',
           },
@@ -191,12 +192,8 @@ export function AppTour({ autoStart = false }: AppTourProps) {
           buttonSkip: {
             color: 'hsl(var(--muted-foreground))',
           },
-        }}
-        floaterProps={{
-          styles: {
-            floater: {
-              filter: 'drop-shadow(0 4px 12px rgba(0,0,0,0.15))',
-            },
+          floater: {
+            filter: 'drop-shadow(0 4px 12px rgba(0,0,0,0.15))',
           },
         }}
       />

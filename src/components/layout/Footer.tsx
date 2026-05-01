@@ -1,4 +1,4 @@
-import { Apple, Github, Heart } from 'lucide-react'
+import { Apple, Code, Heart } from 'lucide-react'
 import Link from 'next/link'
 
 export function Footer() {
@@ -76,7 +76,7 @@ export function Footer() {
               rel="noopener noreferrer"
               className="text-muted-foreground hover:text-primary transition-colors"
             >
-              <Github className="h-5 w-5" />
+              <Code className="h-5 w-5" />
             </Link>
           </div>
         </div>
