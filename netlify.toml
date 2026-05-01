@@ -2,9 +2,3 @@
   command = "pnpm run build"
   functions = "netlify/functions"
   publish = ".next"
-
-# Scheduled Functions (Netlify)
-# Keep Supabase database active every 6 hours
-[[functions]]
-  path = "src/app/api/cron/keep-alive"
-  schedule = "0 */6 * * *"
